@@ -60,6 +60,11 @@ import java.io.OutputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
+
+import java.util.Calendar;
 /**
  * This class launches the camera view, allows the user to take a picture, closes the camera view,
  * and returns the captured image.  When the camera view is closed, the screen displayed before
@@ -130,6 +135,10 @@ public class CameraLauncher extends CordovaPlugin implements MediaScannerConnect
     private ExifHelper exifData;            // Exif data from source
     private String applicationId;
 
+    private boolean superImposeTimeStamp;
+    private String superImposeText;
+
+
 
     /**
      * Executes the request and returns PluginResult.
@@ -168,6 +177,10 @@ public class CameraLauncher extends CordovaPlugin implements MediaScannerConnect
             this.allowEdit = args.getBoolean(7);
             this.correctOrientation = args.getBoolean(8);
             this.saveToPhotoAlbum = args.getBoolean(9);
+
+            this.superImposeTimeStamp = args.getBoolean(13);
+            this.superImposeText = args.getString(14);
+
 
             // If the user specifies a 0 or smaller width/height
             // make it -1 so later comparisons succeed
@@ -1091,6 +1104,31 @@ public class CameraLauncher extends CordovaPlugin implements MediaScannerConnect
                     this.orientationCorrected = false;
                 }
             }
+
+            try {
+                if(superImposeTimeStamp) {
+    
+                    SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yy HH:mm:ss");
+                    String text = sdf.format(Calendar.getInstance().getTime()); // reading local time in the system
+    
+                    if(!superImposeText.isEmpty()) {
+                        text = text + " - " + superImposeText;
+                    }
+    
+    
+                    Canvas cs = new Canvas(scaledBitmap);
+                    Paint tPaint = new Paint();
+                    tPaint.setTextSize(25);
+                    tPaint.setColor(Color.WHITE);
+                    tPaint.setStyle(Paint.Style.FILL);
+    
+                    float height = tPaint.measureText("yY");
+                    cs.drawText(text, 20f, scaledBitmap.getHeight() - (height+5f), tPaint);
+                }
+    
+            }catch (Exception e) {}
+
+
             return scaledBitmap;
         }
         finally {

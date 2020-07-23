@@ -29,7 +29,8 @@
                 * Enable inline JS: add 'unsafe-inline' to default-src -->
       
         <!-- <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: gap: https://ssl.gstatic.com 'unsafe-eval'; style-src 'self' 'unsafe-inline'; media-src *; img-src 'self' data: content:;">  -->
-        <meta http-equiv="Content-Security-Policy" content="default-src *; style-src 'self' http://* 'unsafe-inline'; script-src 'self' http://* 'unsafe-inline' 'unsafe-eval'" />
+        <!-- <meta http-equiv="Content-Security-Policy" content="default-src *; style-src 'self' http://* 'unsafe-inline'; script-src 'self' http://* 'unsafe-inline' 'unsafe-eval'" /> -->
+        <meta http-equiv="Content-Security-Policy" content="default-src *; script-src 'self' 'unsafe-inline' 'unsafe-eval' *; style-src	'self' 'unsafe-inline' *; img-src 'self' data: *">
 
         <meta name="format-detection" content="telephone=no">
         <meta name="msapplication-tap-highlight" content="no">
@@ -43,7 +44,7 @@
         <link href="css/forgotpassword.css" rel="stylesheet">
         <link href="css/norms.css" rel="stylesheet">
         <link href="js/lib/select2-4.0.1/dist/css/select2.css" rel="stylesheet">
-        <!--<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCPx6WPrL00fBGgmWBP4feuXHpXKSduABM&sensor=false"></script>-->
+        <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCPx6WPrL00fBGgmWBP4feuXHpXKSduABM&sensor=false"></script>
         <script type="text/javascript" data-main="js/main.js" src="js/lib/require-min.js"></script>
         <script type="application/javascript" src="js/lib/iscroll.js"></script>
         <!--<script type="text/javascript" src="js/utilities_web.js"></script>-->
