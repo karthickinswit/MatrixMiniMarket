@@ -63,6 +63,8 @@ import java.util.Date;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Rect;
+
 
 import java.util.Calendar;
 /**
@@ -575,6 +577,8 @@ public class CameraLauncher extends CordovaPlugin implements MediaScannerConnect
                 Uri uri = Uri.fromFile(createCaptureFile(this.encodingType, System.currentTimeMillis() + ""));
                 bitmap = getScaledAndRotatedBitmap(sourcePath);
 
+                superImposeTimeStamp(bitmap);
+
                 // Double-check the bitmap.
                 if (bitmap == null) {
                     LOG.d(LOG_TAG, "I either have a null image path or bitmap");
@@ -613,6 +617,46 @@ public class CameraLauncher extends CordovaPlugin implements MediaScannerConnect
 
         this.cleanup(FILE_URI, this.imageUri.getFileUri(), galleryUri, bitmap);
         bitmap = null;
+    }
+
+
+    private void superImposeTimeStamp(Bitmap bitmap) {
+        if (superImposeTimeStamp) {
+//         Bitmap dest = Bitmap.createBitmap(bitmap.getWidth(), bitmap.getHeight(), Bitmap.Config.ARGB_8888);
+
+            SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yy HH:mm:ss");
+            String text = sdf.format(Calendar.getInstance().getTime()); // reading local time in the system
+
+            if (!superImposeText.isEmpty()) {
+                //text = text + " - " + superImposeText;
+                text = superImposeText;
+            }
+
+            Canvas cs = new Canvas(bitmap);
+
+            Paint tPaint = new Paint();
+            tPaint.setTextSize(20);
+            tPaint.setColor(Color.WHITE);
+            tPaint.setStrokeWidth(5);
+            tPaint.setStyle(Paint.Style.FILL);
+
+
+            drawCenter(cs, tPaint, text);
+
+        }
+    }
+
+
+    private void drawCenter(Canvas canvas, Paint paint, String text) {
+        Rect r = new Rect();
+        canvas.getClipBounds(r);
+        int cHeight = r.height();
+        int cWidth = r.width();
+        paint.setTextAlign(Paint.Align.LEFT);
+        paint.getTextBounds(text, 0, text.length(), r);
+        float x = cWidth / 2f - r.width() / 2f - r.left;
+        float y = cHeight / 2f + r.height() / 2f - r.bottom;
+        canvas.drawText(text, x, y, paint);
     }
 
     private String getPicturesPath() {
@@ -1105,30 +1149,8 @@ public class CameraLauncher extends CordovaPlugin implements MediaScannerConnect
                 }
             }
 
-            try {
-                if(superImposeTimeStamp) {
-    
-                    SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yy HH:mm:ss");
-                    String text = sdf.format(Calendar.getInstance().getTime()); // reading local time in the system
-    
-                    if(!superImposeText.isEmpty()) {
-                        text = text + " - " + superImposeText;
-                    }
-    
-    
-                    Canvas cs = new Canvas(scaledBitmap);
-                    Paint tPaint = new Paint();
-                    tPaint.setTextSize(25);
-                    tPaint.setColor(Color.WHITE);
-                    tPaint.setStyle(Paint.Style.FILL);
-    
-                    float height = tPaint.measureText("yY");
-                    cs.drawText(text, 20f, scaledBitmap.getHeight() - (height+5f), tPaint);
-                }
-    
-            }catch (Exception e) {}
 
-
+            
             return scaledBitmap;
         }
         finally {

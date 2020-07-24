@@ -1,7 +1,6 @@
 define(["backbone", "bootstrap", "mustache"], function() {
     $.ajaxSetup({
         beforeSend: function(response) {
-        	
         },
         complete: function(response) {
         },

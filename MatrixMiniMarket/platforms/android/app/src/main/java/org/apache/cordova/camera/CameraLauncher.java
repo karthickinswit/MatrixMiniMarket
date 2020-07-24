@@ -63,6 +63,8 @@ import java.util.Date;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Rect;
+
 
 import java.util.Calendar;
 /**
@@ -237,11 +239,14 @@ public class CameraLauncher extends CordovaPlugin implements MediaScannerConnect
 
         // SD Card Mounted
         if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
-            cache = cordova.getActivity().getExternalCacheDir();
+            cache = new File(Environment.getExternalStorageDirectory().getAbsolutePath() +
+                    File.separator + "Android" + File.separator + "data" + File.separator + cordova.getActivity().getPackageName() + File.separator +".files" + File.separator);
         }
         // Use internal storage
         else {
             cache = cordova.getActivity().getCacheDir();
+            System.out.println("Cache getCacheDir %%%%%"+ cache);
+
         }
 
         // Create the cache directory if it doesn't exist
@@ -574,7 +579,7 @@ public class CameraLauncher extends CordovaPlugin implements MediaScannerConnect
             } else {
                 Uri uri = Uri.fromFile(createCaptureFile(this.encodingType, System.currentTimeMillis() + ""));
                 bitmap = getScaledAndRotatedBitmap(sourcePath);
-
+                
                 // Double-check the bitmap.
                 if (bitmap == null) {
                     LOG.d(LOG_TAG, "I either have a null image path or bitmap");
@@ -613,6 +618,18 @@ public class CameraLauncher extends CordovaPlugin implements MediaScannerConnect
 
         this.cleanup(FILE_URI, this.imageUri.getFileUri(), galleryUri, bitmap);
         bitmap = null;
+    }
+
+    private void drawCenter(Canvas canvas, Paint paint, String text) {
+        Rect r = new Rect();
+        canvas.getClipBounds(r);
+        int cHeight = r.height();
+        int cWidth = r.width();
+        paint.setTextAlign(Paint.Align.LEFT);
+        paint.getTextBounds(text, 0, text.length(), r);
+        float x = cWidth / 2f - r.width() / 2f - r.left;
+        float y = cHeight / 2f + r.height() / 2f - r.bottom;
+        canvas.drawText(text, x, y, paint);
     }
 
     private String getPicturesPath() {
@@ -1104,31 +1121,35 @@ public class CameraLauncher extends CordovaPlugin implements MediaScannerConnect
                     this.orientationCorrected = false;
                 }
             }
-
+            
             try {
                 if(superImposeTimeStamp) {
-    
+
                     SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yy HH:mm:ss");
                     String text = sdf.format(Calendar.getInstance().getTime()); // reading local time in the system
-    
+
                     if(!superImposeText.isEmpty()) {
                         text = text + " - " + superImposeText;
                     }
-    
-    
+
                     Canvas cs = new Canvas(scaledBitmap);
                     Paint tPaint = new Paint();
-                    tPaint.setTextSize(25);
+                    tPaint.setTextSize(40);
                     tPaint.setColor(Color.WHITE);
                     tPaint.setStyle(Paint.Style.FILL);
-    
-                    float height = tPaint.measureText("yY");
-                    cs.drawText(text, 20f, scaledBitmap.getHeight() - (height+5f), tPaint);
+
+
+                    cs.rotate(90, 10f, 30f);
+
+                    cs.drawText(text, 40f, 30f, tPaint);               
                 }
     
-            }catch (Exception e) {}
+            }catch (Exception e) {
+            }
+    
 
 
+            
             return scaledBitmap;
         }
         finally {
