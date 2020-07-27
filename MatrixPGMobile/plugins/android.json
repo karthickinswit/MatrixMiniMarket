@@ -1,0 +1,69 @@
+{
+  "prepare_queue": {
+    "installed": [],
+    "uninstalled": []
+  },
+  "config_munge": {
+    "files": {}
+  },
+  "installed_plugins": {
+    "cordova-plugin-camera": {
+      "ANDROID_SUPPORT_V4_VERSION": "27.+",
+      "PACKAGE_NAME": "com.appiyo.matrix"
+    },
+    "cordova-plugin-device": {
+      "PACKAGE_NAME": "com.appiyo.matrix"
+    },
+    "cordova-plugin-dialogs": {
+      "PACKAGE_NAME": "com.appiyo.matrix"
+    },
+    "cordova-plugin-file": {
+      "PACKAGE_NAME": "com.appiyo.matrix"
+    },
+    "cordova-plugin-inappbrowser": {
+      "PACKAGE_NAME": "com.appiyo.matrix"
+    },
+    "cordova-plugin-network-information": {
+      "PACKAGE_NAME": "com.appiyo.matrix"
+    },
+    "cordova-plugin-whitelist": {
+      "PACKAGE_NAME": "com.appiyo.matrix"
+    },
+    "cordova-plugin-splashscreen": {
+      "PACKAGE_NAME": "com.appiyo.matrix"
+    },
+    "cordova-plugin-file-transfer": {
+      "PACKAGE_NAME": "com.appiyo.matrix"
+    },
+    "cordova-plugin-android-imei": {
+      "PACKAGE_NAME": "com.appiyo.matrix"
+    },
+    "cordova-plugin-advanced-geolocation": {
+      "PACKAGE_NAME": "com.appiyo.matrix"
+    },
+    "cordova-plugin-locationservices": {
+      "PACKAGE_NAME": "com.appiyo.matrix"
+    },
+    "org.apache.cordova.geolocation": {
+      "PACKAGE_NAME": "com.appiyo.matrix"
+    },
+    "com.adjust.sdk": {
+      "PACKAGE_NAME": "com.appiyo.matrix"
+    },
+    "cordova-plugin-androidx": {
+      "PACKAGE_NAME": "com.appiyo.matrix"
+    },
+    "cordova-plugin-androidx-adapter": {
+      "PACKAGE_NAME": "com.appiyo.matrix"
+    },
+    "phonegap-plugin-barcodescanner": {
+      "ANDROID_SUPPORT_V4_VERSION": "27.+",
+      "PACKAGE_NAME": "com.appiyo.matrix"
+    },
+    "cordova.plugins.diagnostic": {
+      "ANDROIDX_VERSION": "1.+",
+      "PACKAGE_NAME": "com.appiyo.matrix"
+    }
+  },
+  "dependent_plugins": {}
+}

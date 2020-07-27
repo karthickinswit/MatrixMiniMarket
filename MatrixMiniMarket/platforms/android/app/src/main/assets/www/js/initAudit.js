@@ -457,9 +457,10 @@ define([
 					}
 				}
 
-				var gpsDetect = cordova.require('cordova/plugin/gpsDetectionPlugin');
-		        gpsDetect.checkGPS(function onGPSSuccess(on) {
-		        	
+					// var gpsDetect = cordova.require('cordova/plugin/gpsDetectionPlugin');
+					// gpsDetect.checkGPS(function onGPSSuccess(on) {
+					//Check: GPS is enabled or not
+					var on= true;		        	
 		        	//Check: GPS is enabled or not
 		            if(!on){
 		            	//GPS is OFF
@@ -483,11 +484,7 @@ define([
 
 						inswit.confirm(message, callback, title, buttons);
 		            }
-		        }, function onGPSError(e) {
-		            alert("Error : " + e);
-		        });
-            }, function(){
-
+		        }, function(){
             });
 		},
 
