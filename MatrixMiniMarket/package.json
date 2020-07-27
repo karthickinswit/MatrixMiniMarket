@@ -20,6 +20,7 @@
     "cordova-plugin-androidx": "^2.0.0",
     "cordova-plugin-androidx-adapter": "^1.1.1",
     "cordova-plugin-camera": "file:custom_plugin/cordova-plugin-camera",
+    "cordova-plugin-clear-cache": "file:custom_plugin/cordova-plugin-clear-cache",
     "cordova-plugin-device": "^2.0.3",
     "cordova-plugin-dialogs": "^2.0.2",
     "cordova-plugin-file": "^6.0.2",

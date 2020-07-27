@@ -1,4 +1,5 @@
 cordova plugin add custom_plugin/cordova-plugin-camera
+cordova plugin add custom_plugin/cordova-plugin-clear-cache
 cordova plugin add cordova-plugin-device
 cordova plugin add cordova-plugin-dialogs
 cordova plugin add cordova-plugin-inappbrowser

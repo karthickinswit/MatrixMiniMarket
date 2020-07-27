@@ -505,6 +505,14 @@ cordova.define('cordova/plugin_list', function(require, exports, module) {
       "clobbers": [
         "CameraPopoverHandle"
       ]
+    },
+    {
+      "id": "com.example.hello.hello",
+      "file": "plugins/com.example.hello/www/hello.js",
+      "pluginId": "com.example.hello",
+      "clobbers": [
+        "hello"
+      ]
     }
   ];
   module.exports.metadata = {
@@ -526,6 +534,7 @@ cordova.define('cordova/plugin_list', function(require, exports, module) {
     "org.apache.cordova.geolocation": "0.3.6",
     "cordova-plugin-request-location-accuracy": "2.3.0",
     "cordova.plugins.diagnostic": "6.0.0",
-    "cordova-plugin-camera": "4.1.0"
+    "cordova-plugin-camera": "4.1.0",
+    "com.example.hello": "0.7.0"
   };
 });

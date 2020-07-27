@@ -102,10 +102,10 @@ define([
 									clearData(db, function(){
 
 										//Clearing the cache files
-										// var home = cordova.require("cordova/plugin/home");
-										// if(home){
-										// 	home.clearCache(function(){},function(){});
-										// }
+										var home = cordova.require("cordova/plugin/home");
+										if(home){
+										   home.clearCache(function(){},function(){});
+										}
 
 										//Set new employee email
 										LocalStorage.setEmployeeEmail(userName);
