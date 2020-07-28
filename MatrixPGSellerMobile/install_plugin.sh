@@ -1,4 +1,5 @@
 cordova plugin add custom_plugin/cordova-plugin-camera
+cordova plugin add custom_plugin/cordova-plugin-clear-cache
 cordova plugin add cordova-plugin-device
 cordova plugin add cordova-plugin-dialogs
 cordova plugin add cordova-plugin-inappbrowser
@@ -15,3 +16,4 @@ cordova plugin add com.adjust.sdk
 cordova plugin add cordova-plugin-androidx
 cordova plugin add cordova-plugin-androidx-adapter
 cordova plugin add phonegap-plugin-barcodescanner
+cordova plugin add cordova-plugin-request-location-accuracy

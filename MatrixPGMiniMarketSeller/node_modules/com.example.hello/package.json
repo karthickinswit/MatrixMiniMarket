@@ -1,0 +1,49 @@
+{
+  "_from": "com.example.hello",
+  "_id": "com.example.hello@0.7.0",
+  "_inBundle": false,
+  "_integrity": "sha512-WPlPl61gc0p6nyBn7Oe79Ry4usa84hQkyZocdhqOuw56EAnu+r1Sef3ZK3WTpWsueihn9NnBfMGmuCkLpsBfXQ==",
+  "_location": "/com.example.hello",
+  "_phantomChildren": {},
+  "_requested": {
+    "type": "tag",
+    "registry": true,
+    "raw": "com.example.hello",
+    "name": "com.example.hello",
+    "escapedName": "com.example.hello",
+    "rawSpec": "",
+    "saveSpec": null,
+    "fetchSpec": "latest"
+  },
+  "_requiredBy": [
+    "#USER",
+    "/"
+  ],
+  "_resolved": "https://registry.npmjs.org/com.example.hello/-/com.example.hello-0.7.0.tgz",
+  "_shasum": "af0ce1200c983e24c66c34495627e84b01c9931b",
+  "_spec": "com.example.hello",
+  "_where": "/media/christus/9cfe9003-fd7a-4a1b-b8e6-759076d91f2e/matrix/checkin/MatrixPGMiniMarketSeller",
+  "author": "",
+  "bundleDependencies": false,
+  "cordova": {
+    "id": "com.example.hello",
+    "platforms": [
+      "android"
+    ]
+  },
+  "deprecated": false,
+  "description": "",
+  "engines": [
+    {
+      "name": "cordova",
+      "version": ">=7.1.0"
+    }
+  ],
+  "keywords": [
+    "ecosystem:cordova",
+    "cordova-android"
+  ],
+  "license": "ISC",
+  "name": "com.example.hello",
+  "version": "0.7.0"
+}

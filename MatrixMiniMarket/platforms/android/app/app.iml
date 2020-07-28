@@ -164,5 +164,6 @@
     <orderEntry type="library" name="Gradle: com.google.android.gms:play-services-stats:17.0.0@aar" level="project" />
     <orderEntry type="module" module-name="CordovaLib" />
     <orderEntry type="module" module-name="CordovaLib" />
+    <orderEntry type="module" module-name="CordovaLib" />
   </component>
 </module>

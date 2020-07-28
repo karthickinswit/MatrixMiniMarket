@@ -1,0 +1,56 @@
+{
+  "_from": "com.adjust.sdk",
+  "_id": "com.adjust.sdk@4.22.1",
+  "_inBundle": false,
+  "_integrity": "sha512-oJtzzcYB6Tq9sqIz9ogrzUxL2vwry8I6744v/J0NjRU1mkOjE1d03B9IA8LBhV84M9RclQrBPX2hgnNIUexzUQ==",
+  "_location": "/com.adjust.sdk",
+  "_phantomChildren": {},
+  "_requested": {
+    "type": "tag",
+    "registry": true,
+    "raw": "com.adjust.sdk",
+    "name": "com.adjust.sdk",
+    "escapedName": "com.adjust.sdk",
+    "rawSpec": "",
+    "saveSpec": null,
+    "fetchSpec": "latest"
+  },
+  "_requiredBy": [
+    "#USER",
+    "/"
+  ],
+  "_resolved": "https://registry.npmjs.org/com.adjust.sdk/-/com.adjust.sdk-4.22.1.tgz",
+  "_shasum": "ae5041fec6cde8136d158b21593b7fa3e0076fc3",
+  "_spec": "com.adjust.sdk",
+  "_where": "/media/christus/9cfe9003-fd7a-4a1b-b8e6-759076d91f2e/matrix/checkin/MatrixPGMiniMarketSeller",
+  "bundleDependencies": false,
+  "cordova_name": "Adjust SDK Cordova Plugin",
+  "deprecated": false,
+  "description": "Cordova plugin for the Adjust SDK",
+  "engines": [
+    {
+      "name": "cordova",
+      "version": ">=3.0.0"
+    },
+    {
+      "name": "cordova-ios",
+      "version": ">=3.0.0"
+    },
+    {
+      "name": "cordova-android",
+      "version": ">=4.0.0"
+    }
+  ],
+  "keywords": [
+    "adjust",
+    "sdk",
+    "ecosystem:cordova"
+  ],
+  "license": "MIT License",
+  "name": "com.adjust.sdk",
+  "platforms": [
+    "ios",
+    "android"
+  ],
+  "version": "4.22.1"
+}

@@ -197,6 +197,10 @@
             {
               "xml": "<feature name=\"Diagnostic_External_Storage\"><param name=\"android-package\" value=\"cordova.plugins.Diagnostic_External_Storage\" /><param name=\"onload\" value=\"true\" /></feature>",
               "count": 1
+            },
+            {
+              "xml": "<feature name=\"RequestLocationAccuracy\"><param name=\"android-package\" value=\"cordova.plugin.RequestLocationAccuracy\" /></feature>",
+              "count": 1
             }
           ]
         }
@@ -259,6 +263,10 @@
     },
     "phonegap-plugin-barcodescanner": {
       "ANDROID_SUPPORT_V4_VERSION": "27.+",
+      "PACKAGE_NAME": "com.appiyo.photoaudit"
+    },
+    "cordova-plugin-request-location-accuracy": {
+      "PLAY_SERVICES_LOCATION_VERSION": "16.+",
       "PACKAGE_NAME": "com.appiyo.photoaudit"
     }
   },
@@ -761,6 +769,14 @@
       "clobbers": [
         "cordova.plugins.barcodeScanner"
       ]
+    },
+    {
+      "id": "cordova-plugin-request-location-accuracy.RequestLocationAccuracy",
+      "file": "plugins/cordova-plugin-request-location-accuracy/www/android/RequestLocationAccuracy.js",
+      "pluginId": "cordova-plugin-request-location-accuracy",
+      "clobbers": [
+        "cordova.plugins.locationAccuracy"
+      ]
     }
   ],
   "plugin_metadata": {
@@ -781,6 +797,7 @@
     "com.adjust.sdk": "4.22.1",
     "cordova-plugin-androidx": "2.0.0",
     "cordova-plugin-androidx-adapter": "1.1.1",
-    "phonegap-plugin-barcodescanner": "8.1.0"
+    "phonegap-plugin-barcodescanner": "8.1.0",
+    "cordova-plugin-request-location-accuracy": "2.3.0"
   }
 }

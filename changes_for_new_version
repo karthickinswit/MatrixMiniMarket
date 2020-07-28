@@ -1,0 +1,31 @@
+main.js
+    // Make the request
+    requestLocationAccuracy();
+
+login.js
+
+comment home plugin
+
+utilities_mobile.js
+
+loginInToAppiyo
+
+
+cordova.plugins.IMEI(function (err, imei) {
+	console.log('imei', imei)
+	callback(imei);
+});
+
+initAudit.js
+
+2 time
+
+var gpsDetect = cordova.require('cordova/plugin/gpsDetectionPlugin');
+	        // gpsDetect.checkGPS(function onGPSSuccess(on) {
+				//Check: GPS is enabled or not
+				var on= true;
+	            if(!on){
+
+
+
+

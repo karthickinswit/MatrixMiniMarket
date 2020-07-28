@@ -63,6 +63,10 @@
     "phonegap-plugin-barcodescanner": {
       "ANDROID_SUPPORT_V4_VERSION": "27.+",
       "PACKAGE_NAME": "com.appiyo.photoaudit"
+    },
+    "cordova-plugin-request-location-accuracy": {
+      "PLAY_SERVICES_LOCATION_VERSION": "16.+",
+      "PACKAGE_NAME": "com.appiyo.photoaudit"
     }
   },
   "dependent_plugins": {}

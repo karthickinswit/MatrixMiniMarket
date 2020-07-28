@@ -491,7 +491,7 @@ var inswit = {
 		for(var i = 0; i < imageList.length; i++){
 			var imageURI = imageList[i].imageURI;
 			if(imageURI){
-				window.resolveLocalFileSystemURI(imageURI, onSuccess, onFailure);
+				window.resolveLocalFileSystemURL(imageURI, onSuccess, onFailure);
 			}	
 		}
 	},
