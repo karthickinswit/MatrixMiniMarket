@@ -27,7 +27,7 @@ var inswit = {
 		password: "",
 	},
 
-	VERSION : "2.9",
+	VERSION : "3.0",
 
 	LOGIN_CREDENTIAL: {
 		"email": "minimarket@matrixbsindia.com",

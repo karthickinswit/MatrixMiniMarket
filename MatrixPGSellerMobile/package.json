@@ -39,7 +39,6 @@
   "cordova": {
     "plugins": {
       "cordova-plugin-whitelist": {},
-      "cordova-plugin-camera": {},
       "cordova-plugin-device": {},
       "cordova-plugin-dialogs": {},
       "cordova-plugin-inappbrowser": {},
@@ -56,8 +55,9 @@
       "cordova-plugin-androidx": {},
       "cordova-plugin-androidx-adapter": {},
       "phonegap-plugin-barcodescanner": {},
-      "cordova-plugin-request-location-accuracy": {
-        "PLAY_SERVICES_LOCATION_VERSION": "16.+"
+      "cordova-plugin-request-location-accuracy": {},
+      "cordova-plugin-camera": {
+        "ANDROID_SUPPORT_V4_VERSION": "27.+"
       }
     },
     "platforms": [

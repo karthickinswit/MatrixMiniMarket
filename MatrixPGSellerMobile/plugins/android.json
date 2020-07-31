@@ -10,10 +10,6 @@
     "cordova-plugin-whitelist": {
       "PACKAGE_NAME": "com.appiyo.photoaudit"
     },
-    "cordova-plugin-camera": {
-      "ANDROID_SUPPORT_V4_VERSION": "27.+",
-      "PACKAGE_NAME": "com.appiyo.photoaudit"
-    },
     "cordova-plugin-device": {
       "PACKAGE_NAME": "com.appiyo.photoaudit"
     },
@@ -66,6 +62,10 @@
     },
     "cordova-plugin-request-location-accuracy": {
       "PLAY_SERVICES_LOCATION_VERSION": "16.+",
+      "PACKAGE_NAME": "com.appiyo.photoaudit"
+    },
+    "cordova-plugin-camera": {
+      "ANDROID_SUPPORT_V4_VERSION": "27.+",
       "PACKAGE_NAME": "com.appiyo.photoaudit"
     }
   },

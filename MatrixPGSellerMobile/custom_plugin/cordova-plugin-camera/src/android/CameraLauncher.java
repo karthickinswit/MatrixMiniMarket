@@ -620,18 +620,6 @@ public class CameraLauncher extends CordovaPlugin implements MediaScannerConnect
         bitmap = null;
     }
 
-    private void drawCenter(Canvas canvas, Paint paint, String text) {
-        Rect r = new Rect();
-        canvas.getClipBounds(r);
-        int cHeight = r.height();
-        int cWidth = r.width();
-        paint.setTextAlign(Paint.Align.LEFT);
-        paint.getTextBounds(text, 0, text.length(), r);
-        float x = cWidth / 2f - r.width() / 2f - r.left;
-        float y = cHeight / 2f + r.height() / 2f - r.bottom;
-        canvas.drawText(text, x, y, paint);
-    }
-
     private String getPicturesPath() {
         String timeStamp = new SimpleDateFormat(TIME_FORMAT).format(new Date());
         String imageFileName = "IMG_" + timeStamp + (this.encodingType == JPEG ? JPEG_EXTENSION : PNG_EXTENSION);
@@ -1137,11 +1125,12 @@ public class CameraLauncher extends CordovaPlugin implements MediaScannerConnect
                     tPaint.setTextSize(40);
                     tPaint.setColor(Color.WHITE);
                     tPaint.setStyle(Paint.Style.FILL);
+ 		    
+                    drawCenter(cs, tPaint, text);
 
+                   //cs.rotate(90, 10f, 30f);
 
-                    cs.rotate(90, 10f, 30f);
-
-                    cs.drawText(text, 40f, 30f, tPaint);               
+                   //cs.drawText(text, 40f, 30f, tPaint);               
                 }
     
             }catch (Exception e) {
@@ -1159,6 +1148,18 @@ public class CameraLauncher extends CordovaPlugin implements MediaScannerConnect
             }
         }
 
+    }
+
+   private void drawCenter(Canvas canvas, Paint paint, String text) {
+        Rect r = new Rect();
+        canvas.getClipBounds(r);
+        int cHeight = r.height();
+        int cWidth = r.width();
+        paint.setTextAlign(Paint.Align.LEFT);
+        paint.getTextBounds(text, 0, text.length(), r);
+        float x = cWidth / 2f - r.width() / 2f - r.left;
+        float y = cHeight / 2f + r.height() / 2f - r.bottom;
+        canvas.drawText(text, x, y, paint);
     }
 
     /**

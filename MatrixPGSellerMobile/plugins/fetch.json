@@ -7,14 +7,6 @@
     "is_top_level": true,
     "variables": {}
   },
-  "cordova-plugin-camera": {
-    "source": {
-      "type": "local",
-      "path": "/media/christus/9cfe9003-fd7a-4a1b-b8e6-759076d91f2e/matrix/checkin/MatrixPGSellerMobile/node_modules/cordova-plugin-camera"
-    },
-    "is_top_level": true,
-    "variables": {}
-  },
   "cordova-plugin-device": {
     "source": {
       "type": "registry",
@@ -146,7 +138,15 @@
   "cordova-plugin-request-location-accuracy": {
     "source": {
       "type": "registry",
-      "id": "cordova-plugin-request-location-accuracy"
+      "id": "cordova-plugin-request-location-accuracy@^2.3.0"
+    },
+    "is_top_level": true,
+    "variables": {}
+  },
+  "cordova-plugin-camera": {
+    "source": {
+      "type": "local",
+      "path": "/media/christus/9cfe9003-fd7a-4a1b-b8e6-759076d91f2e/matrix/checkin/MatrixPGSellerMobile/node_modules/cordova-plugin-camera"
     },
     "is_top_level": true,
     "variables": {}
