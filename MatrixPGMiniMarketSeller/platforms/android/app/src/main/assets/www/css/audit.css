@@ -1,6 +1,6 @@
 /*Login page css*/
 .loginpage .control-group {
-	margin-top: 85%;
+	padding-top: 50%;
 	text-align: center;
 }
 .loginpage .placeholder_color {
@@ -25,6 +25,11 @@
 .audit_header .center_content {
 	width: 100%;
     text-indent: 10px;
+    margin-top: 7px;
+    margin-left: 28px;
+}
+.audits .no_border_left {
+   border-left: 0px solid #ddd !important;
 }
 .audit_header .logo {
 	margin: 0 7px;
@@ -32,27 +37,24 @@
 .audits .back {
 	float: left;
 	margin : 10px 0 0 0;
+	width: 45px;
+    height: 45px;
+    position: fixed;
 }
 .audits .left_content{
 	font-weight: bolder;
     color: #03549c;
     height: 100%;
     line-height: 3;
-    //border-left: 1px solid #ddd;
+    border-left: 1px solid #ddd;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
-    margin: 0 20px 0 45px;
-    display: block;
-}
-.audits .header_border_left {
-    border-left: 1px solid #ddd;
-}
-.audits .audit_list{
-    margin-top: 17px;
+    /* margin: 0 20px 0 45px; */
+    /* display: block; */
 }
 .audit_home_header .left_content {
-	margin: 0 20px 0 60px;
+	/* margin: 0 20px 0 60px; */
 }
 .audits .audit{
 	display: block;
@@ -108,6 +110,7 @@
 .adt_status select{
 	width: 100%;
 	padding: 5px;
+	/*margin-top: 30px;*/
 }
 .audits .resource_content{
 	display: inline-block;
@@ -125,13 +128,18 @@
 .audits .con_adt_option input{
 	margin: 10px;
 }
-.audits .audit_continue, .audits .upload_audits{
+
+.audits .audit_continue{
 	top:60px;
 }
+
+.audits .upload_audits{
+	top: 140px;
+}
+
 .audits .view_container,
 .audits .audit_details {
 	padding: 5px;
-	bottom: 15px;
 }
 
 .audits .photo_block, .audits .product_done{
@@ -150,14 +158,26 @@
 	font-size: 16px;
 	font-weight: bold;
 }
-.audits .product_header, .audits .score_header{
+.audits .field_type {
+    display: inline-block;
+}
+
+
+.audits .product_header, .audits .score_header,
+.audits .smartspot_header{
 	width: 100%;
 	height: 50px;
 	background: #03549c;
 	color: #ffffff;
 	text-align: center;
 	display: table;
+/*	margin-top: 15px;*/
 }
+
+.audits .smartspot_header {
+    background: #1e211e !important;
+}
+
 .audits .score_header{
 	line-height: 2.5;
 	font-size: 18px
@@ -230,7 +250,8 @@
 .audits .go_next, 
 .audits .complete_audit,
 .audits .product_done,
-.audits .upload_audit{
+.audits .upload_audit,
+.audits .restart_audit{
 	width: 95%;
 	text-align: center;
 	margin-left: 2.5%;
@@ -324,7 +345,16 @@
 	margin: 10px 0;
 }
 .audits .adt_status{
-	margin: 0 0 20px 0;
+	margin: 40px 0 20px 0;
+}
+
+.audits .auditer_detail{
+	text-align: center;
+    padding: 10px;
+}
+
+.audits .audit_textbox {
+	padding: 5px;
 }
 
 /***Questions***/
@@ -355,7 +385,7 @@
 	top:310px;
 }
 .audits .question_list {
-	top: 110px;
+	top: 65px;
 }
 .audits .table i {
 	width: 24px;
@@ -494,6 +524,10 @@
 	border-color: #ebccd1;
 	color: #a94442;
 }
+
+.error_background {
+    background: #867a7a;
+}
 .error_message {
 	display: none;
 }
@@ -503,7 +537,7 @@
 	width: 95%;
 }
 .header_cont {
-	width: 115px;
+	/*width: 115px;*/
 	position: absolute;
 	right: 0;
 	top: 0;
@@ -512,6 +546,12 @@
 	margin: 0;
 	background: #03549c;
 
+}
+.on_upload_audit + .scroll_parent .btn,
+.audits .go_audit_list,
+.audits .bulk_upload_retry {
+    width: 98%;
+    margin: 1%;
 }
 .on_upload_audit .center_content {
 	color: #fff;
@@ -579,16 +619,63 @@
     width: 50px;
     vertical-align: bottom;
 }
-.audits .last_visit{
+
+
+.audits .restart_audit {
+    margin-top: 40px;
+}
+
+.audits .product_question{
+	width: 35%;
+    position: relative;
+    display: inline-block;
     font-weight: bold;
-    margin-right: 18px;
+    color: #000 !important;
+    margin-left: 60px;
 }
-.audits .last_visit_norm {
-    margin-left: 10px;
+
+.norm_header .center_content{
+	margin-top: 9px;
+    line-height: 1;
 }
-.audits .remark_txt_bx{
-    width: 94%;
+.norm_header .sub_header_name{
+    margin-left: 40px;
+    color: #524b4b;
+    line-height: 2;
 }
-.audits .remarks_3 {
-    margin: 11px 0 0 23px;
+
+.audits .add_product_photo {
+    text-align: center;
+    width: 100%;
+    display: inline-block;
+}
+
+.audits .multiple_photo_block {
+    width: 98%;
+}
+
+.audits .multiple_photo_table .remove_item {
+    display: block !important;
+    border-color: transparent;
+    position: absolute;
+    right: 2px;
+    z-index:11;
+}
+
+.multiple_photo_table_row .photo_block_container {
+        position: relative;
+        margin-left: 1.5%;
+        padding-top: 50px;
+        /*display: inline-block;*/
+        /*z-index: -1;*/
+}
+.audits .bulk_upload {
+    vertical-align: 14px;
+}
+
+.force_clear_ico {
+	background: url("../images/matrix_icons/force_clear.png");
+	background-size: cover;
+	vertical-align: -3px;
+	margin: 10px;
 }

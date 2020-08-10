@@ -86,5 +86,39 @@ var LocalStorage = {
 
     getAuditStatus: function() {
       return JSON.parse(localStorage.getItem("auditStatus"));
+    },
+
+    setAuditTimeLimit: function(minutes) {
+        localStorage.setItem("auditTimeLimit", minutes);
+    },
+
+    getAuditTimeLimit: function() {
+        return localStorage.getItem("auditTimeLimit");
+    },
+
+    setServerTime: function(id, time) {
+      localStorage.setItem(id, time);
+    },
+
+    getServerTime: function(id) {
+      var time = localStorage.getItem(id);
+      return time;
+    },
+
+    removeServerTime: function(id) {
+        localStorage.removeItem(id)
+    },
+
+    setLoginStatus: function() {
+        localStorage.setItem("loginDone", true);
+    },
+
+    getLoginStatus: function() {
+        return localStorage.getItem("loginDone");
+    },
+
+    removeLoginStatus: function() {
+        localStorage.removeItem("loginDone");
     }
+
 };

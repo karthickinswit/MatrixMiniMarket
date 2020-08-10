@@ -3,7 +3,7 @@ define([], function(){
 
 	templates.resetEmail = '<div class="">\
 		<div class="audit_header audit_home_header">\
-			<img src="images/logo.png" class="logo ico_48 pull-left">\
+			<img src="images/logo.png" class="logo ico_48 float-left">\
 			<div class="left_content">\
 				<div class="center_content font_18">Reset Password</div>\
 			</div>\
@@ -26,7 +26,7 @@ define([], function(){
 
 	templates.setPassword = '<div class="">\
 		<div class="audit_header audit_home_header">\
-			<img src="images/logo.png" class="logo ico_48 pull-left">\
+			<img src="images/logo.png" class="logo ico_48 float-left">\
 			<div class="left_content">\
 				<div class="center_content font_18">Update Password</div>\
 			</div>\

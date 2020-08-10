@@ -2,11 +2,11 @@ define([],function(){
     var templates = {};
 
     templates.auditMain =  '{{#audits}}\
-                                <div class="audit {{mId}}" href={{mId}} style=background:{{auditColor}}>\
+                                <div class="audit" href={{mId}} style=background:{{auditColor}}>\
                                     <span class="audit_channel_status">\
-                                        <div class="color_code" style=background:{{color}}>{{channelCode}}</div>\
+                                        <div class="color_code" style="background:{{color}}">{{channelCode}}</div>\
                                         {{#partial}}\
-                                            <img src="images/matrix_icons/audit_icon_48.png" class="ico_32 status_ico">\
+                                            <img src="images/matrix_icons/audit_intermediate_48.png" class="ico_32 status_ico">\
                                         {{/partial}}\
             							{{#completed}}\
                                             <img src="images/matrix_icons/audit_pending_48.png" class="ico_32 status_ico">\
@@ -29,13 +29,11 @@ define([],function(){
                                             <i class="font_12">Due  &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</i>:\
                                             <span class="font_14 ellipsis" title="{{endDate}}">{{ endDate}}</span>\
                                         </span>\
-                                        <span class="last_visit_date">\
-                                            <img src="images/matrix_icons/date_audit.png" class="ico_12">\
-                                            <i class="font_12">Last visit</i>:\
-                                            <span class="font_14 ellipsis" title="{{endDate}}">{{ lastVisit}}</span>\
-                                        </span>\
                                     </span>\
                                     <span class="left_arrow" style="display:inline-block">\
+                                        {{#audited}}\
+                                            <img src="images/matrix_icons/ok_green_48.png" class="ico_32">\
+                                        {{/audited}}\
                                         <img src="images/matrix_icons/back_arrow_blue_72.png" class="ico_32">\
                                     </span>\
                                 </div>\
@@ -49,31 +47,44 @@ define([],function(){
                                     <div class="center_content bold font_18">Completed Audits</div>\
                                 </div>\
                             </div>\
+                            <button class="upload_all btn btn-success" id="upload_all">Upload All</button>\
                             <div id="upload_audit_wrapper" class="scroll_parent upload_audits">\
-                            {{#audits}}\
-                                <div class="audit" href={{mId}}>\
-                                    <img src="images/matrix_icons/audit_pending_48.png" class="ico_32 status_ico">\
-                                    <div class="resource_content">\
-                                        <span class="font_18 name text_ellipsis" title="{{store_name}}">\
-                                            {{store_name}}\
-                                        </span>\
-                                        <span class="store_code text_ellipsis">\
-                                            <img src="images/matrix_icons/store_code.png" class="ico_12">\
-                                            <i class="font_12">Store &nbsp&nbsp</i>:\
-                                            <span class="font_14 ellipsis" title="{{store_code}}">{{ store_code}}</span>\
-                                        </span>\
-                                        <span class="assigned_date">\
-                                            <img src="images/matrix_icons/date_audit.png" class="ico_12">\
-                                            <i class="font_12">Due  &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</i>:\
-                                            <span class="font_14 ellipsis" title="{{due}}">{{ due}}</span>\
+                              <div class="norms scroll_ele" >\
+                                {{#audits}}\
+                                    <div class="audit" href={{mId}}>\
+                                        <img src="images/matrix_icons/audit_pending_48.png" class="ico_32 status_ico">\
+                                        <div class="resource_content">\
+                                            <span class="font_18 name text_ellipsis" title="{{store_name}}">\
+                                                {{store_name}}\
+                                            </span>\
+                                            <span class="store_code text_ellipsis">\
+                                                <img src="images/matrix_icons/store_code.png" class="ico_12">\
+                                                <i class="font_12">Store &nbsp&nbsp</i>:\
+                                                <span class="font_14 ellipsis" title="{{store_code}}">{{ store_code}}</span>\
+                                            </span>\
+                                            <span class="assigned_date">\
+                                                <img src="images/matrix_icons/date_audit.png" class="ico_12">\
+                                                <i class="font_12">Due  &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</i>:\
+                                                <span class="font_14 ellipsis" title="{{due}}">{{ due}}</span>\
+                                            </span>\
+                                        </div>\
+                                        <span class="left_arrow" style="display:none">\
+                                            <img src="images/matrix_icons/back_arrow_blue_72.png" class="ico_32">\
                                         </span>\
                                     </div>\
-                                    <span class="left_arrow" style="display:inline-block">\
-                                        <img src="images/matrix_icons/back_arrow_blue_72.png" class="ico_32">\
-                                    </span>\
+                                {{/audits}}\
+                              </div>';
+
+
+    templates.emptyCompAudit =  '<div class="audit_header">\
+                                <div class="back">\
+                                    <img src="images/matrix_icons/back_arrow_red_72.png" class="ico_36">\
                                 </div>\
-                            {{/audits}}\
-                            <button class="upload_all btn btn-success" id="upload_all">Upload All</button>';
+                                <div class="left_content">\
+                                    <div class="center_content bold font_18">Completed Audits</div>\
+                                </div>\
+                            </div>\
+                            <div class="no_audit">Nothing is ready to upload</div>';
     
     templates.filterModal = '<div id="myModal" class="modal" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">\
                             <div class="modal-dialog">\
@@ -130,6 +141,20 @@ define([],function(){
                         <li class="branch_filter ellipsis">{{branchName}}</li>\
                     </ul>';
 
+        templates.photoBlock ='<tr class="multiple_photo_table_row">\
+		    <td>\
+		    <div class="pull-right">\
+                 <button class="btn-mini btn-warning hide remove_item">\
+                  X</button>\
+             </div>\
+		     <div class="photo_block_container">\
+		          <button class="pull-left btn take_product_photo gillette_store_photo">\
+		               <img class="ico_16" src="images/matrix_icons/take_photo_48.png">\
+		               Take Brand Photo\
+		          </button>\
+		     </div>\
+		   </td>\
+		 </tr>';
 
     return templates;
 });

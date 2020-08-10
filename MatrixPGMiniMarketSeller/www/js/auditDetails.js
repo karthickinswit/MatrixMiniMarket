@@ -32,8 +32,7 @@ define([
 							inswit.hideLoaderEl();
 							var date = new Date();
 			            	var formattedDate = date.getDate() + "-" + (date.getMonth() + 1) + "-" + date.getFullYear();
-			            	var auditedDate = "-";
-
+			            	
 			            	that.auditDetails = {
 								name: result.store_name,
 								storeId: result.store_id,
@@ -50,8 +49,7 @@ define([
 								auditorName: result.adtr_name,
 								auditorCode: result.adtr_code,
 								date: formattedDate,
-								mId:mId,
-								lastVisit: result.last_visit_date
+								mId:mId
 							};
 				 
 							var html = Mustache.to_html(template, that.auditDetails);

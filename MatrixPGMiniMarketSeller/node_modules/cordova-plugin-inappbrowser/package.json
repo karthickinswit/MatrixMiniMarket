@@ -1,4 +1,10 @@
 {
+  "_args": [
+    [
+      "cordova-plugin-inappbrowser@4.0.0",
+      "/media/christus/9cfe9003-fd7a-4a1b-b8e6-759076d91f2e/matrix/checkin/MatrixPGMiniMarketSeller"
+    ]
+  ],
   "_from": "cordova-plugin-inappbrowser@4.0.0",
   "_id": "cordova-plugin-inappbrowser@4.0.0",
   "_inBundle": false,
@@ -16,12 +22,10 @@
     "fetchSpec": "4.0.0"
   },
   "_requiredBy": [
-    "#USER",
     "/"
   ],
   "_resolved": "https://registry.npmjs.org/cordova-plugin-inappbrowser/-/cordova-plugin-inappbrowser-4.0.0.tgz",
-  "_shasum": "081e125b3ece05e30dd00e5f9396160926832a2a",
-  "_spec": "cordova-plugin-inappbrowser@4.0.0",
+  "_spec": "4.0.0",
   "_where": "/media/christus/9cfe9003-fd7a-4a1b-b8e6-759076d91f2e/matrix/checkin/MatrixPGMiniMarketSeller",
   "author": {
     "name": "Apache Software Foundation"
@@ -29,7 +33,6 @@
   "bugs": {
     "url": "https://github.com/apache/cordova-plugin-inappbrowser/issues"
   },
-  "bundleDependencies": false,
   "cordova": {
     "id": "cordova-plugin-inappbrowser",
     "platforms": [
@@ -40,7 +43,6 @@
       "windows"
     ]
   },
-  "deprecated": false,
   "description": "Cordova InAppBrowser Plugin",
   "devDependencies": {
     "eslint": "^4.0.0",

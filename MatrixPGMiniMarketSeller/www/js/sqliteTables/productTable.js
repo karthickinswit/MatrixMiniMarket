@@ -1,30 +1,36 @@
 /*************************** Create All Enterprise Table in DB if not exist*****************************************/
 
 function createProductTable(tx, success, error) {
-    var createStatement = "CREATE TABLE IF NOT EXISTS mxpg_product(product_id TEXT, product_name TEXT, channel_id TEXT, channel_name TEXT, is_hotspot BOOLEAN, priority INTEGER, is_frontage BOOLEAN)";
+    var createStatement = "CREATE TABLE IF NOT EXISTS mxpg_product(product_id TEXT, product_name TEXT, category_id TEXT, channel_name TEXT, is_hotspot BOOLEAN, priority INTEGER, is_frontage BOOLEAN, brand_order NUMBER,  channel_id TEXT)";
     tx.executeSql(createStatement, [], success, error);
-    var createIndex = "CREATE UNIQUE INDEX allProductIndex ON mxpg_product(product_id, channel_id)";
+    var createIndex = "CREATE UNIQUE INDEX allProductIndex ON mxpg_product(product_id, category_id, channel_id, brand_order)";
     tx.executeSql(createIndex);
 }
 
-function getProductName(db, mId, pId, fn) {
+function getProductName(db, mId,  categoryId, productId, fn) {
     var id = mId.split("-");
     var auditId = id[0];
     var storeId = id[1];
     var channelId = id[2];
     
-    var query = "select product_name, priority, is_frontage from mxpg_product where product_id='" + pId + "' AND channel_id='" + channelId + "'";
+    var query = "select p.product_name, p.priority, p.is_frontage, p.product_id, c.category_type from mxpg_product p join mxpg_category c  where p.category_id= " + categoryId + " and p.channel_id="+ channelId +  " and c.category_id= "+ categoryId +"  and p.product_id = "+ productId;
     db.transaction(function(tx){
         tx.executeSql(query , [], function(tx, response) {
-            fn(response.rows.item(0));
+            var length = response.rows.length;
+            if(length > 0) {
+                fn(response.rows.item(0));
+            }else {
+                fn("");
+            }
+            
         });
     });
 }
 
 function createProductNormMap(tx, success, error) {
-    var createStatement = "CREATE TABLE IF NOT EXISTS mxpg_pn_map(product_id TEXT, norm_id TEXT, channel_id TEXT, store_score BOOLEAN, norm_order NUMBER)";
+    var createStatement = "CREATE TABLE IF NOT EXISTS mxpg_pn_map(product_id TEXT, norm_id TEXT, category_id TEXT, store_score BOOLEAN, norm_order NUMBER, channel_id TEXT, brand_order NUMBER, isConsider TEXT, qr_flag TEXT, audit_month TEXT, audit_month_id TEXT)";
     tx.executeSql(createStatement, [], success, error);
-    var createIndex = "CREATE UNIQUE INDEX pnMapIndex ON mxpg_pn_map(product_id, norm_id, channel_id)";
+    var createIndex = "CREATE UNIQUE INDEX pnMapIndex ON mxpg_pn_map(channel_id, product_id, norm_id, category_id, audit_month, audit_month_id)";
     tx.executeSql(createIndex);
 }
 
@@ -53,11 +59,9 @@ function populateProductTable(db, products, success, error) {
                 product.isHotSpot = false;
                 product.priority = 6;
             }
-
-             product.priority = 10;
             
-            tx.executeSql('INSERT OR replace INTO mxpg_product(product_id, product_name, channel_id, channel_name, is_hotspot, priority, is_frontage) VALUES (?,?,?,?,?,?,?);',
-                [product.brandId, product.brandName, product.chanId, product.chanName, product.isHotSpot, product.priority, product.isFrontage]
+            tx.executeSql('INSERT OR replace INTO mxpg_product(product_id, product_name, category_id, channel_name, is_hotspot, priority, is_frontage, brand_order, channel_id) VALUES (?,?,?,?,?,?,?,?,?);',
+                [product.brandId, product.brandName, product.categoryId, product.chanName, product.isHotSpot, product.priority, product.isFrontage, product.brandOrder, product.chanId]
             , success, error);
         }
     });
@@ -75,8 +79,8 @@ function populateProductNormMap(db, mapDetails, success, error) {
         for(var i = 0; i < mapDetails.length; i++){
             var mapData = mapDetails[i];
 
-            tx.executeSql('INSERT OR replace INTO mxpg_pn_map(product_id, norm_id, channel_id, store_score, norm_order) VALUES (?,?,?,?,?);',
-                [mapData.productId, mapData.normId, mapData.chanId, mapData.isConsider, mapData.normOrder]
+            tx.executeSql('INSERT OR replace INTO mxpg_pn_map(product_id, norm_id, category_id, store_score, norm_order, channel_id, brand_order, isConsider, qr_flag, audit_month, audit_month_id) VALUES (?,?,?,?,?,?,?,?,?,?,?);',
+                [mapData.productId, mapData.normId, mapData.categoryId, mapData.isConsider || "", mapData.normOrder,  mapData.chanId, mapData.brandOrder, mapData.isConsider, mapData.qrCode, mapData.auditMonth, mapData.auditId]
             , success, error);
         }
     });
@@ -90,7 +94,7 @@ function populateProductNormMap(db, mapDetails, success, error) {
 
 function selectProducts(db, auditId, storeId, channelId, fn, er) {
 
-    var query = "select t1.product_id, t1.product_name, t1.is_hotspot, t1.priority, t1.is_frontage from mxpg_product t1 join mxpg_store t2 where t1.channel_id='" + channelId + "' and t1.product_id = t2.brandId and t2.store_id = '" + storeId + "' ORDER BY priority DESC";
+    var query = "select product_id, product_name, is_hotspot, priority, is_frontage from mxpg_product where category_id='" + channelId + "' ORDER BY priority DESC";
     
     db.transaction(function(tx){
         tx.executeSql(query , [], function(tx, response) {
@@ -122,7 +126,7 @@ function selectProducts(db, auditId, storeId, channelId, fn, er) {
 
 function selectAllHotSpotBrands(db, auditId, storeId, channelId, fn, er) {
 
-    var query = "select product_id, product_name, priority from mxpg_product where channel_id='" + channelId + "' and priority=8 ";
+    var query = "select product_id, product_name, priority from mxpg_product where category_id='" + channelId + "' and priority=8 ";
     
     db.transaction(function(tx){
         tx.executeSql(query , [], function(tx, response) {
@@ -139,7 +143,7 @@ function selectAllHotSpotBrands(db, auditId, storeId, channelId, fn, er) {
 
 function selectProduct(db, productId, channelId, fn) {
 
-    var query = "select is_hotspot, priority, is_frontage from mxpg_product where channel_id='" + channelId + "' AND product_id='" + productId + "'";
+    var query = "select is_hotspot, priority, is_frontage from mxpg_product where category_id='" + channelId + "'";
     
     db.transaction(function(tx){
         tx.executeSql(query , [], function(tx, response) {
@@ -148,7 +152,6 @@ function selectProduct(db, productId, channelId, fn) {
         });
     });
 }
-
 
 /**
  * This method Select store image for store id where audit is partial in SQLite DB.
@@ -184,6 +187,22 @@ function getProdImage(db, storeId, fn) {
     db.transaction(function(tx){
         tx.executeSql(query , [storeId], function(tx, response) {
             fn(response);
+        });
+    });
+}
+
+
+
+function getBrandId(db, channelId, categoryId, fn) {
+    var query = "select product_id from mxpg_product  where channel_id=? and category_id=? ";
+
+    db.transaction(function(tx){
+        tx.executeSql(query , [channelId, categoryId], function(tx, response) {
+            var length = response.rows.length;
+            if(length > 0) {
+               var obj = response.rows.item(0);
+               fn(obj);
+            }
         });
     });
 }

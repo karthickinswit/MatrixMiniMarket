@@ -11,15 +11,17 @@ define([
 			perPage:5,
 			searchKey: "",
 			header: '<div class="audit_header audit_home_header">\
-						<img src="images/logo.png" class="logo ico_48 pull-left">\
-						<div class="left_content">\
-							<div class="center_content font_18">Audit List\
+						<img src="images/logo.png" class="logo ico_48 float-left">\
+						<span class="left_content">\
+							<span class="center_content font_18">Audit List\
+							</span>\
+							<div class="float-right font_12 header_cont">\
+                                <a class="force_clear"><i class="force_clear_ico ico_32"></i></a>\
+                                <a class="refresh_list"><i class="refresh_ico logout_ico ico_32"></i></a>\
+                                <a class="bulk_upload"><i class="upload_ico ico_24"></i></a>\
+                                <a class="logout"><i class="logout_ico ico_32"></i></a>\
 							</div>\
-							<div class="pull-right font_12 header_cont">\
-							<a class="refresh_list"><i class="refresh_ico logout_ico ico_32"></i></a>\
-							<a class="logout"><i class="logout_ico ico_32"></i></a>\
-							</div>\
-						</div>\
+						</span>\
 					</div>\
 					<div class="filter_container"></div>\
 					<div class="search_container">\
@@ -29,7 +31,9 @@ define([
 					<div class="modal_container"></div>',
 		},
 
-		initialize: function() {}                             
+		initialize: function() {
+		    this.alreadyStarted = false;
+		}
 	});
 
 	Audit.View = Backbone.View.extend({
@@ -45,7 +49,9 @@ define([
 			"click .reset_filter" : "resetFilterValues",
 			"change .distributor_name" : "onChangeDistributor",
 			"change .distributor_location" : "onChangeLocation",
-			"click .refresh_list" : "getAudits"
+			"click .refresh_list" : "getAudits",
+			"click .bulk_upload" : "showCompletedAuditList",
+			"click .force_clear": "forceClear"
 		},
 
 		filter : {
@@ -71,13 +77,13 @@ define([
 
 		render: function() {
 			var that = this;
-			inswit.showLoaderEl("Loading Audits");
+			//inswit.showLoaderEl("Loading Audits");
 
 			//Append filter header template
 			this.$el.append(this.model.get("header"));
 
 			//Fetch audits from local database
-			this.fetchAudit();
+			/*this.fetchAudit();
 			this.getAudits();
 
 			if(this.timeOut){
@@ -87,7 +93,16 @@ define([
 
 			this.timeOut = setTimeout(function(){
 				inswit.hideLoaderEl();
-			}, 30000);
+			}, 30000);*/
+
+			var isLoggedIn = LocalStorage.getLoginStatus();
+
+            if(!isLoggedIn) {
+                this.getAudits();
+            }else {
+                that.fetchAudit("", true, [], true);
+                $(".no_audit").remove();
+            }
 		},
 
 		getAudits: function(event) {
@@ -113,11 +128,26 @@ define([
 			    			inswit.sessionOut();
 			    		}
 			    	}
+			    	var cutOffTime = response.ProcessVariables.cutOffTime;
+                    LocalStorage.setAuditTimeLimit(cutOffTime);
+
+                    var storeEndDateExtend = response.ProcessVariables.storeEndDateExtend;
+                    populateAuditDateRange(db, storeEndDateExtend);
 
 		    		if(response.ProcessVariables.isUpdate){
-			    		inswit.alert("Master data is changed!. Hereafter you can do audits based on new modification");
+			    		//inswit.alert("Master data is changed!. Hereafter you can do audits based on new modification");
 
 			    		that.fetchUpdatedMasterData(function(){
+			    			if(response.ProcessVariables.sgfNormMap) {
+			    				var sgfNormMap = response.ProcessVariables.sgfNormMap;
+			    				populateSgfTable(db, sgfNormMap);
+			    			}
+
+			    			if(response.ProcessVariables.qrcodeDetails) {
+                                var qrcodeDetails = response.ProcessVariables.qrcodeDetails;
+                                populateQrCodePnMap(db, qrcodeDetails);
+                            }
+
 			    			if(response.ProcessVariables.stores){
 			    				//inswit.alert("Stores loded from server:- " + response.ProcessVariables.stores.length);
 
@@ -136,6 +166,8 @@ define([
 		                    	inswit.hideLoaderEl();
 		                    	that.fetchAudit("", true, [], true);
 		                    }
+
+		                     LocalStorage.setLoginStatus();
 			    		});
 			    	}else{
 
@@ -149,6 +181,8 @@ define([
 	                        }
 						
                         	populateAllStoreTable(db, storesDetails, callback);
+
+                        	LocalStorage.setLoginStatus();
 
 	                    }else {
 	                    	//inswit.alert("Stores are not coming from the server");
@@ -201,74 +235,113 @@ define([
 					var completedAudit = false;
 					selectAllCompletedAudit(db, function(audits){
 						//Clear unwanted last month(expired) audits from database
-						inswit.clearAudits(auditList, audits, newAuditDetails, isConsider);
+						//inswit.clearAudits(auditList, audits, newAuditDetails, isConsider);
 
-						if(isConsider)
+						//if(isConsider)
 						//inswit.alert("After clearing unwanted audits:- " + auditList.length);
 
-						var completedAuditLength = audits.length;
-					
-						inswit.setColorCode(auditList, function(auditList){
-							var length = auditList.length;
-							if(completedAuditLength > 0){
-								completedAudit = true;
-								for(var i = 0; i < length; i++){
-									var audit = auditList[i];
 
-									if(audit.is_fresh === "true" || audit.is_fresh === true){
-										audit.auditColor = inswit.BGCOLOR[0];
-									}else{
-										audit.auditColor = inswit.BGCOLOR[1];
-									}
+                        selectAuditHistories(db, function(auditHistory){
 
-									for(var j = 0; j < completedAuditLength; j++){
-										var completedAudit = audits[j];
-										if(audit.auditId == completedAudit.audit_id && audit.id == completedAudit.store_id){
-											
-											if((completedAudit.audited == "true" && completedAudit.comp_audit == "false") 
-												|| (completedAudit.audited == "false" && completedAudit.comp_audit == "false")){
-												audit.partial = true;
-												that.removePartilAudit(audit.mId, function() {
-												    console.log("removed partial Audit");
-												});
-											}else if(completedAudit.comp_audit == "true"){
-												audit.completed = true;
-											}
+                            for(var i = 0; i < auditList.length; i++){
+                                auditList[i].audited = false;
 
-											break;
-										}
+                                for(var j = 0; j < auditHistory.length; j++){
+                                    var item = auditHistory.item(j);
+                                    if(auditList[i].id === item.store_id){
+                                        auditList[i].audited = true;
+                                        break;
+                                    }
+                                }
+                            }
 
-										if(j+1 == completedAuditLength){
-											audit.normal = true;
-										}
-									}
-								}
+                            var completedAuditLength = audits.length;
 
-								var html = Mustache.to_html(template.auditMain, {"audits":auditList});
-								that.$el.find(".audit_list").html(html);
+                            inswit.setColorCode(auditList, function(auditList){
+                                var length = auditList.length;
+                                if(completedAuditLength > 0){
+                                    completedAudit = true;
+                                    for(var i = 0; i < length; i++){
+                                        var audit = auditList[i];
 
-							}else{
+                                        if(audit.is_fresh === "true" || audit.is_fresh === true){
+                                            audit.auditColor = inswit.BGCOLOR[0];
+                                        }else{
+                                            audit.auditColor = inswit.BGCOLOR[1];
+                                        }
 
-								if(length > 0) {
-									for(var k = 0; k < length; k++){
-										auditList[k].normal = true;
+                                        for(var j = 0; j < completedAuditLength; j++){
+                                            var completedAudit = audits[j];
+                                            if(audit.auditId == completedAudit.audit_id && audit.id == completedAudit.store_id){
 
-										if(auditList[k].is_fresh === "true" || auditList[k].is_fresh === true){
-											auditList[k].auditColor = inswit.BGCOLOR[0];
-										}else{
-											auditList[k].auditColor = inswit.BGCOLOR[1];
-										}
-									}
+                                                if((completedAudit.audited == "true" && completedAudit.comp_audit == "false")
+                                                    || (completedAudit.audited == "false" && completedAudit.comp_audit == "false")){
+                                                    audit.partial = true;
 
-									var html = Mustache.to_html(template.auditMain, {"audits":auditList});
-									that.$el.find(".audit_list").html(html);				
-								}else {
-									that.$el.find(".audit_list").append("<div class='no_audit'>No audits found</div>");
-								}
-							}
-							that.refreshScroll("wrapper_audit");
-						});
-					});					
+                                                    /*that.removePartilAudit(audit.mId, function() {
+                                                        console.log("removed partial Audit");
+                                                    });*/
+                                                    /*inswit.showLoaderEl("Checking for partial completed store! Please wait...");
+                                                    that.checkRemainingTime(audit.mId, function() {
+                                                        router.navigate("/audits/"+ audit.mId, {
+                                                            trigger: true
+                                                        });
+                                                        inswit.alert(inswit.ErrorMessages.oldTimerExceed);
+                                                        return;
+                                                    });*/
+                                                     if(!that.alreadyStarted) {
+                                                            inswit.showLoaderEl("Checking for partial completed store! Please wait...");
+                                                            that.checkRemainingTime(audit.mId, function() {
+                                                                router.navigate("/audits/"+ audit.mId, {
+                                                                   trigger: true
+                                                                });
+                                                                inswit.alert(inswit.ErrorMessages.oldTimerExceed);
+                                                                return;
+                                                            });
+                                                     }
+
+
+                                                }else if(completedAudit.comp_audit == "true"){
+                                                    audit.audited = true;
+                                                    audit.completed = true;
+                                                }
+
+                                                break;
+                                            }
+
+                                            if(j+1 == completedAuditLength){
+                                                audit.normal = true;
+                                            }
+                                        }
+                                    }
+
+                                    var html = Mustache.to_html(template.auditMain, {"audits":auditList});
+                                    that.$el.find(".audit_list").html(html);
+
+                                }else{
+
+                                    if(length > 0) {
+                                        for(var k = 0; k < length; k++){
+                                            auditList[k].normal = true;
+
+                                            if(auditList[k].is_fresh === "true" || auditList[k].is_fresh === true){
+                                                auditList[k].auditColor = inswit.BGCOLOR[0];
+                                            }else{
+                                                auditList[k].auditColor = inswit.BGCOLOR[1];
+                                            }
+                                        }
+
+                                        var html = Mustache.to_html(template.auditMain, {"audits":auditList});
+                                        that.$el.find(".audit_list").html(html);
+                                    }else {
+                                        that.$el.find(".audit_list").append("<div class='no_audit'>No audits found</div>");
+                                    }
+                                }
+                                that.refreshScroll("wrapper_audit");
+                            });
+                        });
+
+                    });
 				});
 
 			}catch(err){
@@ -288,16 +361,23 @@ define([
 	            	if((audit.audited == "true" && audit.comp_audit == "false") 
 						|| (audit.audited == "false" && audit.comp_audit == "false")){
 
-						router.navigate("/audits/"+ mId + "/continue", {
-	                        trigger: true
-	                    });
+						inswit.showLoaderEl("Checking for partial completed store! Please wait...");
+                        that.checkRemainingTime(mId, function() {
+                            inswit.alert(inswit.ErrorMessages.oldTimerExceed);
+                            router.navigate("/audits/"+ mId, {
+                                trigger: true
+                            });
+                        });
+                         router.navigate("/audits/"+ mId, {
+                            trigger: true
+                        });
 					}else if(audit.audited == "true" && audit.comp_audit == "true"){
-
+                        return;
 						router.navigate("/audits/"+ mId + "/upload", {
 	                        trigger: true
 	                    });
 					}else if(audit.audited == "false" && audit.comp_audit == "true"){
-
+                        return;
 						router.navigate("/audits/"+ mId + "/upload", {
 	                        trigger: true
 	                    });
@@ -310,7 +390,7 @@ define([
             });
 		},
 
-		showCompletedAuditList: function(){
+		/*showCompletedAuditList: function(){
 			var that = this;
 
 			require(['templates/t_audits'], function(template){
@@ -319,7 +399,14 @@ define([
 					that.$el.empty().html(html);
 				});
 			});
-		},
+		},*/
+
+		showCompletedAuditList: function(){
+            router.navigate("/audits/upload/all", {
+                trigger: true,
+                replace: true
+            });
+        },
 
 		renderFilterDialog: function() {
 			var that = this;
@@ -597,12 +684,98 @@ define([
 			this.scrollView.refresh();
 		},
 
-		removePartilAudit: function(mId, callback) {
-		     var id = mId.split("-");
+        checkRemainingTime: function(mId, callback) {
+            var that = this;
+            var serverDateTime;
+            var startedDateTime;
+
+            var auditTimeLimit = LocalStorage.getAuditTimeLimit();
+
+            serverDateTime = new Date(); // Current Date & Time
+
+            startedDateTime = new Date(localStorage.getItem(mId));
+
+            var diffTime = serverDateTime.getTime() - startedDateTime.getTime();
+            if(diffTime < 0 ) {
+                var id = mId.split("-");
+                var storeId = id[1];
+                inswit.clearPartialAudit(storeId);
+                inswit.alert(inswit.ErrorMessages.invalidMobileTime);
+                callback();
+                return;
+            }
+            if(diffTime >= auditTimeLimit * 60 *1000) {
+                var id = mId.split("-");
+                var storeId = id[1];
+                inswit.clearPartialAudit(storeId);
+                callback();
+            }else {
+                //Go to products page
+                var ele = $(".timer_container").show();
+                var el = "timer";
+                var remainingTime = ((auditTimeLimit* 60* 1000) - diffTime);
+
+                var minutes = Math.floor(remainingTime / 60000);
+                var seconds = ((remainingTime % 60000) / 1000).toFixed(0);
+                seconds = (seconds < 10 ? '0' : '') + seconds;
+
+                console.log("minutes"+ minutes);
+                console.log("seconds"+ seconds);
+
+
+                var id = mId.split("-");
+                var storeId = id[1];
+                inswit.setTimer(el, parseInt(minutes), parseInt(seconds), storeId);
+                that.alreadyStarted = true;
+                var route = "#audits/" + mId + "/categoryList";
+                router.navigate(route, {
+                    trigger: true
+                });
+            }
+            inswit.hideLoaderEl();
+
+        },
+
+        getDateTime: function(serverTime) {
+            var dateTime;
+
+            var dateString = serverTime.split(" ");
+
+
+             var dateParts = dateString[0].split("-");
+             var timeParts = dateString[1].split(":");
+
+             dateTime = new Date(dateParts[2], dateParts[1] - 1 , dateParts[0], timeParts[0], timeParts[1], timeParts[2]);
+
+             return dateTime;
+        },
+
+        removePartilAudit: function(mId, callback) {
+             var id = mId.split("-");
              var storeId = id[1];
              inswit.clearPartialAudit(storeId);
              callback();
-		},
+        },
+
+        forceClear: function() {
+
+            inswit.confirm(inswit.alertMessages.forceLogout, function onConfirm(buttonIndex) {
+                if(buttonIndex == 1) {
+                    LocalStorage.removeEmployeeEmail();
+
+                    LocalStorage.removeAccessToken();
+                    LocalStorage.removeEmployeeId();
+                    LocalStorage.resetAuditFilter();
+                    LocalStorage.removeLoginStatus();
+
+                    router.navigate("/", {
+                        trigger: true
+                    });
+                }
+            }, "confirm", ["OK", "Cancel"]);
+
+        }
+
 	});
 	
 	return Audit;

@@ -44,7 +44,8 @@ define([
 
 			var userName = this.$el.find("#name").val().trim();
 			var password = this.$el.find("#password").val().trim();
-	
+
+
 			inswit.showLoaderEl("Logging in to Matrix.. Please wait");
 
 			if(this.loginTimeout){
@@ -59,7 +60,8 @@ define([
 			try{
 
 				var loginToMatrix = function(imei){
-					//imei = "911433805803104"; //Sample IMEI number for testing
+					//imei = "867274026348691"; //Sample IMEI number for testing
+					var uuid = device.uuid;
 					var processVariables = {
 						"projectId":inswit.LOGIN_PROCESS.projectId,
 						"workflowId":inswit.LOGIN_PROCESS.workflowId,
@@ -68,7 +70,9 @@ define([
 							"email":userName,
 							"password":password, 
 							"imei": imei,
-							"version": inswit.VERSION
+							"version": inswit.VERSION,
+							"isSellerAudit": true,
+							"UUID":uuid
 						}
 					};
 					
@@ -77,11 +81,15 @@ define([
 							
 							if(response.ProcessVariables.status){
 
+
 								var lastEmployeeEmail = LocalStorage.getEmployeeEmail();
 								
 								//Set new employee id
 								var empId = response.ProcessVariables.empId;
 								LocalStorage.setEmployeeId(empId);
+
+								//inswit.errorLog({"Info": "Login successfull"});
+
 
 								//inswit.errorLog({"info":"Logged in Successfully"});
 
@@ -537,13 +545,13 @@ define([
 					                        	}
 					                        );
 
-											createChannelTable(
+											createCategoryTable(
 					                        	tx, 
 					                        	function(){}, 
 					                        	function(error, info){
 					                        		var desc = {
 					                        			value: info.message,
-					                        			table: "mxpg_channel"
+					                        			table: "mxpg_category"
 					                        		};
 					                        		var pVariables = {
 													    "projectId":inswit.ERROR_LOG.projectId,
@@ -583,6 +591,53 @@ define([
 										            });
 					                        	}
 					                        );
+
+										createChannelTable(
+											tx, 
+											function(){}, 
+											function(error, info){
+												var desc = {
+													value: info.message,
+													table: "mxpg_channel"
+												};
+												var pVariables = {
+												    "projectId":inswit.ERROR_LOG.projectId,
+												    "workflowId":inswit.ERROR_LOG.workflowId,
+												    "processId":inswit.ERROR_LOG.processId,
+												    "ProcessVariables":{
+												    	"errorType": inswit.ERROR_LOG_TYPES.DB_CREATION,
+												    	"empId":empId,
+												    	"issueDate":new Date(),
+												    	"issueDescription": JSON.stringify(desc),
+												    	"version": inswit.VERSION
+												    }
+												};
+
+												inswit.executeProcess(pVariables, {
+												    success: function(response){
+												    	if(response.ProcessVariables){
+												    		
+												    	}
+										            }, failure: function(error){
+										            	inswit.hideLoaderEl();
+										            	switch(error){
+										            		case 0:{
+										            			inswit.alert("No Internet Connection!");
+										            			break;
+										            		}
+										            		case 1:{
+										            			inswit.alert("Check your network settings!");
+										            			break;
+										            		}
+										            		case 2:{
+										            			inswit.alert("Server Busy.Try Again!");
+										            			break;
+										            		}
+										            	}
+										            }
+										        });
+											}
+										);
 
 					                        createDistBranchLocationTable(
 					                        	tx, 
@@ -633,6 +688,681 @@ define([
 					                        	}
 					                        );
 
+
+					                        createAuditHistoryTable(
+                                                tx,
+                                                function(){},
+                                                function(error, info){
+
+                                                    var desc = {
+                                                        value: info.message,
+                                                        table: "mxpg_audit_history"
+                                                    };
+
+                                                    var pVariables = {
+                                                        "projectId":inswit.ERROR_LOG.projectId,
+                                                        "workflowId":inswit.ERROR_LOG.workflowId,
+                                                        "processId":inswit.ERROR_LOG.processId,
+                                                        "ProcessVariables":{
+                                                            "errorType": inswit.ERROR_LOG_TYPES.DB_CREATION,
+                                                            "empId":empId,
+                                                            "issueDate":new Date(),
+                                                            "issueDescription": JSON.stringify(desc),
+                                                            "version": inswit.VERSION
+                                                        }
+                                                    };
+
+                                                    inswit.executeProcess(pVariables, {
+                                                        success: function(response){
+
+                                                        }, failure: function(error){
+                                                            inswit.hideLoaderEl();
+                                                            switch(error){
+                                                                case 0:{
+                                                                    inswit.alert("No Internet Connection!");
+                                                                    break;
+                                                                }
+                                                                case 1:{
+                                                                    inswit.alert("Check your network settings!");
+                                                                    break;
+                                                                }
+                                                                case 2:{
+                                                                    inswit.alert("Server Busy.Try Again!");
+                                                                    break;
+                                                                }
+                                                            }
+                                                        }
+                                                    });
+                                                }
+                                            );
+
+											createSODTable(
+					                        	tx, 
+					                        	function(){}, 
+					                        	function(error, info){
+
+					                        		var desc = {
+					                        			value: info.message,
+					                        			table: "mxpg_sod"
+					                        		};
+
+					                        		var pVariables = {
+													    "projectId":inswit.ERROR_LOG.projectId,
+													    "workflowId":inswit.ERROR_LOG.workflowId,
+													    "processId":inswit.ERROR_LOG.processId,
+													    "ProcessVariables":{
+													    	"errorType": inswit.ERROR_LOG_TYPES.DB_CREATION,
+													    	"empId":empId,
+													    	"issueDate":new Date(),
+													    	"issueDescription": JSON.stringify(desc),
+													    	"version": inswit.VERSION
+													    }
+													};
+									
+													inswit.executeProcess(pVariables, {
+													    success: function(response){
+													    	if(response.ProcessVariables){
+													    		
+													    	}
+										                }, failure: function(error){
+										                	inswit.hideLoaderEl();
+										                	switch(error){
+										                		case 0:{
+										                			inswit.alert("No Internet Connection!");
+										                			break;
+										                		}
+										                		case 1:{
+										                			inswit.alert("Check your network settings!");
+										                			break;
+										                		}
+										                		case 2:{
+										                			inswit.alert("Server Busy.Try Again!");
+										                			break;
+										                		}
+										                	}
+										                }
+										            });
+					                        	}
+					                        );
+
+											
+											createSODProductTable(
+												tx, 
+												function(){}, 
+												function(error, info){
+
+													var desc = {
+														value: info.message,
+														table: "mxpg_comp_sod"
+													};
+
+													var pVariables = {
+													    "projectId":inswit.ERROR_LOG.projectId,
+													    "workflowId":inswit.ERROR_LOG.workflowId,
+													    "processId":inswit.ERROR_LOG.processId,
+													    "ProcessVariables":{
+													    	"errorType": inswit.ERROR_LOG_TYPES.DB_CREATION,
+													    	"empId":empId,
+													    	"issueDate":new Date(),
+													    	"issueDescription": JSON.stringify(desc),
+													    	"version": inswit.VERSION
+													    }
+													};
+
+													inswit.executeProcess(pVariables, {
+													    success: function(response){
+													    	if(response.ProcessVariables){
+													    		
+													    	}
+											            }, failure: function(error){
+											            	inswit.hideLoaderEl();
+											            	switch(error){
+											            		case 0:{
+											            			inswit.alert("No Internet Connection!");
+											            			break;
+											            		}
+											            		case 1:{
+											            			inswit.alert("Check your network settings!");
+											            			break;
+											            		}
+											            		case 2:{
+											            			inswit.alert("Server Busy.Try Again!");
+											            			break;
+											            		}
+											            	}
+											            }
+											        });
+												}
+											);
+
+
+											createCategoryNormMap(
+					                        	tx, 
+					                        	function(){}, 
+					                        	function(error, info){
+
+					                        		var desc = {
+					                        			value: info.message,
+					                        			table: "mxpg_cn_map"
+					                        		};
+
+					                        		var pVariables = {
+													    "projectId":inswit.ERROR_LOG.projectId,
+													    "workflowId":inswit.ERROR_LOG.workflowId,
+													    "processId":inswit.ERROR_LOG.processId,
+													    "ProcessVariables":{
+													    	"errorType": inswit.ERROR_LOG_TYPES.DB_CREATION,
+													    	"empId":empId,
+													    	"issueDate":new Date(),
+													    	"issueDescription": JSON.stringify(desc),
+													    	"version": inswit.VERSION
+													    }
+													};
+									
+													inswit.executeProcess(pVariables, {
+													    success: function(response){
+													    	
+										                }, failure: function(error){
+										                	inswit.hideLoaderEl();
+										                	switch(error){
+										                		case 0:{
+										                			inswit.alert("No Internet Connection!");
+										                			break;
+										                		}
+										                		case 1:{
+										                			inswit.alert("Check your network settings!");
+										                			break;
+										                		}
+										                		case 2:{
+										                			inswit.alert("Server Busy.Try Again!");
+										                			break;
+										                		}
+										                	}
+										                }
+										            });
+					                        	}
+					                        );
+
+											createSGFTable(
+					                        	tx, 
+					                        	function(){}, 
+					                        	function(error, info){
+
+					                        		var desc = {
+					                        			value: info.message,
+					                        			table: "mxpg_sgf"
+					                        		};
+
+					                        		var pVariables = {
+													    "projectId":inswit.ERROR_LOG.projectId,
+													    "workflowId":inswit.ERROR_LOG.workflowId,
+													    "processId":inswit.ERROR_LOG.processId,
+													    "ProcessVariables":{
+													    	"errorType": inswit.ERROR_LOG_TYPES.DB_CREATION,
+													    	"empId":empId,
+													    	"issueDate":new Date(),
+													    	"issueDescription": JSON.stringify(desc),
+													    	"version": inswit.VERSION
+													    }
+													};
+									
+													inswit.executeProcess(pVariables, {
+													    success: function(response){
+													    	
+										                }, failure: function(error){
+										                	inswit.hideLoaderEl();
+										                	switch(error){
+										                		case 0:{
+										                			inswit.alert("No Internet Connection!");
+										                			break;
+										                		}
+										                		case 1:{
+										                			inswit.alert("Check your network settings!");
+										                			break;
+										                		}
+										                		case 2:{
+										                			inswit.alert("Server Busy.Try Again!");
+										                			break;
+										                		}
+										                	}
+										                }
+										            });
+					                        	}
+					                        );
+
+					                        createSGFBrand(
+                                                tx,
+                                                function(){},
+                                                function(error, info){
+
+                                                    var desc = {
+                                                        value: info.message,
+                                                        table: "mxpg_sgf_brand"
+                                                    };
+
+                                                    var pVariables = {
+                                                        "projectId":inswit.ERROR_LOG.projectId,
+                                                        "workflowId":inswit.ERROR_LOG.workflowId,
+                                                        "processId":inswit.ERROR_LOG.processId,
+                                                        "ProcessVariables":{
+                                                            "errorType": inswit.ERROR_LOG_TYPES.DB_CREATION,
+                                                            "empId":empId,
+                                                            "issueDate":new Date(),
+                                                            "issueDescription": JSON.stringify(desc),
+                                                            "version": inswit.VERSION
+                                                        }
+                                                    };
+
+                                                    inswit.executeProcess(pVariables, {
+                                                        success: function(response){
+
+                                                        }, failure: function(error){
+                                                            inswit.hideLoaderEl();
+                                                            switch(error){
+                                                                case 0:{
+                                                                    inswit.alert("No Internet Connection!");
+                                                                    break;
+                                                                }
+                                                                case 1:{
+                                                                    inswit.alert("Check your network settings!");
+                                                                    break;
+                                                                }
+                                                                case 2:{
+                                                                    inswit.alert("Server Busy.Try Again!");
+                                                                    break;
+                                                                }
+                                                            }
+                                                        }
+                                                    });
+                                                }
+                                            );
+
+											createCategoryChannelMap(
+												tx, 
+					                        	function(){}, 
+					                        	function(error, info){
+
+					                        		var desc = {
+					                        			value: info.message,
+					                        			table: "mxpg_cc_map"
+					                        		};
+
+					                        		var pVariables = {
+													    "projectId":inswit.ERROR_LOG.projectId,
+													    "workflowId":inswit.ERROR_LOG.workflowId,
+													    "processId":inswit.ERROR_LOG.processId,
+													    "ProcessVariables":{
+													    	"errorType": inswit.ERROR_LOG_TYPES.DB_CREATION,
+													    	"empId":empId,
+													    	"issueDate":new Date(),
+													    	"issueDescription": JSON.stringify(desc),
+													    	"version": inswit.VERSION
+													    }
+													};
+									
+													inswit.executeProcess(pVariables, {
+													    success: function(response){
+													    	
+										                }, failure: function(error){
+										                	inswit.hideLoaderEl();
+										                	switch(error){
+										                		case 0:{
+										                			inswit.alert("No Internet Connection!");
+										                			break;
+										                		}
+										                		case 1:{
+										                			inswit.alert("Check your network settings!");
+										                			break;
+										                		}
+										                		case 2:{
+										                			inswit.alert("Server Busy.Try Again!");
+										                			break;
+										                		}
+										                	}
+										                }
+										            });
+					                        	}
+					                        );
+
+											createSGFCompTable(
+					                        	tx, 
+					                        	function(){}, 
+					                        	function(error, info){
+
+					                        		var desc = {
+					                        			value: info.message,
+					                        			table: "mxpg_comp_sgf"
+					                        		};
+
+					                        		var pVariables = {
+													    "projectId":inswit.ERROR_LOG.projectId,
+													    "workflowId":inswit.ERROR_LOG.workflowId,
+													    "processId":inswit.ERROR_LOG.processId,
+													    "ProcessVariables":{
+													    	"errorType": inswit.ERROR_LOG_TYPES.DB_CREATION,
+													    	"empId":empId,
+													    	"issueDate":new Date(),
+													    	"issueDescription": JSON.stringify(desc),
+													    	"version": inswit.VERSION
+													    }
+													};
+									
+													inswit.executeProcess(pVariables, {
+													    success: function(response){
+													    	
+										                }, failure: function(error){
+										                	inswit.hideLoaderEl();
+										                	switch(error){
+										                		case 0:{
+										                			inswit.alert("No Internet Connection!");
+										                			break;
+										                		}
+										                		case 1:{
+										                			inswit.alert("Check your network settings!");
+										                			break;
+										                		}
+										                		case 2:{
+										                			inswit.alert("Server Busy.Try Again!");
+										                			break;
+										                		}
+										                	}
+										                }
+										            });
+					                        	}
+					                        );
+
+					                        createCategorySmartSpotBrandMap(
+                                                tx,
+                                                function(){},
+                                                function(error, info){
+
+                                                    var desc = {
+                                                        value: info.message,
+                                                        table: "mxpg_csb_map"
+                                                    };
+
+                                                    var pVariables = {
+                                                        "projectId":inswit.ERROR_LOG.projectId,
+                                                        "workflowId":inswit.ERROR_LOG.workflowId,
+                                                        "processId":inswit.ERROR_LOG.processId,
+                                                        "ProcessVariables":{
+                                                            "errorType": inswit.ERROR_LOG_TYPES.DB_CREATION,
+                                                            "empId":empId,
+                                                            "issueDate":new Date(),
+                                                            "issueDescription": JSON.stringify(desc),
+                                                            "version": inswit.VERSION
+                                                        }
+                                                    };
+
+                                                    inswit.executeProcess(pVariables, {
+                                                        success: function(response){
+
+                                                        }, failure: function(error){
+                                                            inswit.hideLoaderEl();
+                                                            switch(error){
+                                                                case 0:{
+                                                                    inswit.alert("No Internet Connection!");
+                                                                    break;
+                                                                }
+                                                                case 1:{
+                                                                    inswit.alert("Check your network settings!");
+                                                                    break;
+                                                                }
+                                                                case 2:{
+                                                                    inswit.alert("Server Busy.Try Again!");
+                                                                    break;
+                                                                }
+                                                            }
+                                                        }
+                                                    });
+                                                }
+                                            );
+
+
+                                            createQrCodePnMap(
+                                                 tx,
+                                                 function(){},
+                                                 function(error, info){
+
+                                                     var desc = {
+                                                         value: info.message,
+                                                         table: "mxpg_qr_map"
+                                                     };
+
+                                                     var pVariables = {
+                                                         "projectId":inswit.ERROR_LOG.projectId,
+                                                         "workflowId":inswit.ERROR_LOG.workflowId,
+                                                         "processId":inswit.ERROR_LOG.processId,
+                                                         "ProcessVariables":{
+                                                             "errorType": inswit.ERROR_LOG_TYPES.DB_CREATION,
+                                                             "empId":empId,
+                                                             "issueDate":new Date(),
+                                                             "issueDescription": JSON.stringify(desc),
+                                                             "version": inswit.VERSION
+                                                         }
+                                                     };
+
+                                                     inswit.executeProcess(pVariables, {
+                                                         success: function(response){
+
+                                                         }, failure: function(error){
+                                                             inswit.hideLoaderEl();
+                                                             switch(error){
+                                                                 case 0:{
+                                                                     inswit.alert("No Internet Connection!");
+                                                                     break;
+                                                                 }
+                                                                 case 1:{
+                                                                     inswit.alert("Check your network settings!");
+                                                                     break;
+                                                                 }
+                                                                 case 2:{
+                                                                     inswit.alert("Server Busy.Try Again!");
+                                                                     break;
+                                                                 }
+                                                             }
+                                                         }
+                                                     });
+                                                 }
+                                            );
+
+                                            createMPDTable(
+                                                tx,
+                                                function(){},
+                                                function(error, info){
+
+                                                    var desc = {
+                                                        value: info.message,
+                                                        table: "mxpg_mpd"
+                                                    };
+
+                                                    var pVariables = {
+                                                        "projectId":inswit.ERROR_LOG.projectId,
+                                                        "workflowId":inswit.ERROR_LOG.workflowId,
+                                                        "processId":inswit.ERROR_LOG.processId,
+                                                        "ProcessVariables":{
+                                                            "errorType": inswit.ERROR_LOG_TYPES.DB_CREATION,
+                                                            "empId":empId,
+                                                            "issueDate":new Date(),
+                                                            "issueDescription": JSON.stringify(desc),
+                                                            "version": inswit.VERSION
+                                                        }
+                                                    };
+
+                                                    inswit.executeProcess(pVariables, {
+                                                        success: function(response){
+                                                            if(response.ProcessVariables){
+
+                                                            }
+                                                        }, failure: function(error){
+                                                            inswit.hideLoaderEl();
+                                                            switch(error){
+                                                                case 0:{
+                                                                    inswit.alert("No Internet Connection!");
+                                                                    break;
+                                                                }
+                                                                case 1:{
+                                                                    inswit.alert("Check your network settings!");
+                                                                    break;
+                                                                }
+                                                                case 2:{
+                                                                    inswit.alert("Server Busy.Try Again!");
+                                                                    break;
+                                                                }
+                                                            }
+                                                        }
+                                                    });
+                                                }
+                                            );
+
+
+                                            createSellerCompTable(
+                                                tx,
+                                                function(){},
+                                                function(error, info){
+
+                                                    var desc = {
+                                                        value: info.message,
+                                                        table: "mxpg_mp_seller"
+                                                    };
+
+                                                    var pVariables = {
+                                                        "projectId":inswit.ERROR_LOG.projectId,
+                                                        "workflowId":inswit.ERROR_LOG.workflowId,
+                                                        "processId":inswit.ERROR_LOG.processId,
+                                                        "ProcessVariables":{
+                                                            "errorType": inswit.ERROR_LOG_TYPES.DB_CREATION,
+                                                            "empId":empId,
+                                                            "issueDate":new Date(),
+                                                            "issueDescription": JSON.stringify(desc),
+                                                            "version": inswit.VERSION
+                                                        }
+                                                    };
+
+                                                    inswit.executeProcess(pVariables, {
+                                                        success: function(response){
+                                                            if(response.ProcessVariables){
+
+                                                            }
+                                                        }, failure: function(error){
+                                                            inswit.hideLoaderEl();
+                                                            switch(error){
+                                                                case 0:{
+                                                                    inswit.alert("No Internet Connection!");
+                                                                    break;
+                                                                }
+                                                                case 1:{
+                                                                    inswit.alert("Check your network settings!");
+                                                                    break;
+                                                                }
+                                                                case 2:{
+                                                                    inswit.alert("Server Busy.Try Again!");
+                                                                    break;
+                                                                }
+                                                            }
+                                                        }
+                                                    });
+                                                }
+                                            );
+
+                                             createAuditDateRange(
+                                                tx,
+                                                function(){},
+                                                function(error, info){
+
+                                                    var desc = {
+                                                        value: info.message,
+                                                        table: "mxpg_audit_date_range"
+                                                    };
+
+                                                    var pVariables = {
+                                                        "projectId":inswit.ERROR_LOG.projectId,
+                                                        "workflowId":inswit.ERROR_LOG.workflowId,
+                                                        "processId":inswit.ERROR_LOG.processId,
+                                                        "ProcessVariables":{
+                                                            "errorType": inswit.ERROR_LOG_TYPES.DB_CREATION,
+                                                            "empId":empId,
+                                                            "issueDate":new Date(),
+                                                            "issueDescription": JSON.stringify(desc),
+                                                            "version": inswit.VERSION
+                                                        }
+                                                    };
+
+                                                    inswit.executeProcess(pVariables, {
+                                                        success: function(response){
+                                                            if(response.ProcessVariables){
+
+                                                            }
+                                                        }, failure: function(error){
+                                                            inswit.hideLoaderEl();
+                                                            switch(error){
+                                                                case 0:{
+                                                                    inswit.alert("No Internet Connection!");
+                                                                    break;
+                                                                }
+                                                                case 1:{
+                                                                    inswit.alert("Check your network settings!");
+                                                                    break;
+                                                                }
+                                                                case 2:{
+                                                                    inswit.alert("Server Busy.Try Again!");
+                                                                    break;
+                                                                }
+                                                            }
+                                                        }
+                                                    });
+                                                }
+                                             );
+
+
+                                           /*  createQrCodePnMap(
+                                                tx,
+                                                function(){},
+                                                function(error, info){
+
+                                                    var desc = {
+                                                        value: info.message,
+                                                        table: "mxpg_qr_map"
+                                                    };
+
+                                                    var pVariables = {
+                                                        "projectId":inswit.ERROR_LOG.projectId,
+                                                        "workflowId":inswit.ERROR_LOG.workflowId,
+                                                        "processId":inswit.ERROR_LOG.processId,
+                                                        "ProcessVariables":{
+                                                            "errorType": inswit.ERROR_LOG_TYPES.DB_CREATION,
+                                                            "empId":empId,
+                                                            "issueDate":new Date(),
+                                                            "issueDescription": JSON.stringify(desc),
+                                                            "version": inswit.VERSION
+                                                        }
+                                                    };
+
+                                                    inswit.executeProcess(pVariables, {
+                                                        success: function(response){
+
+                                                        }, failure: function(error){
+                                                            inswit.hideLoaderEl();
+                                                            switch(error){
+                                                                case 0:{
+                                                                    inswit.alert("No Internet Connection!");
+                                                                    break;
+                                                                }
+                                                                case 1:{
+                                                                    inswit.alert("Check your network settings!");
+                                                                    break;
+                                                                }
+                                                                case 2:{
+                                                                    inswit.alert("Server Busy.Try Again!");
+                                                                    break;
+                                                                }
+                                                            }
+                                                        }
+                                                    });
+                                                }
+                                             );*/
+
+
 					                    	var processVariables = {
 												"projectId":inswit.INIT_PROCESS.projectId,
 												"workflowId":inswit.INIT_PROCESS.workflowId,
@@ -650,12 +1380,19 @@ define([
 														LocalStorage.setLastUpdatedDate(processVariables.updatedDate);
 														var products = processVariables.brandChanMap;
 														var productNormMap = processVariables.brandNormMap;
-														var norms = processVariables.normOptionRemarkMap;
-														var options = processVariables.options;
-														var remarks = processVariables.remarks;
+														var norms = processVariables.normOptionRemarkMap || [];
+														var options = processVariables.options || [];
+														var remarks = processVariables.remarks || [];
 														var distributors = processVariables.DistributorBranch;
 														var storeStatus = processVariables.StoreStatus;
 														var channels = processVariables.channelList;
+														var categoryList = processVariables.categoryList
+														var cnNormMap = processVariables.categoryNormMap || [];
+														var sod = processVariables.sodNormMap || [];
+														var ccMap = processVariables.channelCategoryMap;
+														var sgfNormMap = processVariables.sgfNormMap || [];
+														var csbMap = processVariables.categorySmartSpotBrands || [];
+														var sgfBrands = processVariables.sgfBrands || [];
 														
 														//Populate all the tables
 														populateProductTable(
@@ -669,6 +1406,103 @@ define([
 								                        			table: "mxpg_product"
 								                        		};
 
+																var pVariables = {
+																    "projectId":inswit.ERROR_LOG.projectId,
+																    "workflowId":inswit.ERROR_LOG.workflowId,
+																    "processId":inswit.ERROR_LOG.processId,
+																    "ProcessVariables":{
+																    	"errorType": inswit.ERROR_LOG_TYPES.DB_UPDATION,
+																    	"empId":empId,
+																    	"issueDate":new Date(),
+																    	"issueDescription": JSON.stringify(desc),
+																    	"version": inswit.VERSION
+																    }
+																};
+												
+																inswit.executeProcess(pVariables, {
+																    success: function(response){
+																    	if(response.ProcessVariables){
+																    		
+																    	}
+													                }, failure: function(error){
+													                	inswit.hideLoaderEl();
+													                	switch(error){
+													                		case 0:{
+													                			inswit.alert("No Internet Connection!");
+													                			break;
+													                		}
+													                		case 1:{
+													                			inswit.alert("Check your network settings!");
+													                			break;
+													                		}
+													                		case 2:{
+													                			inswit.alert("Server Busy.Try Again!");
+													                			break;
+													                		}
+													                	}
+													                }
+													            });
+															}
+														);
+
+														populateSODTable(
+															db, 
+															sod,
+															function(){}, 
+															function(error, info){
+
+																var desc = {
+								                        			value: sod,
+								                        			table: "mxpg_product"
+								                        		};
+
+																var pVariables = {
+																    "projectId":inswit.ERROR_LOG.projectId,
+																    "workflowId":inswit.ERROR_LOG.workflowId,
+																    "processId":inswit.ERROR_LOG.processId,
+																    "ProcessVariables":{
+																    	"errorType": inswit.ERROR_LOG_TYPES.DB_UPDATION,
+																    	"empId":empId,
+																    	"issueDate":new Date(),
+																    	"issueDescription": JSON.stringify(desc),
+																    	"version": inswit.VERSION
+																    }
+																};
+												
+																inswit.executeProcess(pVariables, {
+																    success: function(response){
+																    	if(response.ProcessVariables){
+																    		
+																    	}
+													                }, failure: function(error){
+													                	inswit.hideLoaderEl();
+													                	switch(error){
+													                		case 0:{
+													                			inswit.alert("No Internet Connection!");
+													                			break;
+													                		}
+													                		case 1:{
+													                			inswit.alert("Check your network settings!");
+													                			break;
+													                		}
+													                		case 2:{
+													                			inswit.alert("Server Busy.Try Again!");
+													                			break;
+													                		}
+													                	}
+													                }
+													            });
+															}
+														);
+														populateCategoryNormTable(
+															db, 
+															cnNormMap, 
+															function(){}, 
+															function(error, info){
+																var desc = {
+								                        			value: cnNormMap,
+								                        			table: "mxpg_cn_map"
+								                        		};
 																var pVariables = {
 																    "projectId":inswit.ERROR_LOG.projectId,
 																    "workflowId":inswit.ERROR_LOG.workflowId,
@@ -1003,6 +1837,55 @@ define([
 															}
 														);
 														
+														populateCategoryTable(
+															db, 
+															categoryList, 
+															function(){}, 
+															function(error, info){
+									
+																var desc = {
+								                        			value: categoryList,
+								                        			table: "mxpg_category"
+								                        		};
+
+																var pVariables = {
+																    "projectId":inswit.ERROR_LOG.projectId,
+																    "workflowId":inswit.ERROR_LOG.workflowId,
+																    "processId":inswit.ERROR_LOG.processId,
+																    "ProcessVariables":{
+																    	"errorType": inswit.ERROR_LOG_TYPES.DB_UPDATION,
+																    	"empId":empId,
+																    	"issueDate":new Date(),
+																    	"issueDescription": JSON.stringify(desc),
+																    	"version": inswit.VERSION
+																    }
+																};										
+																inswit.executeProcess(pVariables, {
+																    success: function(response){
+																    	if(response.ProcessVariables){
+																    		
+																    	}
+													                }, failure: function(error){
+													                	inswit.hideLoaderEl();
+													                	switch(error){
+													                		case 0:{
+													                			inswit.alert("No Internet Connection!");
+													                			break;
+													                		}
+													                		case 1:{
+													                			inswit.alert("Check your network settings!");
+													                			break;
+													                		}
+													                		case 2:{
+													                			inswit.alert("Server Busy.Try Again!");
+													                			break;
+													                		}
+													                	}
+													                }
+													            });
+															}
+														);
+
 														populateChannelTable(
 															db, 
 															channels, 
@@ -1051,6 +1934,156 @@ define([
 													            });
 															}
 														);
+
+														
+														populateSgfBrandTable(
+															db, 
+															sgfBrands,
+															function(){}, 
+															function(error, info){
+									
+																var desc = {
+								                        			value: sgfBrands,
+								                        			table: "mxpg_sgf_brand"
+								                        		};
+
+																var pVariables = {
+																    "projectId":inswit.ERROR_LOG.projectId,
+																    "workflowId":inswit.ERROR_LOG.workflowId,
+																    "processId":inswit.ERROR_LOG.processId,
+																    "ProcessVariables":{
+																    	"errorType": inswit.ERROR_LOG_TYPES.DB_UPDATION,
+																    	"empId":empId,
+																    	"issueDate":new Date(),
+																    	"issueDescription": JSON.stringify(desc),
+																    	"version": inswit.VERSION
+																    }
+																};										
+																inswit.executeProcess(pVariables, {
+																    success: function(response){
+																    	if(response.ProcessVariables){
+																    		
+																    	}
+													                }, failure: function(error){
+													                	inswit.hideLoaderEl();
+													                	switch(error){
+													                		case 0:{
+													                			inswit.alert("No Internet Connection!");
+													                			break;
+													                		}
+													                		case 1:{
+													                			inswit.alert("Check your network settings!");
+													                			break;
+													                		}
+													                		case 2:{
+													                			inswit.alert("Server Busy.Try Again!");
+													                			break;
+													                		}
+													                	}
+													                }
+													            });
+															}
+														);
+
+
+
+														populateCategoryChannel(
+															db, 
+															ccMap, 
+															function(){}, 
+															function(error, info){
+									
+																var desc = {
+								                        			value: channels,
+								                        			table: "mxpg_channel"
+								                        		};
+
+																var pVariables = {
+																    "projectId":inswit.ERROR_LOG.projectId,
+																    "workflowId":inswit.ERROR_LOG.workflowId,
+																    "processId":inswit.ERROR_LOG.processId,
+																    "ProcessVariables":{
+																    	"errorType": inswit.ERROR_LOG_TYPES.DB_UPDATION,
+																    	"empId":empId,
+																    	"issueDate":new Date(),
+																    	"issueDescription": JSON.stringify(desc),
+																    	"version": inswit.VERSION
+																    }
+																};										
+																inswit.executeProcess(pVariables, {
+																    success: function(response){
+																    	if(response.ProcessVariables){
+																    		
+																    	}
+													                }, failure: function(error){
+													                	inswit.hideLoaderEl();
+													                	switch(error){
+													                		case 0:{
+													                			inswit.alert("No Internet Connection!");
+													                			break;
+													                		}
+													                		case 1:{
+													                			inswit.alert("Check your network settings!");
+													                			break;
+													                		}
+													                		case 2:{
+													                			inswit.alert("Server Busy.Try Again!");
+													                			break;
+													                		}
+													                	}
+													                }
+													            });
+															}
+														);
+
+														populateCsbMap(
+                                                            db,
+                                                            csbMap,
+                                                            function(){},
+                                                            function(error, info){
+
+                                                                var desc = {
+                                                                    value: channels,
+                                                                    table: "mxpg_csb_map"
+                                                                };
+
+                                                                var pVariables = {
+                                                                    "projectId":inswit.ERROR_LOG.projectId,
+                                                                    "workflowId":inswit.ERROR_LOG.workflowId,
+                                                                    "processId":inswit.ERROR_LOG.processId,
+                                                                    "ProcessVariables":{
+                                                                        "errorType": inswit.ERROR_LOG_TYPES.DB_UPDATION,
+                                                                        "empId":empId,
+                                                                        "issueDate":new Date(),
+                                                                        "issueDescription": JSON.stringify(desc),
+                                                                        "version": inswit.VERSION
+                                                                    }
+                                                                };
+                                                                inswit.executeProcess(pVariables, {
+                                                                    success: function(response){
+                                                                        if(response.ProcessVariables){
+
+                                                                        }
+                                                                    }, failure: function(error){
+                                                                        inswit.hideLoaderEl();
+                                                                        switch(error){
+                                                                            case 0:{
+                                                                                inswit.alert("No Internet Connection!");
+                                                                                break;
+                                                                            }
+                                                                            case 1:{
+                                                                                inswit.alert("Check your network settings!");
+                                                                                break;
+                                                                            }
+                                                                            case 2:{
+                                                                                inswit.alert("Server Busy.Try Again!");
+                                                                                break;
+                                                                            }
+                                                                        }
+                                                                    }
+                                                                });
+                                                            }
+                                                        );
 
 														router.navigate("/audits", {
 										                    trigger: true

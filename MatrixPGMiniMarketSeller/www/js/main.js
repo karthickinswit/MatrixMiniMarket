@@ -36,11 +36,10 @@ require.config({
         "jquery.loadmask": ["jquery"]
     }
 });
-var platform;
 
+var platform;
 function onDeviceReady(isDesktop) {
     platform = cordova.platformId;
-
     require(["router", "jquery.loadmask"], function(Router) {
         try{
 
@@ -69,20 +68,18 @@ function onDeviceReady(isDesktop) {
         
         $('body').addClass("android cover");
         select2Intitialize();
+
+        inswit.events = _.extend({}, Backbone.Events);
     });
 
-    document.addEventListener("backbutton", backKeyDown, false);
-
-    // Make the request
-    requestLocationAccuracy();
-
-
+        // Make the request
+        requestLocationAccuracy();
 }
 
 if (!isDesktop()) {
     // This is running on a device so waiting for deviceready event
     document.addEventListener('deviceready', onDeviceReady, false);
-    //document.addEventListener("backbutton", backKeyDown, true);
+    document.addEventListener("backbutton", backKeyDown, true);
     document.addEventListener("resume", onResume, false);
     document.addEventListener("touchstart", function(){}, true);
 
@@ -106,6 +103,10 @@ function backKeyDown(e) {
     var hash = location.hash;
     var temp = hash.split("/");
 
+    var link = location.hash.split('/');
+
+
+
     var length = temp.length;
     if(length > 0)
         temp = temp[length - 1];
@@ -126,12 +127,8 @@ function backKeyDown(e) {
         router.navigate("/audits", {
             trigger: true
         });
-    }else if(location.hash.lastIndexOf("products") != -1|| location.hash.lastIndexOf("continue") != -1){
-            if(location.hash.lastIndexOf("products/") != -1){
-             history.back();
-        }else{
-             return;
-        }
+    }else if(link[2] == "categoryList"){
+            return;
     }else{
         history.back();
     }
@@ -195,6 +192,13 @@ function Migrator(db) {
                 console.error(e);
         }
     }
+}
+
+function isNumberKey(evt){
+    var charCode = (evt.which) ? evt.which : event.keyCode
+    if (charCode > 31 && (charCode < 48 || charCode > 57))
+        return false;
+    return true;
 }
 
 function onError(error) {

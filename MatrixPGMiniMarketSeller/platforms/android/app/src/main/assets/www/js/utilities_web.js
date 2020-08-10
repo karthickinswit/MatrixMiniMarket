@@ -1,8 +1,7 @@
 var inswit = {};
 
-var PROJECTID = "1c62737aae0d11e59d090050569cb68c";   //development
-//var PROJECTID = "4f9b261ea32d11e5a9bb0050569ccb08"; //production
-//var PROJECTID = "97677c1832bc11e5a9bb0050569ccb08"; //demo
+//var PROJECTID = "a8fe973aff5c11e79d0d0050569cb68c"; //production
+var PROJECTID = "3d916a1c-60fb-4e86-8222-5f4d7c66951f"; //process
 
 window.device = {
 	platform: "android",
@@ -20,35 +19,41 @@ inswit = {
 		password: "",
 	},
 
-	VERSION : "2.1",
+	VERSION : "1.1",
 
-	LOGIN_CREDENTIAL: {
-		"email": "admin@matrixbsindia.com",
+LOGIN_CREDENTIAL: {
+		"email": "minimarket@matrixbsindia.com",
 		"password": "admin@matrix123"
 	},
 
 	LOGIN_PROCESS: {
 		"projectId":PROJECTID,
-		"workflowId":"8f3f33568f4f11e59d090050569cb68c",
-		"processId":"8fa75b988f4f11e59d090050569cb68c"
+		"workflowId":"f474e9a6382c40a6bc4232e50d1bb167",
+		"processId":"037852e078ca4ae5aecf6b2d760c36ee"
 	},
 
 	UPLOAD_PROCESS: {
 		"projectId":PROJECTID,
-		"workflowId":"1e2d4f5e8f7711e59d090050569cb68c",
-		"processId":"1e9139e28f7711e59d090050569cb68c"
+		"workflowId":"9a450cb9b7f6416abfc2c4f706e31403",
+		"processId":"e01e657a91824027802d4feac1168617"
 	},
 
 	FORGOT_PROCESS: {
 		"projectId":PROJECTID,
-		"workflowId":"15099ffeb29f11e59d090050569cb68c",
-		"processId":"155378f4b29f11e59d090050569cb68c"
+		"workflowId":"ce83479cad6a4a6f951c66a1990ca3f2",
+		"processId":"bbbb9a09f36941538e84dbe76da86549"
+	},
+
+	REGISTER_PROCESS: {
+		"projectId":PROJECTID,
+		"workflowId":"4242ac00daee11eaa360c282e0885855",
+		"processId":"426bc4d2daee11eaa360c282e0885855"
 	},
 
 	RESET_PROCESS: {
 		"projectId":PROJECTID,
-		"workflowId":"15099ffeb29f11e59d090050569cb68c",
-		"processId":"bca4a7dcb2a311e5a9bb0050569ccb08"
+		"workflowId":"ce83479cad6a4a6f951c66a1990ca3f2",
+		"processId":"417ec4429beb475fb71090084f319632"
 	},
 
 	GET_DETAILED_AUDIT_PROCESS: {
@@ -59,27 +64,33 @@ inswit = {
 
 	GET_ASSIGNED_AUDIT_PROCESS: {
 		"projectId":PROJECTID,
-		"workflowId":"ffa187448f5311e59d090050569cb68c",
-		"processId":"0005eb8a8f5411e59d090050569cb68c"
+		"workflowId":"a6e3595105f840f09d430829bff59235",
+		"processId":"9b27e388222f4f238fde82659a38c3c3"
 	},
 
 	INIT_PROCESS: {
 		"projectId":PROJECTID,
-		"workflowId":"d10e37629feb11e5a9bb0050569ccb08",
-		"processId":"d163cccc9feb11e5a9bb0050569ccb08"
+		"workflowId":"a5deb0663c754763a93fccd9289e8ff0",
+		"processId":"8e7adb41ad194c93b7664db684c108ba"
 	},
 
 	ERROR_LOG: {
 		"projectId":PROJECTID,
-		"workflowId":"16307c78314711e69d090050569cb68c",
-		"processId":"16837428314711e69d090050569cb68c"
+		"workflowId":"28e722a7522843c98211b30b5f2cd61f",
+		"processId":"17f4b1d0be9549d9b6106c76b5aa4315"
 	},
 
 	ERROR_LOG_UPLOAD: {
 		"projectId":PROJECTID,
-		"workflowId":"9e8b3fa899b711e6a9bc0050569ccb08",
-		"processId":"9edc962899b711e6a9bc0050569ccb08"
+		"workflowId":"c8d262b2d48347e485714042cd13cb49",
+		"processId":"7ea6c23bb1724838bab4b2681c29c4b1"
 	},
+
+	SERVER_TIME: {
+        "projectId":PROJECTID,
+        "workflowId":"c33bd4a78755407ba70352624144de7c",
+        "processId":"935ec05204224e53bcac63f6d84813bd"
+    },
 
 	COLORS:[
 		"#FF0000",
@@ -134,6 +145,18 @@ inswit = {
 		UPLOAD_AUDIT: "UPLOAD_AUDIT",
 		UPDATE_MASTER: "UPDATE_MASTER"
 	},
+
+	FIELD_TYPES: {
+		INT: "1",
+		TEXT: "2",
+		OPTION: "3"
+	},
+
+	FIELDS: {
+		"TEXT_INPUT": "0"
+	},
+
+	
 	alert: function( msg ) {
     	alert( msg, function(){}, 'Alert' );
     },
@@ -524,55 +547,74 @@ inswit = {
 	},
 
 	takePicture: function(callback, takeEl, retakeEl) {
-		var that = this;
+		 var that = this;
 
-		if($("."+ takeEl + ", ." + retakeEl).hasClass("disable")) {
-			return;
-		}
-		
-		$("."+ takeEl + ", ." + retakeEl).addClass("disable");
+        //inswit.errorLog({"info":"Before taking picture"});
 
-		if (!navigator.camera) {
-			inswit.alert("Camera API not supported", "Error");
-			return;
-		}
+        if(!parentsEl) {
 
-		var cameraOptions = {
-			quality: 50,
-			destinationType: Camera.DestinationType.FILE_URI,//To get image URI       
-			sourceType: Camera.PictureSourceType.CAMERA,  // 0:Photo Library, 1=Camera, 2=Saved Album
-			encodingType: Camera.EncodingType.JPEG,// 0=JPEG 1=PNG,
-			targetWidth: 728,
-	        targetHeight: 1024,
-	        correctOrientation: true,
-	        inbuiltCamera: true
-	    };
+            if($("."+ takeEl + ", ." + retakeEl).hasClass("disable")) {
+                return;
+            }
 
-	    var oldImageURI = $(".photo_block img").attr("src") || "";
-		navigator.camera.getPicture(function(imageURI) {
-			var template = "<img src='{{imageURI}}' width='100%' height='200'><a class='{{element}} retake_photo'>Retake</a>";
-			var html = Mustache.to_html(template, {"imageURI":imageURI, "element":retakeEl});
+            $("."+ takeEl + ", ." + retakeEl).addClass("disable");
+        }else {
+            if(parentsEl.find("."+ takeEl + ", ." + retakeEl).hasClass("disable")) {
+                return;
+            }
 
-			$("." + takeEl).remove();
-			$(".photo_block").empty().append(html);
+            parentsEl.find("."+ takeEl + ", ." + retakeEl).addClass("disable");
+        }
 
-			callback(imageURI);
+        if (!navigator.camera) {
+            inswit.alert("Camera API not supported", "Error");
+            return;
+        }
 
-			if(oldImageURI){
-				var imageList = [{"imageURI":oldImageURI}];
-				inswit.clearPhoto(imageList);
-			}
+        var cameraOptions = {
+        quality: 50,
+        destinationType: Camera.DestinationType.FILE_URI,//0=DATA_URL, 1=FILE_URI
+        sourceType: Camera.PictureSourceType.CAMERA,  // 0=Photo Library, 1=Camera, 2=Saved Album
+        encodingType: Camera.EncodingType.JPEG,// 0=JPEG 1=PNG,
+        targetWidth: 728,
+        targetHeight: 1024,
+        correctOrientation: true,
+        inbuiltCamera: true,
+        superImposeTimeStamp: true,
+        superImposeText: superImposeText || ""
+        };
 
-			//that.refreshScroll("wrapper_norms");
-			//that.scrollView.scrollToElement('.product_done', 0); 
-			
-			$("."+ takeEl + ", ." + retakeEl).removeClass("disable");
+        var oldImageURI = $(".photo_block img").attr("src") || "";
+        navigator.camera.getPicture(function(imageURI) {
+        var template = "<img src='{{imageURI}}' width='100%' height='200'><a class='{{element}} retake_photo'>Retake</a>";
+        var html = Mustache.to_html(template, {"imageURI":imageURI, "element":retakeEl});
 
-		},function(err) {
-			var imageURI = $(".photo_block img").attr("src") || "";
-			callback(imageURI);
-			$("."+ takeEl + ", ." + retakeEl).removeClass("disable");
-		}, cameraOptions);
+        if(!parentsEl) {
+            $("." + takeEl).remove();
+            $(".photo_block").empty().append(html);
+        }else {
+            parentsEl.find("." + takeEl).remove();
+             parentsEl.find(".photo_block").empty().append(html);
+        }
+
+        callback(imageURI);
+
+        if(oldImageURI){
+            var imageList = [{"imageURI":oldImageURI}];
+            inswit.clearPhoto(imageList);
+        }
+
+        if(!parentsEl) {
+            $("."+ takeEl + ", ." + retakeEl).removeClass("disable");
+        }else {
+            parentsEl.find("."+ takeEl + ", ." + retakeEl).removeClass("disable");
+        }
+
+        },function(err) {
+            var imageURI = $(".photo_block img").attr("src") || "";
+            callback(imageURI);
+            $("."+ takeEl + ", ." + retakeEl).removeClass("disable");
+        }, cameraOptions);
 	},
 
 	updateMasterData: function(processVariables, callback){
@@ -586,6 +628,8 @@ inswit = {
 			var remarks = processVariables.remarks;
 			var distributors = processVariables.DistributorBranch;
 			var empId = LocalStorage.getEmployeeId();
+			var channels = processVariables.channelList;
+			var categoryList = processVariables.categoryList;
 			
 			var modified = false;
 			//Remove and populate the product table
@@ -689,6 +733,107 @@ inswit = {
 					});
 				});
 			}
+
+			//Remove and populate the category table
+			if(categoryList && categoryList.length > 0){
+				modified = true;
+
+				removeTable(db, "mxpg_category", function(){
+					populateCategoryTable(db, categoryList, function(){}, function(error, info){
+						var desc = {
+							value: categoryList,
+							table: "mxpg_category"
+						};
+						var pVariables = {
+						    "projectId":inswit.ERROR_LOG.projectId,
+						    "workflowId":inswit.ERROR_LOG.workflowId,
+						    "processId":inswit.ERROR_LOG.processId,
+						    "ProcessVariables":{
+						    	"errorType": inswit.ERROR_LOG_TYPES.UPDATE_MASTER,
+						    	"empId":empId,
+						    	"issueDate":new Date(),
+						    	"issueDescription": JSON.stringify(desc),
+						    	"version": inswit.VERSION
+						    }
+						};
+		
+						inswit.executeProcess(pVariables, {
+						    success: function(response){
+						    	if(response.ProcessVariables){
+						    		
+						    	}
+			                }, failure: function(error){
+			                	inswit.hideLoaderEl();
+			                	switch(error){
+			                		case 0:{
+			                			inswit.alert("No Internet Connection!");
+			                			break;
+			                		}
+			                		case 1:{
+			                			inswit.alert("Check your network settings!");
+			                			break;
+			                		}
+			                		case 2:{
+			                			inswit.alert("Server Busy.Try Again!");
+			                			break;
+			                		}
+			                	}
+			                }
+			            });
+					});
+				});
+			}
+
+			//Remove and populate the channel table
+			if(channels && channels.length > 0){
+				modified = true;
+
+				removeTable(db, "mxpg_channel", function(){
+					populateChannelTable(db, channels, function(){}, function(error, info){
+						var desc = {
+							value: channels,
+							table: "mxpg_channel"
+						};
+						var pVariables = {
+						    "projectId":inswit.ERROR_LOG.projectId,
+						    "workflowId":inswit.ERROR_LOG.workflowId,
+						    "processId":inswit.ERROR_LOG.processId,
+						    "ProcessVariables":{
+						    	"errorType": inswit.ERROR_LOG_TYPES.UPDATE_MASTER,
+						    	"empId":empId,
+						    	"issueDate":new Date(),
+						    	"issueDescription": JSON.stringify(desc),
+						    	"version": inswit.VERSION
+						    }
+						};
+		
+						inswit.executeProcess(pVariables, {
+						    success: function(response){
+						    	if(response.ProcessVariables){
+						    		
+						    	}
+			                }, failure: function(error){
+			                	inswit.hideLoaderEl();
+			                	switch(error){
+			                		case 0:{
+			                			inswit.alert("No Internet Connection!");
+			                			break;
+			                		}
+			                		case 1:{
+			                			inswit.alert("Check your network settings!");
+			                			break;
+			                		}
+			                		case 2:{
+			                			inswit.alert("Server Busy.Try Again!");
+			                			break;
+			                		}
+			                	}
+			                }
+			            });
+					});
+				});
+			}
+
 
 			//Remove and populate the option table
 			if(options && options.length > 0){
@@ -954,5 +1099,45 @@ inswit = {
 				callback();
 			}					              
 		});
+	},
+
+	errorLog: function(error) {
+		inswit.hideLoaderEl();
+
+		var pVariables = {
+		    "projectId":inswit.ERROR_LOG_UPLOAD.projectId,
+		    "workflowId":inswit.ERROR_LOG_UPLOAD.workflowId,
+		    "processId":inswit.ERROR_LOG_UPLOAD.processId,
+		    "ProcessVariables":{
+		    	"executing": JSON.stringify(error),
+		    	"empId":LocalStorage.getEmployeeId(),
+		    	"issueDate":new Date(),
+		    	"version": inswit.VERSION
+		    }
+		};
+
+		inswit.executeProcess(pVariables, {
+		    success: function(response){
+		    	if(response.ProcessVariables){
+		    		
+		    	}
+            }, failure: function(error){
+            	inswit.hideLoaderEl();
+            	switch(error){
+            		case 0:{
+            			inswit.alert("No Internet Connection!");
+            			break;
+            		}
+            		case 1:{
+            			inswit.alert("Check your network settings!");
+            			break;
+            		}
+            		case 2:{
+            			inswit.alert("Server Busy.Try Again!");
+            			break;
+            		}
+            	}
+            }
+        });
 	}
 };

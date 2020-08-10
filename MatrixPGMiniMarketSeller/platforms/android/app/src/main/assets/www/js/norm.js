@@ -1,8 +1,14 @@
+"use strict";
+
 define([
 	"backbone",
 	"mustache",
+	"SGF/sgfNorms",
+	"computeNorm",
+	"submitSellerAudit",
+	"multiplePhotos/multiplePhotos",
 	"select2"
-], function(Backbone, Mustache) {
+], function(Backbone, Mustache, sgfNorms, computeNorm, submitAudit, multiplePhotos) {
 	var Norm = {};
 	Norm.Model = Backbone.Model.extend({
 		
@@ -15,39 +21,101 @@ define([
 
 		events:{
 			"click .take_product_photo": "takeProductPicture",
-			"click .retake_product_photo": "takeProductPicture",
+			"click .retake_product_photo": "retakeProductPicture",
+			"click .retake_photo": "retakeProductPicture",
 			"change .option": "onChangeOption",
 			"change #frontage_applicable" : "toggleFrontage",
 			"change .hotspot_decision" : "toggleHotspot",
 			"click .product_done": "done",
+			"click .complete_audit": "done",
 			"click .back": "back",
-			"click .complete_audit": "completeAudit",
+			"keyup .total_sos, .total_sku, .field_value": "onKeyUp",
+			"keydown .field_value": "onkeyDown",
+            "click .scan_qr": "scanQR",
 
-
-            "click .take_signature_photo": "takeSignaturePicture",
-            "click .retake_signature_photo": "takeSignaturePicture",
-
-
-            "focus .auditer_comment" : "onFocusTextarea"
+//            "click .add_item": "addPhoto",
+//            "click .remove_item": "removePhoto",
 		},
 
 		showNorms: function(mId, pId, product, hotspotPid){
-			var that = this;
 
-			this.getStoreName(mId);
 
-			var id = mId.split("-");
+		    var fetchCategory = true;
+
+            this.getStoreName(mId);
+
+            var id = mId.split("-");
             var auditId = id[0];
             var storeId = id[1];
             var channelId = id[2];
 
+
+
+
+            var that = this;
+
             var productName = product.product_name;
+
+            var brandId = product.product_id;
+
+            var categoryId = that.model.get("categoryId");
+
+            require(['templates/t_seller'], function(template){
+
+                var html = Mustache.to_html(
+                    template,
+                    {
+                        "productName":productName,
+                        "mId": mId,
+                    }
+                );
+
+                $(".audits").append(html);
+
+                selectCompletedProduct(db, storeId, categoryId, brandId, function(result) {
+
+                        var length = result.length;
+
+                        if(length > 0) {
+                            var multiplePhotoModel = new multiplePhotos.Model({
+                                 "mId": mId,
+                                 "productId":brandId,
+                                 "audited": result
+                            });
+
+                        }else {
+                            var multiplePhotoModel = new multiplePhotos.Model({
+                                 "mId": mId,
+                                 "productId":brandId
+                            });
+                        }
+
+                        var multiplePhotoView = new multiplePhotos.View({model: multiplePhotoModel});
+
+
+                        multiplePhotoView.render(function(view) {
+                             that.$el.find(".products").append(view.$el);
+                             that.refreshScroll("wrapper_products");
+                             inswit.events.on("refreshScroll", that.refreshScroll, that);
+                        });
+
+                });
+            });
+
+            return;
+
+
+
+
             var priority = product.priority;
+            var categoryType = product.category_type;
 
+            // Hotspot frontage not needed for mini-market
 
-            var pName = productName.toLowerCase().trim();
+            /*var pName = productName.toLowerCase().trim();
 
-            var brandName = pName.replace(/\s/g, '');
+            var brandName = pName.replace(/\s/g, '');*/
+            var brandName = "";
             var hotspotExecution = false;
             if(brandName == "hotspotexecution"){
             	hotspotExecution = true;
@@ -58,334 +126,386 @@ define([
             	isFrontage = true;
             }
 
-			//Show completed norms(With user modified values)
-			var fn = function(results){
-				if(results.length > 0){
-					require(['templates/t_audit_questions'], function(template){
+            var previousQRcode = "";
 
-						var callback = function(norms){
-							selectProduct(db, pId, channelId, function(product){
-								//Set first question as a frontage norm
-								if(isFrontage && norms[0]){
-									norms[0].isFrontage = isFrontage;
-								}
 
-								//Set first question as a hotspot decision norm
-								if(hotspotExecution && norms[0]){
-									norms[0].hotspotExecution = hotspotExecution;
-								}
+            var brandwiseNorm = that.model.get("brandwiseNorm");
 
-								for(var i = 0; i < norms.length; i++){
-									var norm = norms[i];
-									var no = norm.no;
-									var yes = norm.yes;
-									var options = norm.options;
+            var categoryId = that.model.get("categoryId");
+            var brandId = that.model.get("brandId");
+            var isSGF = that.model.get("isSGF");
+            if(isSGF) {
+            	var model = new sgfNorms.Model({
+            		"mId": mId,
+            		"pId": pId,
+            		"product": product,
+            		"categoryId": categoryId,
+            		"brandId": brandId
+            	});
+            	var view = new sgfNorms.View({model: model});
 
-									for(var j = 0; j < results.length; j++){
-										var result = results[j];
-										if(norm.normId == result.normId){
-											for(var k = 0; k < options.length; k++){
-												if(result.optionId == options[k].optionId){
+            	view.showSgfNorms(function(el, resetFrontage) {
+            		that.$el.empty().append(el);
+            		if(resetFrontage)  {
+            		    that.$el.find("#frontage_applicable").trigger("change");
+            		}
+            		that.refreshScroll("wrapper_norms");	
+					that.bindResizeEvent();
+            	});
 
-												     if(norm.productId == result.productId && result.optionId == "9" ){
-                                                            options[k].optionName = result.optionName;
-                                                            break;
-                                                     }else {
-                                                            options[k].selected = "selected";
-                                                            options[k].remarkTxt = result.remarkText;
+            }else {
 
-                                                        break;
-                                                     }
-												}
-											}
+				//Show completed norms(With user modified values)
+				var fn = function(results) {
+					if(results.length > 0) {
+                         var model = new computeNorm.Model({
+                            "mId": mId,
+                            "pId": pId,
+                            "product": product,
+                            "categoryId": categoryId,
+                            "brandId": brandId,
+                            "brandwiseNorm": brandwiseNorm,
+                            "results": results,
+                            "channelId": channelId,
+                            "isFrontage": isFrontage,
+                            "hotspotExecution": hotspotExecution,
+                            "productName": productName,
+                            "categoryType": categoryType,
+                            "storeId": storeId,
+                            "qrCode": results[0].qrCode,
+                            "previousQRcode": previousQRcode
+                        });
+                        var MPDnormId, normIdPos;
+                        for(var i = 0; i <results.length; i++) {
+                            if(results[i].multiple_photo == "true") {
+                                MPDnormId = results[i].normId;
+                                normIdPos = i;
+                                selectMPDAuditPhotos(db, MPDnormId, categoryId, storeId, function(mpdPhotos) {
 
-											var isOk = false;
-											for(var l = 0; l < yes.length; l++){
-												if(result.remarkId == yes[l].remarkId){
-													yes[l].selected = "selected";
-													norm.show1 = "block";
-													norm.show2 = "none";
-													isOk = true;
-													break;
-												}
-											}
-
-											if(!isOk){
-												for(var m = 0; m < no.length; m++){
-													if(result.remarkId == no[m].remarkId){
-														no[m].selected = "selected";
-														no[m].showRemark = "block";
-														no[m].remarkTxt = result.remarkText;
-														norm.show1 = "none";
-														norm.show2 = "block";
-														norm.showRemark = "block";
-														break;
-													}
-												}
-											}
-											break;
-										}
-									}
-								}
-
-								var isImage = false;
-								var imageURI = results[0].imageURI || "";
-								if(imageURI){
-									isImage = true;
-								}
-
-								var takePhoto = false;
-								if(!imageURI && priority == 6){
-									takePhoto = true;
-								}
-
-								if(!imageURI && priority == 10){
-									takePhoto = true;
-								}
-
-								selectCompletedAudit(db, mId, function (result) {
-
-								    var html = Mustache.to_html(
-                                        template,
-                                        {
-                                            "norms":norms,
-                                            "mId":mId,
-                                            "productName":productName,
-                                            "productId":pId,
-                                            "name":that.storeName,
-                                            "imageURI":imageURI,
-                                            "isImage":isImage,
-                                            "takePhoto":takePhoto,
-                                            "element":"retake_product_photo",
-                                            "priority": priority,
-                                            "lastVisit": that.lastVisit,
-                                            "auditerCmt": result[0].auditer_cmt || ""
-                                        }
-                                    );
-
-                                    that.$el.empty().append(html);
-
-                                    var isFrontageNo = (norms[0].options[1].selected == "selected") ? true:false;
-
-                                    if(isFrontageNo) {
-                                        that.$el.find("#frontage_applicable").trigger("change");
-                                    }else {
-                                        $( ".audit_no option[value=294]" ).wrap( "<span>" );
+                                    if(mpdPhotos.length) {
+                                         results[normIdPos].auditImages = mpdPhotos;
                                     }
 
-								});
+                                });
+                            }
 
+                            if((i+1) == results.length) {
+                                var view = new computeNorm.View({model: model});
+                                view.showCompletedNorms(function(el){
+                                    that.$el.empty().append(el);
+                                  //  that.$el.find("#frontage_applicable").trigger("change");
+                                    var el = $(".gillette_table");
+                                    if(el.length) {
+                                       $(".gillette_table").removeClass("hide");
+                                       $(".add_product_photo").removeClass("hide");
+                                    }
 
-								
-								//toggleHotspot function will disable certain elements based on hotspot decision value
-//								if(priority == 10){
-//									var hotspotDecision = $(".hotspot_decision").val().replace(/\s/g, '').toLowerCase();
-//									if(hotspotDecision == "no"){
-//										that.toggleHotspot("", "no");
-//
-//										//Hide all other norms except first
-//										var elements  = $(".question");
-//										for(var i = 1; i < elements.length; i++){
-//											$(elements[i]).hide();
-//										}
-//									}
-//								}
+                                    that.refreshScroll("wrapper_norms");
+                                    that.bindResizeEvent();
+                                    if(!brandwiseNorm) {
+                                        var smartSpot = 1;
+                                        view.showCompletedCategorySMbrands(function(el) {
+                                            that.$el.find(".category-brand-norm").after(el);
+                                            that.bindResizeEvent();
 
-								if(priority == 8){
-									var success = function(results){
-										if(results.item(0)){
-											if(results.item(0).option_name.replace(/\s/g, '').toLowerCase() == "no"){
-												that.$el.find(".question_list .norms").prepend("<div class='warning_msg'>This hotspot brand can not be edited. Because hotspot execution is not available</div>");
-												that.toggleHotspot("", "no", true);
-											}
-										}
-									}
+                                             var el = $(".gillette_table");
+                                             if(el.length) {
+                                                   $(".gillette_table").removeClass("hide");
+                                                   $(".add_product_photo").removeClass("hide");
+                                             }
 
-									selectHotSpotExecutionDecision(db, auditId, storeId, hotspotPid, success);
-								}
-								
-								that.refreshScroll("wrapper_norms");
+                                             that.refreshScroll("wrapper_norms");
 
-								return that;
-							});
-						}
+                                        }, smartSpot);
+                                    }
+                                });
+                            }
+                        }
 
-						selectNorms(db, channelId, pId, priority, product.is_frontage, callback);
-						
-						return that;
-					});
-				}else{
-					//Render first time(Default options)
-					var callback = function(norms){
-						//Set first question as a frontage norm
-						if(isFrontage && norms[0]){
-							norms[0].isFrontage = isFrontage;
-						}
-						//Set first question as a hotspot decision norm
-						if(hotspotExecution && norms[0]){
-							norms[0].hotspotExecution = hotspotExecution;
-						}
+                    }else{
 
-						selectProduct(db, pId, channelId, function(product){
-							require(['templates/t_audit_questions'], function(template){
-								var takePhoto = false;
-								if(product.priority == 6 || product.priority == 10){
-									takePhoto = true;
-								}
-								norms.productName = productName;
-								norms.productId = pId;
-								norms.mId = mId;
+						var model = new computeNorm.Model({
+							"mId": mId,
+		            		"pId": pId,
+		            		"product": product,
+		            		"categoryId": categoryId,
+		            		"brandId": brandId,
+		            		"brandwiseNorm": brandwiseNorm,
+		            		"channelId": channelId,
+		            		"isFrontage": isFrontage,
+		            		"hotspotExecution": hotspotExecution,
+		            		"productName": productName,
+		            		"categoryType": categoryType,
+		            		"storeId": storeId,
+		            		"previousQRcode": previousQRcode
+						});
 
-								var html = Mustache.to_html(
-									template,
-									{
-										"norms":norms, 
-										"mId":mId,
-										"productName":productName,
-										"productId":pId, 
-										"name":that.storeName,
-										"takePhoto": takePhoto,
-										"element":"retake_product_photo",
-										"priority": priority,
-										"lastVisit": that.lastVisit
-									}
-								);
-								that.$el.empty().append(html);
-								that.refreshScroll("wrapper_norms");					
-				
-								return that;
-							});
+		            	var view = new computeNorm.View({model: model});
+		            	view.showNorm(function(el){
+		            		that.$el.empty().append(el);
+		            		that.refreshScroll("wrapper_norms");	
+							that.bindResizeEvent();
+                            if(!brandwiseNorm) {
+                                view.showCategorySmartSpotBrandNorms(function(el){
+                                    that.$el.find(".category-brand-norm").after(el);
+                                    that.refreshScroll("wrapper_norms");
+                                    that.bindResizeEvent();
+
+                                });
+                            }
+
 						});
 					}
-
-					selectNorms(db, channelId, pId, priority, product.is_frontage, callback);
 				}
-			}
-			
-			selectProductsToVerify(db, auditId, storeId, pId, fn);
+				if(pId) {
+					selectProductsToVerify(db, auditId, storeId, pId, fn, categoryId );
+				}else {
+					selectProductsToVerify(db, auditId, storeId, pId, fn, categoryId);
+				}
+            }
+		},
+
+		retakeProductPicture: function(event) {
+
+            var parentsEl = $(event.currentTarget).parent();
+            this.takePhoto(parentsEl);
 		},
 
 		takeProductPicture:function(event){
-			var that = this;
 
-			var mId = $(".product_done").attr("href");
+			var parentsEl = $(event.currentTarget).parent();
+            this.takePhoto(parentsEl);
+		},
 
-			var id = mId.split("-");
+		takePhoto: function(parentsEl) {
+            var that = this;
+
+            var mId = $(".product_done").attr("href");
+
+            var time = inswit.getCurrentTime();
+            time = inswit.getFormattedDateTime(time);
+
+		    var id = mId.split("-");
             var auditId = id[0];
             var storeId = id[1];
             var channelId = id[2];
 
-			getStoreCode(db, storeId, function(storeCode){
-			 	var callback = function(imageURI){
-					that.refreshScroll("wrapper_norms");
-				}
+            getStoreCode(db, storeId, function(storeCode){
+                var callback = function(imageURI){
+                    that.refreshScroll("wrapper_norms");
+                }
 
-				var takeEl = "take_product_photo";
-				var retakeEl = "retake_product_photo";
-				inswit.takePicture(callback, takeEl, retakeEl, storeCode);
-			});
+                var takeEl = "take_product_photo";
+                var retakeEl = "retake_product_photo";
+                inswit.takePicture(callback, takeEl, retakeEl, storeCode, parentsEl);
+            });
 		},
 
 		onChangeOption: function(e){
-			var option = e.target.options[e.target.selectedIndex].text
+			var option = e.target.options[e.target.selectedIndex].text;
+
+			var isCategory = ($(e.target).attr("rel") == "category")? true:false;
+
+			if(isCategory) {
+				return;
+			}
 			
 			if(option == "Yes" || option == "100"){
 				$(e.target).parents(".question").find(".remarks_1").show();
 				$(e.target).parents(".question").find(".remarks_2").hide();
-				$(e.target).parents(".question").find(".remarks_3").hide();
-				$(e.target).parents(".question").find(".remark_txt_bx").hide();
+				var sgfEl = this.$el.find(".sgf .question");
+				if(sgfEl.length > 0) {
+				    var selectEl = $(e.target).parents(".question");
+                    selectEl.find(".remarks_1 select option:eq(1)").attr("selected", "true")
+				}
 
-				this.selectFirstOption(e, "remarks_1");
+				var multiplePhotoEL = $(e.target).parents(".question").find(".gillette_table");
+				if(multiplePhotoEL.length == 1) {
+				    multiplePhotoEL.removeClass("hide");
+				    if(multiplePhotoEL.find(".add_product_photo").length == 0) {
+				        var el = '<span class="add_product_photo">\
+                                      <button class="btn-mini btn-success add_item">\
+                                      +</button>\
+                                   </span>';
+				        multiplePhotoEL.append(el);
+				    }else {
+				        multiplePhotoEL.find(".add_product_photo").removeClass("hide");
+				    }
+				    this.$el.find(".gillette_table_row").removeClass("hide");
+				}
 			}else{
 				$(e.target).parents(".question").find(".remarks_1").hide();
 				$(e.target).parents(".question").find(".remarks_2").show();
-				$(e.target).parents(".question").find(".remarks_3").show();
-				$(e.target).parents(".question").find(".remark_txt_bx").show();
+				var multiplePhotoEL = $(e.target).parents(".question").find(".gillette_table");
+                if(multiplePhotoEL.length == 1) {
+                    var imageEl= $(e.target).parents(".question").find(".gillette_table img");
 
-				this.selectFirstOption(e, "remarks_2");
-			}
-			this.refreshScroll("wrapper_norms");
-		},
-
-		selectFirstOption: function(event, selector) {
-		    var size = $(event.target).parents(".question").find("."+selector+" select option").size();
-		    var option = $(".question").find(".option").val();
-            if(option == "No") {
-                if ($( ".audit_no option[value=294]" ).parent().is( "span" ) ){
-                        $( ".audit_no option[value=294]" ).unwrap();
+                    $(e.target).parents(".question").find(".gillette_table, .add_product_photo").addClass("hide");
                 }
-            }
-
-
-             $(event.target).parents(".question").find("."+selector+" select>option:eq(1)").prop('selected', true);
-           // }
+			}
 		},
 
 		toggleFrontage: function(event){
 			var value = $(event.currentTarget).val().toLowerCase();
+            var questions = $(event.target).parent().parent().find(".question");
+			var questionLen = questions.length;
+            var questionEl = $(event.target).parent().parent().find(".question")[questionLen -1];
 
-			var elements = this.$el.find(".question");
+            var isConsider = ($(event.target).parents(".question").attr("rel") == "true")? true: false;
+
+			var elements = this.$el.find(".smartspotbrand .question");
+
+			var sgfEl = this.$el.find(".sgf .question");
 
 			if(value == "yes"){
+			    var selectEl = sgfEl.find(".question");
+                sgfEl.find(".remarks_1").show();
+                sgfEl.find(".remarks_2").hide();
 
+                 var selectEl = $(event.target).parents(".question");
+                 selectEl.find(".remarks_1 select option:eq(1)").attr("selected", "true")
 
-				$(event.target).parents(".question").find(".remarks_1").show();
-				$(event.target).parents(".question").find(".remarks_2").hide();
+                for(var i = 1; i < sgfEl.length; i++){
+                    var normEl = $(sgfEl[i]);
+                    var val = normEl.find(".option").val();
 
-				$( ".audit_no option[value=294]" ).wrap( "<span>" );
-
-				$(".remarks_2 option").removeAttr("selected");
-
-
-				for(var i = 1; i < elements.length; i++){
-					var normEl = $(elements[i]);
-					var val = normEl.find(".option").val();
-
-
-					if(!val || val == "" || val == undefined){
+                    if(!val || val == "" || val == undefined){
                         normEl.find(".option").prop("selectedIndex", 0);
                     }else {
                         normEl.find(".option").prop("selectedIndex", 0);
                         normEl.find(".remarks_1 option:eq(0)").attr("selected", "true");
-                        normEl.find(".audit_yes").prop("selectedIndex", 0);
-                        normEl.find(".remarks_1").show();
-                        normEl.find(".remarks_2").hide();
                     }
-				}
+                    $(normEl).show();
+                }
 
-				$(".normal, .take_product_photo, .photo_block").show();
-				$(".remark_txt_bx").hide();
-				this.selectFirstOption(event, "remarks_1");
+
+                $(".normal, .take_product_photo, .photo_block, .brands").show();
+
+
+                // isconsider: true, set the last norm to yes or no based on last beform three norms.
+				if(isConsider) {
+				    var count = 0;
+                    var elCount = questions.length;
+                    for(var i = elCount-4; i < elCount; i++){
+                        var normEl = $(questions[i]);
+                        var optionName = normEl.find(".option option:selected").text();
+                        console.log(optionName);
+                        if(optionName == "Yes" || optionName == "select") {
+                            count++;
+                        }
+                        if(i == elCount-2) {
+                             if(count >= 3) {
+                                 $(questionEl).find(".remarks_1").show();
+                                 $(questionEl).find(".remarks_2").hide();
+                                 $(questionEl).find(".option option:selected").removeAttr("selected");
+                                 $(questionEl).find("#frontage_applicable option:eq(1)").prop('selected', true);
+                                 $(questionEl).find(".remarks_1 option:eq(1)").attr("selected", "true");
+                                 $(questionEl).next().attr("rel", true);
+
+                            }else {
+                                $(questionEl).find(".remarks_1").hide();
+                                $(questionEl).find(".remarks_2").show();
+                                $(questionEl).find(".option option:selected").removeAttr("selected");
+                                $(questionEl).find("#frontage_applicable option:eq(2)").prop('selected', true);
+                                $(questionEl).find(".remarks_2 option:eq(1)").attr("selected", "true");
+                                $(questionEl).next().attr("rel", false);
+                            }
+                            console.log(optionName);
+                        }
+
+                    }
+                }else {
+                    var smartSpotTxt = $(questions[0]).find(".product_name").attr("rel");
+                    if(smartSpotTxt == "Device Available"){
+                        if($(questions[0]).find("#frontage_applicable").val() == "Yes") {
+                            $(".take_product_photo").attr("rel", true);
+                        }else {
+                             $(".take_product_photo").attr("rel", false);
+                        }
+                    }
+                }
+
+                 /*if(sgfEl.length > 1) {
+                      var selectEl = $(event.target).parents(".question");
+                        selectEl.find(".sgf .remarks_1").show();
+                        selectEl.find(".sgf .remarks_2").hide();
+
+                       for(var i = 1; i < elements.length; i++){
+                            var normEl = $(sgfEl[i]);
+                            var val = normEl.find(".option").val();
+
+                            if(!val || val == "" || val == undefined){
+                                normEl.find(".option").prop("selectedIndex", 1);
+                            }
+                            $(normEl).show();
+                        }
+
+
+                        $(".normal, .take_product_photo, .photo_block, .brands").show();
+
+                 }*/
 
 			}else{
-				$(".remarks_1").hide();
-				$(".remarks_2").show();
 
-				if ( $( ".audit_no option[value=294]" ).parent().is( "span" ) ){
-                        $( ".audit_no option[value=294]" ).unwrap();
-                }
-				var selectedValue = $(elements[0]).find(".audit_no").val() || "294";
+			    if(sgfEl.length > 1) {
+			        $(".remarks_1").hide();
+                    $(".remarks_2").show();
+                    var normEl = $(sgfEl[0]);
+                    normEl.find(".option").prop("selectedIndex", 2);
+                    normEl.find(".audit_no").prop("selectedIndex", 1);
+                    for(var i = 1; i < sgfEl.length; i++){
+                        var normEl = $(sgfEl[i]);
+                        normEl.find(".option").prop("selectedIndex", 2);
+                        normEl.find(".audit_no").prop("selectedIndex", 1);
 
-				for(var i = 1; i < elements.length; i++){
-					var normEl = $(elements[i]);
-					normEl.find(".option").prop("selectedIndex", 2);
-					normEl.find(".audit_no").val("50");
+                        if(normEl.find(".audit_no").val() !== "50"){
+                            normEl.find(".audit_no").prop("selectedIndex", 1);
+                        }
+                        $(normEl).hide();
 
-					if(normEl.find(".audit_no").val() !== "50"){
-						//normEl.find(".audit_no").prop("selectedIndex", 1);
-						normEl.find(".audit_no ").val(selectedValue);
-					}
-					
-				}
-				$(".normal, .take_product_photo, .photo_block").hide();
-				this.selectFirstOption(event, "remarks_2");
+                    }
+                    $(".photo_block img").attr("src", "");
+                    $(".normal, .take_product_photo, .photo_block").hide();
+			    }
+
+			     var selectEl = $(event.target).parents(".question");
+                 selectEl.find(".remarks_2 select option:eq(1)").attr("selected", "true");
+
+
+
+                // isconsider: true, set the last norm to yes or no based on last beform three norms.
+                if(isConsider) {
+
+                    if(value == "Yes" || value == "100"){
+                        $(questionEl).find(".remarks_1").show();
+                        $(questionEl).find(".remarks_2").hide();
+                         $(questionEl).find(".option option:selected").removeAttr("selected");
+                         $(questionEl).next().attr("rel", true);
+                    }else{
+                        $(questionEl).find(".remarks_1").hide();
+                        $(questionEl).find(".remarks_2").show();
+                        $(questionEl).find(".option option:selected").removeAttr("selected");
+                        $(questionEl).next().attr("rel", false);
+                    }
+                    $(questionEl).find("#frontage_applicable option:eq(2)").prop('selected', true);
+                    $(questionEl).find(".remarks_2 option:eq(1)").attr("selected", "true");
+
+                }else {
+                 var smartSpotTxt = $(questions[0]).find(".product_name").attr("rel");
+                     if(smartSpotTxt == "Device Available"){
+                         if($(questions[0]).find("#frontage_applicable").val() == "No") {
+                             $(".take_product_photo").attr("rel", false);
+                         }
+                     }
+                 }
+
+
 			}
 
 			this.refreshScroll("wrapper_norms");
 		},
 
 		toggleHotspot: function(event, value, isHotSpotBrand){
-
 			if(event){
 				value = $(event.currentTarget).val().toLowerCase();
 			}
@@ -414,8 +534,6 @@ define([
 				normEl.find(".option").prop("selectedIndex", 1);
 
 				$(".take_product_photo, .photo_block").show();
-
-				this.selectFirstOption(event, "remarks_1");
 
 			}else{
 				$(".remarks_1").hide();
@@ -447,378 +565,35 @@ define([
 			this.refreshScroll("wrapper_norms");
 		},
 
-		//Store the product details in client side DB temporarly.
-		update: function(mId, auditId, storeId, channelId, fn){
-			var that = this;
-
-			var takePhoto = "no";
-			var ele = that.$el.find(".norms");
-			var priority = ele.attr("href");
-
-			var hotspotDecision;
-			if($(".hotspot_decision").val()){
-				hotspotDecision = $(".hotspot_decision").val().trim().toLowerCase();
-			}
-			
-			if(priority == 10 && hotspotDecision != "no"){
-				takePhoto = "yes"
-			}
-
-			if(priority == 6){
-				takePhoto = "yes"
-			}
-
-			if(that.$el.find("#frontage_applicable").val()){
-				takePhoto = that.$el.find("#frontage_applicable").val().toLowerCase() || "no";
-			}
-
-			getDistributor(db, auditId, storeId, function(distributor){
-
-				var image = $(".photo_block img").attr("src");
-	 			if(distributor != inswit.DISTRIBUTOR){ //For certain distributor photo is not mandatory
-					/*if(takePhoto == "yes" && !image){
-						inswit.alert("Please take a brand photo!");
-						return;
-					}*/
-	 			}
-
-				if(takePhoto == "no"){
-					image = "";
-				}
-
-				var product = {};
-				product.storeId = storeId;
-				product.auditId = auditId;
-				product.storeName = that.storeName;
-				product.isContinued = true;
-				product.isCompleted = false;
-				product.image = "";
-				product.imageId = "";
-				product.norms = that.getValues(auditId, storeId);
-				product.imageURI = image || "";
-				product.priority = priority;
-
-				if(product.norms && product.norms.length > 0) {
-					var callback = function(){
-						/*//HotspotDescision is 'no' means we have to
-						//update all hotspot brand norms as 'no'
-						if(hotspotDecision == "no"){
-							that.getAllHotspotBrands(auditId, storeId, channelId);
-							window.history.back();
-						}else if(hotspotDecision == "yes"){
-							//Remove all hotspot brands from completed product table
-							removeBrands(db, auditId, storeId);
-							//If it is in verify page we need to go back and to do audits
-							//for all other hotspot brands
-							if(that.model.get("isVerify")){
-								var route = "#audits/" + mId + "/products";
-								router.navigate(route, {
-					                trigger: true,
-					                replace: true
-					            });
-							}else{
-								window.history.back();
-							}
-						}else{
-							window.history.back();
-						}*/
-						fn();
-					}
-
-					populateCompProductTable(db, product, callback);
-				}else{
-					//inswit.alert("No norms mapped to this product! \n Contact your administrator");
-				}
-	 		}, function(){
-
-	 		});
-		},
-
-		getAllHotspotBrands: function(auditId, storeId, channelId){
-			var that = this;
-
-            var callback = function(response){
-
-            	var len = response.rows.length;
-            	for(var i = 0; i < len; i++){
-	                var obj = response.rows.item(i);
-	                var pId = obj.product_id;
-	                var pName = obj.product_name;
-	                var priority = obj.priority;
-
-					that.selectHotSpotNorms(auditId, storeId, channelId, pId, pName, priority);
-	            }
-			};
-				
-			var error = function(e, a){};
-
-			selectAllHotSpotBrands(db, auditId, storeId, channelId, callback, error);
-		},
-
-		selectHotSpotNorms: function(auditId, storeId, channelId, pId, pName, priority){
-			var that = this;
-
-			var fn = function(norms){
-            	var product = {};
-				product.storeId = storeId;
-				product.auditId = auditId;
-				product.storeName = that.storeName;
-				product.isContinued = true;
-				product.isCompleted = false;
-				product.image = "";
-				product.imageId = "";
-				product.norms = that.getDefaultValues(norms, pId, pName, priority);
-				product.imageURI = "";
-				product.priority = priority;
-
-				var cb = function(){}
-
-				populateCompProductTable(db, product, cb);
-			}
-
-			selectNorms(db, channelId, pId, priority, "false", fn);
-		},
-
-		getDefaultValues: function(norms, pId, pName, priority){
-			var values = [];
-			for(var i = 0; i < norms.length; i++){
-				var norm = norms[i];
-				
-				//Getting default options
-				var optionName, optionId, remarkName, remarkId;
-				for(var j = 0; j < norm.options.length; j++){
-					var option = norm.options[j];
-
-					if(option.optionName.replace(/\s/g, '').toLowerCase() == "no"){
-						optionName = option.optionName;
-						optionId = option.optionId;
-						break;
-					}
-				}
-
-				//Getting default remarks
-				for(var k = 0; k < norm.no.length; k++){
-					var remark = norm.no[k];
-
-					if(remark.remarkId == "44"){
-						remarkName = remark.remarkName;
-						remarkId = remark.remarkId;
-						break;
-					}
-				}
-
-				var value = {};
-				value.productName = pName;
-				value.productId = pId;
-				value.isConsider = norm.isConsider;
-				value.normName = norm.normName;
-				value.normId = norm.normId;
-				value.optionName = optionName;
-				value.optionId = optionId;
-				value.remarkName = remarkName;
-				value.remarkId = remarkId;
-
-				values.push(value);
-			}
-
-			return values;
-		},
-
-		getValues: function(auditId, storeId){
-
-			var elements = this.$el.find(".question");
-			this.$(".norms").find(".error").removeClass("error");
-            var normFieldType;
-
-            var productName = this.$el.find(".product_header h2").text();
-			var productId = this.$el.find(".product_header h2").attr("id");
-			var norms = [];
-
-
-			var auditerCmtEl = $(".auditer_comment");
-
-            var auditerComment = auditerCmtEl.val() || "";
-
-            /*if((auditerComment == "") || (auditerComment == undefined)) {
-                var isVisible = auditerCmtEl.is(":visible");
-                if(isVisible){
-                    auditerCmtEl.addClass("error");
-                    this.scrollView.scrollToElement(normEl.length);
-                    return;
-                }
-            }*/
-
-
-            updateAuditerComment(db, auditId, storeId, auditerComment);
-
-
-
-			for(var i = 0; i < elements.length; i++){
-				var norm = {},
-					remarkName,
-					remarkId,
-					remarkTxt;
-
-				var normEl = $(elements[i]);
-				var normType = normEl.attr("id");
-
-
-				if(normEl.find("select").length){
-                    normFieldType = 1;
-                }else if(normEl.find("textarea").length){
-                    normFieldType = 0;
-                }
-
-                if(normFieldType == inswit.FIELDS.TEXT_INPUT){
-                    var optionName = normEl.find(".field_value").val();
-                    if(optionName < 0) {
-                        alert("Negative value found, Please recheck the values.")
-                        return;
-                    }
-                    var optionId = normEl.find(".field_value").attr("id");
-                    remarkName = "No Remark";
-                    remarkId = "100"
-                }else {
-                    var optionName = normEl.find(".option option:selected").text();
-                    var optionId = normEl.find(".option option:selected").attr("id");
-                }
-
-
-
-
-
-				var isConsider = normEl.attr("rel") || false;
-				var normName = normEl.find(".product_name").attr("rel");
-				var normId = normEl.find(".product_name").attr("id");
-				//var optionName = normEl.find(".option option:selected").text();
-				//var optionId = normEl.find(".option option:selected").attr("id");
-				var remarkTxt = normEl.find(".remark_txt_bx").val() || "";
-
-
-				
-				if(optionName == "Yes" || optionName == "100" && normFieldType == 3){
-					remarkName = normEl.find(".audit_yes option:selected").text() || "";
-					remarkId = normEl.find(".audit_yes option:selected").attr("id") || "";
-				}else if(normId == "000" && normFieldType == 1) {
-                    optionName = normEl.find("option:selected").text();
-                    optionId = normEl.find("option:selected").attr("id");
-                    remarkName =  normEl.find("option:selected").text();
-                    remarkId = normEl.find("option:selected").attr("id");
-                }else if(normFieldType == 1){
-                    remarkName = normEl.find(".audit_no option:selected").text() || "";
-                    remarkId = normEl.find(".audit_no option:selected").attr("id") || "";
-                }else if(normFieldType == 0 && !optionName) {
-                    normEl.find(".field_value").val("");
-                    remarkName = "No Remark";
-                    //remarkId = normEl.find(".audit_no option:selected").attr("id") || "";
-                }
-
-
-                switch(normFieldType){
-                    case 0:
-                         if((norms[0].optionName == "No")) {
-                            break;
-                        }else if((optionName == "") || (remarkName == undefined)) {
-                            normEl.addClass("error");
-                            this.scrollView.scrollToElement(normEl[0]);
-                            return;
-                        }
-
-                    break;
-                    case 1:
-
-                        if((optionId == "" ) || (optionId == undefined)) {
-                            normEl.addClass("error");
-                            this.scrollView.scrollToElement(normEl[0]);
-                            return;
-                        }
-                        if((remarkId == "" ) || (remarkId == undefined)) {
-                            normEl.addClass("error");
-                            this.scrollView.scrollToElement(normEl[0]);
-                            return;
-                        }
-                    break;
-
-                    default:
-                        if((remarkTxt == "") || (remarkTxt == undefined)) {
-                            var isVisible = normEl.find(".remark_txt_bx").is(":visible");
-                            if(isVisible){
-                                normEl.addClass("error");
-                                this.scrollView.scrollToElement(normEl[0]);
-                                return;
-                            }
-                        }
-
-                }
-
-
-				norm.productName = productName;
-				norm.productId = productId;
-				norm.isConsider = isConsider;
-				norm.normName = normName;
-				norm.normId = normId;
-				norm.optionName = optionName;
-				norm.optionId = optionId;
-				norm.remarkName = remarkName;
-				norm.remarkId = remarkId;
-				norm.remarkTxt = remarkTxt;
-				norm.auditerComment = auditerComment;
-
-				norms.push(norm);
-			}
-
-
-			return norms;
-		},
-
 		done: function(event){
-			var that = this;
 
-			var mId = $(event.currentTarget).attr("href");
-			var id = mId.split("-");
-            var auditId = id[0];
-            var storeId = id[1];
-            var channelId = id[2];
+           if(this.$el.find(".product_done").hasClass("clicked")){
+           				//inswit.errorLog({"Clicked": that.$el.find(".upload_audit").hasClass("clicked")});
+                return;
+           }
 
-			var takePhoto = "no";
-			var ele = that.$el.find(".norms");
-			var priority = ele.attr("href");
+            this.$el.find(".product_done").addClass("clicked");
 
-			if(priority == 8){
-				var success = function(results){
-					if(results.length == 0){
-						inswit.alert("Please Audit Hotspot Execution first before audit hotspot brand");
-					}else{
-						that.update(mId, auditId, storeId, channelId);
-					}
-				}
+			submitAudit.auditDone(this, event);
 
-				var hotspotPid = that.model.get("hotspotPid");
-				selectHotSpotExecutionDecision(db, auditId, storeId, hotspotPid, success);
-			}else{
-
-				that.update(mId, auditId, storeId, channelId, function() {
-				    /*setTimeout(function(){
-				        that.showSignaturePage();
-				    },500);*/
-				    window.history.back();
-				});
-
-			}
+		//	submitAudit.auditDone(this, event);
 		},
-
 
 		getStoreName: function(mId){
 			var that = this;
 
 			fetchStoreName(db, mId, function(result){
 				that.storeName = result.storeName;
-				that.lastVisit = result.lastVisit;
+				var channelId = that.model.get("categoryId");
+				fetchCategoryName(db, channelId, function(result){
+					that.categoryName = result;
+				});
 			});
 		},
 
 		back: function(){
 			window.history.back();
+			console.log("back");
 		},
 
 		refreshScroll: function(wrapperEle) {
@@ -828,64 +603,127 @@ define([
 			this.scrollView.refresh();
 		},
 
-		completeAudit: function(event){
-            var that = this;
+		bindResizeEvent: function() {
+			var that = this;
+        	$(window).bind('resize.normKeyboard', function() {
+	        	setTimeout(function(){
+	        		that.scrollView.refresh();
+	        	}, 1000);
+	        });
+		},
 
-            if($(event.currentTarget).hasClass("clicked")){
-                return;
-            }
-            $(event.currentTarget).addClass("clicked");
-
-            var mId = $(event.currentTarget).attr("href");
-            var id = mId.split("-");
-            var auditId = id[0];
-            var storeId = id[1];
-            var channelId = id[2];
-
-            getDistributor(db, auditId, storeId, function(distributor){
-
-                if(distributor != inswit.DISTRIBUTOR){ //For certain distributor photo is not mandatory
-                    var image = $(".photo_block img").attr("src");
-                    if(!image){
-                        inswit.alert("Please take a selfie photo with Counsellor!");
-                        $(event.currentTarget).removeClass("clicked");
-                        return;
-                    }
-                }
-
-                var callback = function(isYes){
-                    $(event.currentTarget).removeClass("clicked");
-                    if(isYes == 1){
-
-                       updateAuditStatus(db, auditId, storeId);
-
-                        var route = "#audits/" + mId + "/upload";
-                        router.navigate(route, {
-                            trigger: true
-                        });
-                    }
-                }
-
-                var title = "Alert";
-                var message = "Are you sure you want to complete this audit?\n\n" +
-                              "This will update the audit status as 'Audited', after which audit details cannot be modified.";
-                var buttons = ["Yes", "No"];
-
-                inswit.confirm(message, callback, title, buttons);
-
-            }, function(){
-
-            });
+		unbindResizeEvent: function() {
+        	$(window).unbind('resize.normKeyboard');
         },
 
+        remove: function() {
+        	this.unbindResizeEvent();
+        },
 
-        onFocusTextarea: function() {
-            var that = this;
-            setTimeout(function() {
-                that.refreshScroll("wrapper_norms");
-            }, 1000)
+        onKeyUp: function(evt) {
+        	var that = this;
 
-        }
+        	var elements = that.$el.find(".question");
+        	var totalSku = 0, totalSos = 0;
+        	totalSos = parseFloat(elements.find("input.total_sos").val()) || 0;
+        	totalSku = parseFloat(elements.find("input.total_sku").val()) || 0;
+
+        	totalSos = Math.round( totalSos * 1e2 ) / 1e2;
+            totalSku = Math.round( totalSku * 1e2 ) / 1e2;
+
+			var resultSos = 0, resultSku = 0;
+			for(var i = 0; i < elements.length; i++) {
+				var normEl = $(elements[i]);
+
+		        var sosValue = parseFloat(normEl.find("input.sos").val() || 0);
+		        var skuValue = parseFloat(normEl.find("input.sku").val() || 0);
+
+		        sosValue = Math.round( sosValue * 1e2 ) / 1e2;
+		        skuValue = Math.round( skuValue * 1e2 ) / 1e2;
+		        
+		        if(!isNaN(sosValue)) {
+		        	resultSos = resultSos+sosValue;
+		        }
+
+		        if(!isNaN(skuValue)) {
+		        	resultSku = resultSku+skuValue;
+		        }
+		       
+			}
+			var otherSos = totalSos-resultSos;
+			var otherSku = totalSku-resultSku;
+
+			 otherSos = Math.round( otherSos * 1e2 ) / 1e2;
+             otherSku = Math.round( otherSku * 1e2 ) / 1e2;
+			if(!isNaN(otherSos))
+				elements.find("input.other_sos").val(otherSos);
+			if(!isNaN(otherSku))
+				elements.find("input.other_sku").val(otherSku);
+        },
+
+        onkeyDown: function(evt) {
+		    if (evt.keyCode == 9) {
+		    	evt.preventDefault();
+		    }
+        },
+
+       scanQR: function(e) {
+		     var that = this;
+		     e.stopPropagation();
+		     e.preventDefault();
+		     var target = e.currentTarget;
+		     var previousQRcode = $(target).parent().find(".qrcode_text").attr("id") || "";
+		     var qrTxtEl = $(target).parent().find(".qrcode_text");
+		     qrTxtEl.val("");
+		     cordova.plugins.barcodeScanner.scan(
+                   function (result) {
+                          var qrCode = result.text;
+                          if(previousQRcode && qrCode != previousQRcode) {
+                                alert("QR code in the masters and asset are different");
+                          }
+                          qrTxtEl.val(result.text);
+
+                   },
+                   function (error) {
+                       alert("Scanning failed: " + error);
+                   }
+             );
+       },
+
+
+        addPhoto: function(event) {
+           event.preventDefault();
+           event.stopPropagation();
+           var that = this;
+
+           if(this.$el.find(".add_item").hasClass("clicked")){
+                      				//inswit.errorLog({"Clicked": that.$el.find(".upload_audit").hasClass("clicked")});
+               return;
+           }
+
+           this.$el.find(".add_item").addClass("clicked");
+           var count = parseInt(this.$el.find(".audit_yes :selected").html()) || 0;
+
+           var photoElLen = this.$el.find(".gillette_table_row").length;
+           if(count <= photoElLen) {
+               inswit.alert("Given MPD count and number of photos should to be same");
+               that.$el.find(".add_item").removeClass("clicked");
+               return;
+           }else {
+               require(['templates/t_audits'], function(template){
+                   var html = Mustache.to_html(template.photoBlock);
+                   that.$el.find(".gillette_table_body").append(html);
+                   that.scrollView.refresh();
+                   that.$el.find(".add_item").removeClass("clicked");
+               });
+           }
+
+       },
+
+       removePhoto: function(event) {
+           var target =  $(event.target).parents().parents().parents().get(0);
+           target.remove();
+       }
 
 	});
 

@@ -33,13 +33,21 @@ define(["backbone", "bootstrap", "mustache"], function() {
         routes: {
             "":"renderLogin",
             "forgotpassword" : "showForgotPassword",
+	        "register" : "showRegister",
             "audits" : "getAuditList",
             "audits/:id" : "showAuditDetails",
             "audits/:id/continue" : "startAudit",
+            "audits/:id/categoryList" : "showCategory",
             "audits/:id/products" : "showProducts",
-            "audits/:id/products/:id" : "showNorms",
+            "audits/:id/category/:id/brands" : "showBrands",
+            "audits/:id/category/:id" : "showAllBrandNorms",
+            "audits/:id/category/:id/SGF" : "showSGFBrands",
+            "audits/:id/category/:id/brand/:id/sgfNorms" : "showSGFNorms",
+            "audits/:id/products/:id/category/:id/brandNorms/:true/cId/:id" : "showNorms",
             "audits/:id/product/verify" : "verifyAudit",
-            "audits/:id/upload" : "onUploadAudit"
+            "audits/:id/upload" : "onUploadAudit",
+            "audits/:id/category/:id/SOD" : "openSOD",
+            "audits/upload/all" : "uploadAll"
             /* "audits/upload" : "uploadAll"*/
         },
 
@@ -62,6 +70,7 @@ define(["backbone", "bootstrap", "mustache"], function() {
                     that.appendView(RegisterView);
                 });  
             }
+            $(".timer_container").hide();
         },
 
         getAuditList: function(){
@@ -77,6 +86,7 @@ define(["backbone", "bootstrap", "mustache"], function() {
 
                 that.appendView(AuditView);
             });
+            $(".timer_container").hide();
         },
 
         uploadAll: function(){
@@ -92,6 +102,7 @@ define(["backbone", "bootstrap", "mustache"], function() {
 
                 that.appendView(AuditView);
             });
+            $(".timer_container").hide();
         },
 
         showAuditDetails: function(mId){
@@ -108,22 +119,37 @@ define(["backbone", "bootstrap", "mustache"], function() {
 
                 that.appendView(AuditDetailsView);
             });
+            $(".timer_container").hide();
         },
 
         startAudit: function(mId){
             var that = this;
 
-            require(["initAudit"], function(InitAudit) {
-                var InitAuditModel = new InitAudit.Model({
-                    "mId":mId
-                });
-                var InitAuditView = new InitAudit.View({
-                    model: InitAuditModel
-                });
-                InitAuditView.startAudit(mId);
+//            var callback = function(time, noInternet){
+               /* if(noInternet == 1){
+                    window.history.back();
+                    return;
+                }*/
 
-                that.appendView(InitAuditView);
-            });
+                var time = inswit.getCurrentTime();
+
+                LocalStorage.setServerTime(mId, time);
+
+                require(["initAudit"], function(InitAudit) {
+                    var InitAuditModel = new InitAudit.Model({
+                        "mId":mId
+                    });
+                    var InitAuditView = new InitAudit.View({
+                        model: InitAuditModel
+                    });
+                    InitAuditView.startAudit(mId);
+
+                    that.appendView(InitAuditView);
+                });
+
+//             };
+
+            //inswit.getServerTime(callback);
         },
 
         showProducts: function(mId){
@@ -148,6 +174,18 @@ define(["backbone", "bootstrap", "mustache"], function() {
 
                 forgotpasswordView.render();
                 that.appendView(forgotpasswordView);
+            });
+            $(".timer_container").hide();
+        },
+
+	showRegister: function() {
+            var that = this;
+            require(["register"], function(RegisterUniqueId){
+                var registerModel = new RegisterUniqueId.Model({});
+                var registerView = new RegisterUniqueId.View({model:registerModel});
+
+                registerView.render();
+                that.appendView(registerView);
             });
         },
 
@@ -177,9 +215,8 @@ define(["backbone", "bootstrap", "mustache"], function() {
             }
         },
 
-        showNorms: function(mId, storeVisit){
+        showNorms: function(mId, pId, categoryId, brandwiseNorm, cId){
             var that = this;
-            var product = {};
 
             //Getting hotspot execution brand id to disable all the norms(Audit time)
             var hotspotPid = $(this.currentView.$el.find(".product")[0]).attr("id");
@@ -191,46 +228,148 @@ define(["backbone", "bootstrap", "mustache"], function() {
                 isVerify = true;
             }
             
-            /*setTimeout(function(){
+            setTimeout(function(){
                 var callback = function(product){
                     require(["norm"], function(Norm) {
                         var NormModel = new Norm.Model({
                             "mId":mId,
                             "hotspotPid": hotspotPid,
-                            "isVerify":isVerify
+                            "isVerify":isVerify,
+                            "brandwiseNorm": (brandwiseNorm == "true")? true:false,
+                            "categoryId": categoryId,
+                            "cId": cId
                         });
                         var NormView = new Norm.View({
                             model: NormModel
                         });
-                        NormView.showNorms(mId, pId, storeVisit, hotspotPid);
+                        NormView.showNorms(mId, pId, product, hotspotPid);
 
                         that.appendView(NormView);
 
                     });
                 }
 
-                getProductName(db, mId, pId, callback);
-            }, 350)*/
+                getProductName(db, mId, categoryId, pId, callback);
+            }, 350);
+        },
+
+        showAllBrandNorms: function(mId, categoryId) {
+            var that = this;
+
+            //Getting hotspot execution brand id to disable all the norms(Audit time)
+            var hotspotPid = $(this.currentView.$el.find(".product")[0]).attr("id");
+            var isVerify = false;
+
+            //Getting hotspot execution brand id to disable all the norms(verify time)
+            if(!hotspotPid){
+                hotspotPid = $(this.currentView.$el.find(".p_header")[0]).attr("id");
+                isVerify = true;
+            }
+            
             setTimeout(function(){
-                 var callback = function(product){
+                var callback = function(product){
                     require(["norm"], function(Norm) {
                         var NormModel = new Norm.Model({
                             "mId":mId,
                             "hotspotPid": hotspotPid,
                             "isVerify":isVerify,
+                            "categoryId": categoryId,
+                            "cId": categoryId
                         });
                         var NormView = new Norm.View({
                             model: NormModel
                         });
-                        NormView.showNorms(mId, storeVisit, product, hotspotPid);
+                        NormView.showNorms(mId, undefined, product, hotspotPid);
 
                         that.appendView(NormView);
+
                     });
-                 }
-                getProductName(db, mId, storeVisit, callback);
+                }
+
+                getProductName(db, mId, categoryId, callback);
             }, 350);
+        },
 
+        showSGFNorms: function(mId, categoryId, brandId) {
+            var that = this;
 
+            //Getting hotspot execution brand id to disable all the norms(Audit time)
+            var hotspotPid = $(this.currentView.$el.find(".product")[0]).attr("id");
+            var isVerify = false;
+
+            //Getting hotspot execution brand id to disable all the norms(verify time)
+            if(!hotspotPid){
+                hotspotPid = $(this.currentView.$el.find(".p_header")[0]).attr("id");
+                isVerify = true;
+            }
+            
+            setTimeout(function(){
+                var callback = function(product){
+                    require(["norm"], function(Norm) {
+                        var NormModel = new Norm.Model({
+                            "mId":mId,
+                            "hotspotPid": hotspotPid,
+                            "isVerify":isVerify,
+                            "categoryId": categoryId,
+                            "cId": categoryId,
+                            "isSGF": true,
+                            "brandId": brandId
+                        });
+                        var NormView = new Norm.View({
+                            model: NormModel
+                        });
+                        NormView.showNorms(mId, undefined, product, hotspotPid);
+
+                        that.appendView(NormView);
+
+                    });
+                }
+
+                getProductName(db, mId, categoryId, callback);
+            }, 350);
+        },
+
+        showSGFBrands: function(mId, channelId) {
+            var that = this;
+
+            //Getting hotspot execution brand id to disable all the norms(Audit time)
+            var hotspotPid = $(this.currentView.$el.find(".product")[0]).attr("id");
+            var isVerify = false;
+
+            //Getting hotspot execution brand id to disable all the norms(verify time)
+            if(!hotspotPid){
+                hotspotPid = $(this.currentView.$el.find(".p_header")[0]).attr("id");
+                isVerify = true;
+            }
+            
+            setTimeout(function(){
+                var callback = function(product){
+                    require(["SGF/storeGrowthFund"], function(SGF) {
+                        var SGFModel = new SGF.Model({
+                            "mId":mId,
+                            "hotspotPid": hotspotPid,
+                            "isVerify":isVerify,
+                            "channelId": channelId,
+                            "cId": channelId,
+                            "isSGF": true
+                        });
+                        var SGFView = new SGF.View({
+                            model: SGFModel
+                        });
+                        SGFView.showSgfbrands(mId, undefined, "", hotspotPid);
+
+                        that.appendView(SGFView);
+
+                    });
+                }
+
+                getProductName(db, mId, channelId, callback);
+            }, 350);
+        },
+
+        showBrandNorms: function(mId, pId) {
+            var brandwiseNorm = true;
+            this.getNorm(mId, pId, brandwiseNorm);
         },
 
         onUploadAudit: function(mId) {
@@ -245,6 +384,73 @@ define(["backbone", "bootstrap", "mustache"], function() {
                 UploadView.onUploadAudit(mId);
                 that.appendView(UploadView);
             });
+            $(".timer_container").hide();
+        },
+
+        showCategory: function(mId) {
+            var that = this;
+
+            require(["category"], function(Category) {
+                var CategoryModel = new Category.Model({
+                    "mId":mId
+                });
+                var CategoryView = new Category.View({model: CategoryModel});
+
+                CategoryView.showCategories(mId);
+                that.appendView(CategoryView);
+            });
+        },
+
+        showBrands: function(mId, categoryId) {
+            var that = this;
+
+            require(["brands"], function(Brands) {
+                var BrandsModel = new Brands.Model({
+                    "mId":mId,
+                    "categoryId": categoryId
+                });
+                var BrandsView = new Brands.View({model: BrandsModel});
+                
+                var brandwiseNorm = true;
+                BrandsView.showBrands(mId, categoryId, brandwiseNorm);
+                that.appendView(BrandsView);
+            });
+        },
+
+        openSOD: function(mId, categoryId) {
+            var that = this;
+
+            require(["shareOfDisplay"], function(ShareOfDisplay) {
+                var ShareOfDisplayModel = new ShareOfDisplay.Model({
+                    "mId":mId,
+                    "categoryId": categoryId
+                });
+                var ShareOfDisplayView = new ShareOfDisplay.View({model: ShareOfDisplayModel});
+                
+                var brandwiseNorm = false;
+                ShareOfDisplayView.showBrands(mId, categoryId, brandwiseNorm);
+                that.appendView(ShareOfDisplayView);
+            });
+        },
+
+        uploadAll: function(){
+            var that = this;
+
+            require(["uploadAll"], function(UploadAll) {
+                var UploadAllModel = new UploadAll.Model({
+                });
+                var UploadAllView = new UploadAll.View({
+                    model: UploadAllModel
+                });
+                UploadAllView.render();
+
+                that.appendView(UploadAllView);
+            });
+            $(".timer_container").hide();
+        },
+
+        getNorm: function(mId, pId, brandwiseNorm) {
+            
         },
 
         appendView: function(view) {

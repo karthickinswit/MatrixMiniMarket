@@ -6,6 +6,13 @@ function createStoreStatus(tx, success, error){
     tx.executeSql(createIndex);
 }
 
+function createCategoryTable(tx, success, error){
+    var createStatement = "CREATE TABLE IF NOT EXISTS mxpg_category(category_id INTEGER, category_name TEXT, category_type TEXT)";
+    tx.executeSql(createStatement, [], success, error);
+    var createIndex = "CREATE UNIQUE INDEX categoryIndex ON mxpg_category(category_id)";
+    tx.executeSql(createIndex);
+}
+
 function createChannelTable(tx, success, error){
     var createStatement = "CREATE TABLE IF NOT EXISTS mxpg_channel(channel_id INTEGER, channel_name TEXT)";
     tx.executeSql(createStatement, [], success, error);
@@ -27,6 +34,17 @@ function populateStoreStatusTable(db, storeOptions, success, error) {
 
             tx.executeSql('INSERT OR replace INTO mxpg_store_status(status_id, status_name) VALUES (?,?);',
             [option.id, option.name], success, error);
+        }
+    });
+}
+
+function populateCategoryTable(db, channels, success, error) {
+    db.transaction(function(tx){
+        for(var i = 0; i < channels.length; i++){
+            var channel = channels[i];
+
+            tx.executeSql('INSERT OR replace INTO mxpg_category(category_id, category_name, category_type) VALUES (?,?,?);',
+            [channel.id, channel.name, channel.type], success, error);
         }
     });
 }
@@ -106,6 +124,27 @@ function selectStoreStatus(db, fn) {
     });
 }
 
+function fetchCategories(db, channelId, auditMonthId, fn, sod) {
+    var query = "select * from mxpg_cc_map t1 join mxpg_category t2 on t2.category_id = t1.category_id where t1.channel_id = "+ channelId +" and t1.audit_month_id = " + auditMonthId + " order by t2.category_id asc";
+    if(sod){
+         query = "select * from mxpg_category where category_type = 0 order by category_id asc";
+    }
+    db.transaction(function(tx){
+        tx.executeSql(query, [], function(tx,response) {
+            var results = [];
+            var len = response.rows.length;
+            for(var i = 0; i < len; i++){
+                var obj = response.rows.item(i);
+                results.push(obj);
+            }
+            
+            fn(results);
+        }, function(tx,error){
+            console.log(error);
+        });
+    });
+}
+
 function selectChannels(db, fn) {
     var query = "select * from mxpg_channel order by channel_id asc";
     db.transaction(function(tx){
@@ -154,6 +193,34 @@ function removeTable(db, tableName, callback, error){
 
 
 
+/**
+ * This method Remove the record from Completed Audit table.
+ * @param  {object} db
+ * @param  {json} auditId
+ * @param  {function} callback function
+ */
+
+function removeAuditEntries(db, storeId, success, error) {
+
+    db.transaction(function(tx){
+        tx.executeSql('DELETE FROM mxpg_mp_seller WHERE store_id=?;', [storeId]);
+    });
+
+    db.transaction(function(tx){
+        tx.executeSql('DELETE FROM mxpg_comp_audits WHERE store_id=?;', [storeId]);
+    });
+}
+
+function removeAuditHistories(db, storeId, success, error){
+
+    var query = "DELETE FROM mxpg_audit_history WHERE store_id='" + storeId + "';";
+
+    db.transaction(function(tx){
+        tx.executeSql(query);
+    });
+}
+
+
 function getStoreCode(db, storeId, callback, error){
     var query = "SELECT store_code FROM mxpg_store WHERE store_id = ?;";
 
@@ -182,5 +249,39 @@ function getDistributor(db, auditId, storeId, callback, error){
         }, function(a, e){
            
         });
+    });
+}
+
+function createAuditHistoryTable(tx, success, error){
+    var createStatement = "CREATE TABLE IF NOT EXISTS mxpg_audit_history(audit_id TEXT, store_id TEXT, date TEXT)";
+    tx.executeSql(createStatement, [], success, error);
+    var createIndex = "CREATE UNIQUE INDEX auditHistoryIndex ON mxpg_audit_history(audit_id, store_id)";
+    tx.executeSql(createIndex);
+}
+
+function populateAuditHistoryTable(db, audit, success, error) {
+    db.transaction(function(tx){
+        tx.executeSql('INSERT OR replace INTO mxpg_audit_history(audit_id, store_id, date) VALUES (?,?,?);',
+        [audit.auditId, audit.storeId, audit.date], success, error);
+    });
+}
+
+function selectAuditHistories(db, fn) {
+    var query = "SELECT * FROM mxpg_audit_history ORDER BY store_id DESC";
+    db.transaction(function(tx){
+        tx.executeSql(query, [], function(tx,response) {
+            fn(response.rows);
+        }, function(tx,error){
+            console.log(error);
+        });
+    });
+}
+
+function removeAuditHistories(db, auditId, storeId, success, error){
+
+    var query = "DELETE FROM mxpg_audit_history WHERE audit_id='" + auditId + "' AND store_id='" + storeId + "';";
+
+    db.transaction(function(tx){
+        tx.executeSql(query);
     });
 }

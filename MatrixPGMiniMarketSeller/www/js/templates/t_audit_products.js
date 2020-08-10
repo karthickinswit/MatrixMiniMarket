@@ -1,17 +1,17 @@
 define([],function(){
     var template =  '<div class="audit_header">\
-                        <!--<div class="back">\
+                        <div class="back">\
                             <img src="images/matrix_icons/back_arrow_red_72.png" class="ico_36">\
-                        </div>-->\
+                        </div>\
                         <div class="left_content">\
-                            <div class="center_content bold font_18">{{name}}</div>\
+                            <div class="center_content bold font_18 ellipsis width_80p">{{name}}</div>\
                         </div>\
                     </div>\
                     <div id="wrapper_products" class="scroll_parent products_list">\
                     <div class="scroll_ele">\
                         <ul class="products list-group">\
                             {{#products}}\
-    	                        <a class="list-group-item product {{#done}}completed{{/done}}" href="#audits/{{mId}}/products/{{product_id}}" rel={{product_name}} id={{product_id}}>\
+    	                        <a class="list-group-item product" href="#audits/{{mId}}/products/{{product_id}}" rel={{product_name}} id={{product_id}}>\
                                     {{#isHotSpot}}<i class="hotspot_ico ico_24"></i>{{/isHotSpot}}\
     	                            <span id={{product_id}}>\
                                     {{#done}}\
@@ -25,8 +25,7 @@ define([],function(){
     	                        </a>\
                             {{/products}}\
                         </ul>\
-                    <!-- <button href="#audits/{{mId}}/product/verify" class="btn btn-success verify_audit" disabled>Verify Audit</button>-->\
-                    <button href="{{mId}}" class="btn btn-success go_next" disabled>Continue</button>\
+                        <button class="complete_audit btn btn-success disabled" href={{mId}}>Complete Audit</button>\
                     </div>\
                     </div>';            
     return template;

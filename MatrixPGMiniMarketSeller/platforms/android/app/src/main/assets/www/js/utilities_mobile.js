@@ -1,12 +1,9 @@
-//var PROJECTID = "1c62737aae0d11e59d090050569cb68c";   //development
-var PROJECTID = "98c096b6494411e8a9bf0050569ccb08"; //production
-//var PROJECTID = "97677c1832bc11e5a9bb0050569ccb08"; //demo
-//var PROJECTID = "f152c28a2b3b11e8a9bf0050569ccb08"; //process
-
+//var PROJECTID = "a8fe973aff5c11e79d0d0050569cb68c"; //production
+var PROJECTID = "3d916a1c-60fb-4e86-8222-5f4d7c66951f"; //process
+//var PROJECTID = "99b8f2863f5511e9bb4f0050569c0a8e"; //development testing
 var inswit = {
 
 	URI: "https://www.appiyo.com/",
-	//URI: "http://72.52.114.252/",
 	
 	DB: "mxpg",
 
@@ -17,12 +14,20 @@ var inswit = {
 		PRIORITY_NO_POWER:105
 	},
 
+	navigator: {
+		notification: {
+			alert: "alert"
+		}
+	},
+
+	cordova: "",
+
 	TEST_ACCOUNT: {
 		email: "",
 		password: "",
 	},
-	
-	VERSION : "2.2",
+
+	VERSION : "2.7",
 
 	LOGIN_CREDENTIAL: {
 		"email": "minimarket@matrixbsindia.com",
@@ -30,68 +35,72 @@ var inswit = {
 	},
 
 	LOGIN_PROCESS: {
+
 		"projectId":PROJECTID,
-		"workflowId":"927b2a17f97a4cbda9db935fe37a87e3",
-		"processId":"fdb22c0b6189413880a96ee3bf3baad6"
+		"workflowId":"f474e9a6382c40a6bc4232e50d1bb167",
+		"processId":"037852e078ca4ae5aecf6b2d760c36ee"
 	},
 
 	UPLOAD_PROCESS: {
 		"projectId":PROJECTID,
-		"workflowId":"b7d289d473364bf1bab6701f81ec00ef",
-		"processId":"93f56f755d0c4915b6f212e899ff5bff"
+		"workflowId":"e64bfdaa59e011e98e59eede07c14f65",
+		"processId":"e659430c59e011e98e59eede07c14f65"
 	},
 
 	FORGOT_PROCESS: {
 		"projectId":PROJECTID,
-		"workflowId":"7b798b38dab049a4b9779ad15bcad0ec",
-		"processId":"aab04e67e63743e7b94daa7c9ad38ee1"
+		"workflowId":"ce83479cad6a4a6f951c66a1990ca3f2",
+		"processId":"bbbb9a09f36941538e84dbe76da86549"
+	},
+
+	REGISTER_PROCESS: {
+		"projectId":PROJECTID,
+		"workflowId":"4242ac00daee11eaa360c282e0885855",
+		"processId":"426bc4d2daee11eaa360c282e0885855"
 	},
 
 	RESET_PROCESS: {
 		"projectId":PROJECTID,
-		"workflowId":"7b798b38dab049a4b9779ad15bcad0ec",
-		"processId":"97a250e54f084d07a3ae0cbd75cea016"
+		"workflowId":"ce83479cad6a4a6f951c66a1990ca3f2",
+		"processId":"417ec4429beb475fb71090084f319632"
 	},
 
-/*  GET_DETAILED_AUDIT_PROCESS: {
+	GET_DETAILED_AUDIT_PROCESS: {
 		"projectId":PROJECTID,
 		"workflowId":"47e6ab168f6711e5a9bb0050569ccb08",
 		"processId":"484eb7568f6711e5a9bb0050569ccb08"
-	},*/
+	},
 
 	GET_ASSIGNED_AUDIT_PROCESS: {
 		"projectId":PROJECTID,
-		"workflowId":"259981fe02a344619785512bfc806f22",
-		"processId":"333e2dc949d04cdfadc05bd5b1ad5fe2"
+		"workflowId":"3dc3041a5c5311e9a360c282e0885855",
+		"processId":"3dd0525a5c5311e9a360c282e0885855"
 	},
 
 	INIT_PROCESS: {
 		"projectId":PROJECTID,
-		"workflowId":"e0db98a51a144891a92817732d664f76",
-		"processId":"f28a6d973cb44377a51fdcc2f48fcae9"
+		"workflowId":"d076551c588111e98e59eede07c14f65",
+		"processId":"cf7d2d66588111e9a360c282e0885855"
 	},
 
 	ERROR_LOG: {
 		"projectId":PROJECTID,
-		"workflowId":"6b24bcc9b6294fb694819d3fdabebbf8",
-		"processId":"081a49563b57467cbf3e6f8ae9480f1f"
+		"workflowId":"28e722a7522843c98211b30b5f2cd61f",
+		"processId":"17f4b1d0be9549d9b6106c76b5aa4315"
 	},
 
 	ERROR_LOG_UPLOAD: {
 		"projectId":PROJECTID,
-		"workflowId":"f976a31104d140f2bf5752e05cee8e85",
-		"processId":"ece125f0e2a4448b96dd31bbb7eae6d8"
+		"workflowId":"c8d262b2d48347e485714042cd13cb49",
+		"processId":"7ea6c23bb1724838bab4b2681c29c4b1"
 	},
 
-	FIELD_TYPES: {
-        INT: "1",
-        TEXT: "2",
-        OPTION: "3"
+	SERVER_TIME: {
+        "projectId":PROJECTID,
+        "workflowId":"c33bd4a78755407ba70352624144de7c",
+        "processId":"935ec05204224e53bcac63f6d84813bd"
     },
 
-    FIELDS: {
-        "TEXT_INPUT": "0"
-    },
 
 	//Don't change the order.
 	COLORS:[
@@ -127,12 +136,22 @@ var inswit = {
 	//To this distributor photo is not mandatory
 	DISTRIBUTOR: 33,
 
-	TIMEOUT: 30000,
+	TIMEOUT: 100000,
 
 	MAXIMUM_AGE: 10000,
 
+	TIMER: 0,
+
+    TIMER_MIN: 0,
+
 	alertMessages : {
-		"logOut" : "Are you sure you want to logout?"
+		"logOut" : "Are you sure you want to logout?",
+
+		"restartAudit": "Already taken photos for this store will be deleted. Do you like to proceed?",
+
+		"no_execution" : "You have chosen NonExecution. Are you sure you want to continue?",
+
+		"forceLogout": "Are you sure you want to forcly clear the application data?",
 	},
 
 	ErrorMessages: {
@@ -144,6 +163,18 @@ var inswit = {
 		"emailError" : "* Enter email id",
 
 		"inValidEmailId" : "Invalid email id",
+
+		"timerExceed": "Taking photos for this store exceeded the time limit.\nYou can restart taking photos by selecting the store from store list.",
+
+        "oldTimerExceed": "Already taken photos for this store are invalid as the time exceeds the limit.\nYou will be navigated to Start page.",
+
+        "checkProceed": "Please check NonExecution to proceed.",
+
+        "invalidMobileTime": "Looks like mobile date&time settings are changed.\nYou can restart taking photos by selecting the store from store list.",
+
+   		"UploadAllFail": "Due to some network issue, some store photos failed to upload, \n so please try after some time.",
+
+
 	},
 
 	ERROR_LOG_TYPES: {
@@ -153,6 +184,16 @@ var inswit = {
 		DB_UPDATION: "DB_UPDATION",
 		UPLOAD_AUDIT: "UPLOAD_AUDIT",
 		UPDATE_MASTER: "UPDATE_MASTER"
+	},
+
+	FIELD_TYPES: {
+		INT: "1",
+		TEXT: "2",
+		OPTION: "3"
+	},
+
+	FIELDS: {
+		"TEXT_INPUT": "0"
 	},
 
 	alert: function(msg, title) {
@@ -476,8 +517,7 @@ var inswit = {
             success: function(response){    
                if(response.token) {
                		LocalStorage.setAccessToken(response.token);
-					
-					cordova.plugins.IMEI(function (err, imei) {
+               		cordova.plugins.IMEI(function (err, imei) {
 						console.log('imei', imei)
 						callback(imei);
 					});
@@ -593,10 +633,10 @@ var inswit = {
 				}
 
 		    	options = {
-		    		enableHighAccuracy:false,
+		    		enableHighAccuracy:true,
 			    	maximumAge:inswit.MAXIMUM_AGE,
 		    		timeout:inswit.TIMEOUT,
-			    	priority: inswit.PRIORITY.PRIORITY_NO_POWER
+			    	priority: inswit.PRIORITY.PRIORITY_HIGH_ACCURACY
 				};
 
 				that.getLatLngUsingLocationServices(callback, options, true);
@@ -639,9 +679,9 @@ var inswit = {
 		inswit.hideLoaderEl();
 
 		var pVariables = {
-		    "projectId":inswit.ERROR_LOG_UPLOAD.projectId,
-		    "workflowId":inswit.ERROR_LOG_UPLOAD.workflowId,
-		    "processId":inswit.ERROR_LOG_UPLOAD.processId,
+		    "projectId":inswit.ERROR_LOG.projectId,
+		    "workflowId":inswit.ERROR_LOG.workflowId,
+		    "processId":inswit.ERROR_LOG.processId,
 		    "ProcessVariables":{
 		    	"executing": JSON.stringify(error),
 		    	"empId":LocalStorage.getEmployeeId(),
@@ -675,16 +715,36 @@ var inswit = {
         });
 	},
 
-	takePicture: function(callback, takeEl, retakeEl, superImposeText) {
+	takePicture: function(callback, takeEl, retakeEl, superImposeText, parentsEl) {
 		var that = this;
+		var oldImageURI;
+		var singlePhoto, dynamicStyle;
 
 		//inswit.errorLog({"info":"Before taking picture"});
 
-		if($("."+ takeEl + ", ." + retakeEl).hasClass("disable")) {
-			return;
-		}
-		
-		$("."+ takeEl + ", ." + retakeEl).addClass("disable");
+		if(!parentsEl) {
+
+            if($("."+ takeEl + ", ." + retakeEl).hasClass("disable")) {
+                return;
+            }
+
+            $("."+ takeEl + ", ." + retakeEl).addClass("disable");
+            oldImageURI = $(".photo_block img").attr("src") || "";
+        }else {
+            if(parentsEl.find("."+ takeEl + ", ." + retakeEl).hasClass("disable")) {
+                return;
+            }
+
+            singlePhoto = (parentsEl.hasClass("single_photo") == true) ? true:false;
+
+            if(!singlePhoto) {
+                dynamicStyle = "multiple_photo_block";
+            }
+
+            parentsEl.find("."+ takeEl + ", ." + retakeEl).addClass("disable");
+            oldImageURI = parentsEl.find(".photo_block img").attr("src") || "";
+
+        }
 
 		if (!navigator.camera) {
 			inswit.alert("Camera API not supported", "Error");
@@ -704,13 +764,22 @@ var inswit = {
 	        superImposeText: superImposeText || ""
 	    };
 
-	    var oldImageURI = $(".photo_block img").attr("src") || "";
 		navigator.camera.getPicture(function(imageURI) {
-			var template = "<img src='{{imageURI}}' width='100%' height='200'><a class='{{element}} retake_photo'>Retake</a>";
+			var template = "<img class="+ dynamicStyle +" src='{{imageURI}}' width='100%' height='200'><a class='{{element}} retake_photo'>Retake</a>";
 			var html = Mustache.to_html(template, {"imageURI":imageURI, "element":retakeEl});
 
-			$("." + takeEl).remove();
-			$(".photo_block").empty().append(html);
+            if(!parentsEl) {
+			    $("." + takeEl).remove();
+			    $(".photo_block").empty().append(html);
+			}else {
+			     $(parentsEl).find("."+ takeEl + ", ." + retakeEl).remove();
+			     var photoBlock = $(parentsEl).find(".photo_block");
+			     if(photoBlock.length == 0) {
+			        $(parentsEl).empty().append(html);
+			     }else {
+			        $(parentsEl).find(".photo_block").empty().append(html);
+			     }
+			}
 
 			callback(imageURI);
 
@@ -718,8 +787,12 @@ var inswit = {
 				var imageList = [{"imageURI":oldImageURI}];
 				inswit.clearPhoto(imageList);
 			}
-			
-			$("."+ takeEl + ", ." + retakeEl).removeClass("disable");
+
+			if(!parentsEl) {
+			    $("."+ takeEl + ", ." + retakeEl).removeClass("disable");
+			}else {
+			    parentsEl.find("."+ takeEl + ", ." + retakeEl).removeClass("disable");
+			}
 
 		},function(err) {
 			var imageURI = $(".photo_block img").attr("src") || "";
@@ -734,12 +807,13 @@ var inswit = {
 		db.transaction(function(tx){
 			var products = processVariables.brandChanMap;
 			var productNormMap = processVariables.brandNormMap;
-			var norms = processVariables.normOptionRemarkMap;
-			var options = processVariables.options;
-			var remarks = processVariables.remarks;
+			var norms = processVariables.normOptionRemarkMap || [];
+			var options = processVariables.options || [];
+			var remarks = processVariables.remarks || [];
 			var distributors = processVariables.DistributorBranch;
 			var empId = LocalStorage.getEmployeeId();
 			var channels = processVariables.channelList;
+			var categoryList = processVariables.categoryList;
 			
 			var modified = false;
 			//Remove and populate the product table
@@ -844,7 +918,57 @@ var inswit = {
 				});
 			}
 
-			//Remove and populate the norm table
+			//Remove and populate the category table
+			if(categoryList && categoryList.length > 0){
+				modified = true;
+
+				removeTable(db, "mxpg_category", function(){
+					populateCategoryTable(db, categoryList, function(){}, function(error, info){
+						var desc = {
+							value: categoryList,
+							table: "mxpg_category"
+						};
+						var pVariables = {
+						    "projectId":inswit.ERROR_LOG.projectId,
+						    "workflowId":inswit.ERROR_LOG.workflowId,
+						    "processId":inswit.ERROR_LOG.processId,
+						    "ProcessVariables":{
+						    	"errorType": inswit.ERROR_LOG_TYPES.UPDATE_MASTER,
+						    	"empId":empId,
+						    	"issueDate":new Date(),
+						    	"issueDescription": JSON.stringify(desc),
+						    	"version": inswit.VERSION
+						    }
+						};
+		
+						inswit.executeProcess(pVariables, {
+						    success: function(response){
+						    	if(response.ProcessVariables){
+						    		
+						    	}
+			                }, failure: function(error){
+			                	inswit.hideLoaderEl();
+			                	switch(error){
+			                		case 0:{
+			                			inswit.alert("No Internet Connection!");
+			                			break;
+			                		}
+			                		case 1:{
+			                			inswit.alert("Check your network settings!");
+			                			break;
+			                		}
+			                		case 2:{
+			                			inswit.alert("Server Busy.Try Again!");
+			                			break;
+			                		}
+			                	}
+			                }
+			            });
+					});
+				});
+			}
+
+			//Remove and populate the channel table
 			if(channels && channels.length > 0){
 				modified = true;
 
@@ -893,6 +1017,7 @@ var inswit = {
 					});
 				});
 			}
+
 
 			//Remove and populate the option table
 			if(options && options.length > 0){
@@ -1160,36 +1285,146 @@ var inswit = {
 		});
 	},
 
-	clearPartialAudit: function(storeId) {
+	setTimer: function(elementName, minutes, seconds, storeId) {
+    	var element, endTime, hours, mins, msLeft;
 
-        	getProdImage(db, storeId, function(response){
+    	function twoDigits( n )
+    	{
+    	   return (n <= 9 ? "0" + n : n);
+    	}
 
-                var imageList = [];
-                var result = response.rows;
-                var length = response.rows.length;
-                if(length > 0) {
-                    for(var i = 0; i < length; i++){
-                       var storeImage = result.item(i).image_uri;
-                       imageList.push({
-                           "imageURI":storeImage
-                       });
-                    }
-                    console.log(imageList);
-                    inswit.clearPhoto(imageList);
+    	function updateTimer()
+    	{
+    	   msLeft = endTime - (+new Date);
+    	   if ( msLeft < 1000 ) {
+    	      inswit.stopTimer(elementName);
+    	      inswit.confirm(inswit.ErrorMessages.timerExceed, function onConfirm(buttonIndex) {
+    		    if(buttonIndex == 1) {
+    		       router.navigate("/audits", {
+    		              trigger: true
+    		       });
+    		        return;
+    		    }
+    	      }, "Confirm", ["Ok"]);
+    	   } else {
+    	       element = $("."+ elementName);
+    	       time = new Date( msLeft );
+    	       hours = time.getUTCHours();
+    	       mins = time.getUTCMinutes();
+    	       element.html((hours ? hours + ':' + twoDigits( mins ) : mins) + ':' + twoDigits( time.getUTCSeconds() ));
+    	       inswit.TIMER = setTimeout( updateTimer, time.getUTCMilliseconds() + 500 );
+    	   }
+    	}
+
+    	element = $("."+ elementName);
+    	element.data("storeId", storeId);
+    	endTime = (+new Date) + 1000 * (60*minutes + seconds) + 500;
+    	updateTimer();
+    },
+
+    stopTimer: function(elementName) {
+    	clearTimeout(inswit.TIMER);
+    	inswit.TIMER = 0;
+    	var storeId = $("."+elementName).data('storeId');
+    	console.log(storeId);
+    	inswit.clearPartialAudit(storeId);
+    },
+
+    exitTimer: function() {
+         clearTimeout(inswit.TIMER);
+         inswit.TIMER = 0;
+         $(".timer").text("").data('storeId', null);
+    },
+
+    clearPartialAudit: function(storeId) {
+
+    	getProdImage(db, storeId, function(response){
+
+            var imageList = [];
+            var result = response.rows;
+            var length = response.rows.length;
+            if(length > 0) {
+                for(var i = 0; i < length; i++){
+                   var storeImage = result.item(i).image_uri;
+                   imageList.push({
+                       "imageURI":storeImage
+                   });
                 }
-
-        	});
-
-        	getStoreImage(db, storeId, function(response){
-                var imageList = [];
-                imageList.push({
-                "imageURI":response.store_image
-                });
                 console.log(imageList);
                 inswit.clearPhoto(imageList);
+            }
 
-        	});
+    	});
 
-        	removePartialAudit(db, storeId);
-        },
+    	getStoreImage(db, storeId, function(response){
+            var imageList = [];
+            imageList.push({
+            "imageURI":response.store_image
+            });
+            console.log(imageList);
+            inswit.clearPhoto(imageList);
+
+    	});
+
+    	removePartialAudit(db, storeId);
+
+    	getMPDImage(db, storeId, function(response){
+             var imageList = [];
+             var result = response.rows;
+             var length = response.rows.length;
+             if(length > 0) {
+               for(var i = 0; i < length; i++){
+                  var image_uri = result.item(i).image_uri;
+                  imageList.push({
+                      "imageURI":image_uri
+                  });
+               }
+               console.log(imageList);
+               inswit.clearPhoto(imageList);
+            }
+        });
+    },
+
+    getServerTime: function(fn){
+        var that = this;
+
+        var success = checkConnection();
+        if(!success) {
+            inswit.alert("No Internet Connection!", "Error");
+            fn("", 1);
+            return;
+        }
+
+        var processVariables = {
+            "projectId":inswit.SERVER_TIME.projectId,
+            "workflowId":inswit.SERVER_TIME.workflowId,
+            "processId":inswit.SERVER_TIME.processId,
+            "ProcessVariables":{
+                "version": inswit.VERSION
+            }
+        };
+
+        inswit.executeProcess(processVariables, {
+            success: function(response){
+                if(response.ProcessVariables && response.Error == "0"){
+                    var date = new Date(response.ProcessVariables.time);
+
+                    date = date.getDate() + "-" + (date.getMonth() + 1) + "-" + date.getFullYear() + " " + date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds();
+                    fn(date);
+                }
+
+            }, failure: function(error){
+                fn("");
+            }
+        });
+    },
+
+    getCurrentTime: function() {
+        return new Date();
+    },
+
+    getFormattedDateTime: function(date) {
+        var formatDate = date = date.getDate() + "-" + (date.getMonth() + 1) + "-" + date.getFullYear() + " " + date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds();
+        return formatDate;
+    }
 };

@@ -146,6 +146,7 @@ define([
 		completeAudit: function(event){
 			var that = this;
 
+
 			if($(event.currentTarget).hasClass("clicked")){
 				return;
 			}
@@ -162,7 +163,7 @@ define([
 	 			if(distributor != inswit.DISTRIBUTOR){ //For certain distributor photo is not mandatory
 	 				var image = $(".photo_block img").attr("src");
 					if(!image){
-						inswit.alert("Please take a selfie photo with Counsellor!");
+						inswit.alert("Please take a sign off photo!");
 						$(event.currentTarget).removeClass("clicked");
 						return;
 					}
@@ -171,10 +172,9 @@ define([
 	 			var callback = function(isYes){
 					$(event.currentTarget).removeClass("clicked");
 					if(isYes == 1){
+                       inswit.exitTimer();
 
-					   var auditorName = $("#aName").val() || "";
-
-		   	           updateAuditStatus(db, auditId, storeId, auditorName);
+		   	           updateAuditStatus(db, auditId, storeId);
 
 		   	            var route = "#audits/" + mId + "/upload";
 		   				router.navigate(route, {

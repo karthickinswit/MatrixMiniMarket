@@ -19,8 +19,7 @@ define([
 			"click .take_store_photo": "takeStorePicture",
 			"click .retake_store_photo": "takeStorePicture",
 			"change .aud_confirmation" : "toggleConfirmationBlock",
-			"click .back": "back",
-			"click .audit_list": "auditList"
+			"click .back": "back"
 		},
 
 		startAudit: function(mId){
@@ -29,7 +28,7 @@ define([
 			var id = mId.split("-");
             var auditId = id[0];
             var storeId = id[1];
-            var channelId = id[2];
+            //var channelId = id[2];
 
             that.getStoreName(mId);
 
@@ -54,13 +53,27 @@ define([
             			}
             			LocalStorage.setAuditStatus(storeStatus);
 
-	            		var html = Mustache.to_html(template, {
-	            			"mId":mId,
-	            			"name":that.storeName,
-	            			"yesStoreOptions": yesStoreOptions,
-	            			"noStoreOptions" : noStoreOptions
-	            		});
-						ele.append(html);
+            			var auditerName,auditerNumber;
+            			if(audit.length > 0 && audit[0].auditer_name && audit[0].auditer_number) {
+            				auditerName = audit[0].auditer_name;
+            				auditerNumber = audit[0].auditer_number;
+            			}
+
+            			findMonthRange(db, storeId, function(result) {
+            			    console.log("******result range", result);
+            			    	var html = Mustache.to_html(template, {
+                                    "mId":mId,
+                                    "name":that.storeName,
+                                    "yesStoreOptions": yesStoreOptions,
+                                    "noStoreOptions" : noStoreOptions,
+                                    "auditerName": auditerName || "",
+                                    "auditerNumber": auditerNumber || "",
+                                    "monthRange": result
+                                });
+                                ele.append(html);
+                        });
+
+
 
 						if(audit.length > 0){
 							audit = audit.item(0);
@@ -83,27 +96,27 @@ define([
 
 		continueAudit: function(event){
 			var that = this;
-			//var name = this.$el.find(".audit_name").val();
-            //var phoneNumber = this.$el.find(".audit_number").val();
+			var name = this.$el.find(".audit_name").val() || "";
+			var phoneNumber = this.$el.find(".audit_number").val() || "";
 
-            /*if(!name) {
-                alert("Please enter spoc name");
-                return;
-            }else if(!phoneNumber) {
-                alert("Please enter spoc phone number");
-                return;
-            }
-            var nameLen = name.length;
-            var phoneLen = phoneNumber.length;
+			/*if(!name) {
+				alert("Please enter spoc name");
+				return;
+			}else if(!phoneNumber) {
+				alert("Please enter spoc phone number");
+				return;
+			}
+			var nameLen = name.length;
+			var phoneLen = phoneNumber.length;
 
-            if(nameLen > 1 && nameLen > 100 ) {
-                alert("Please enter spoc name between 1-100 characters");
-                return;
-            }
-            if(phoneLen > 1 && phoneLen > 15) {
-                alert("Please enter spoc phone between 1-15 characters");
-                return;
-            }*/
+			if(nameLen > 1 && nameLen > 100 ) {
+				alert("Please enter spoc name between 1-100 characters");
+				return;
+			}
+			if(phoneLen > 1 && phoneLen > 15) {
+				alert("Please enter spoc phone between 1-15 characters");
+				return;
+			}*/
 
 			// var gpsDetect = cordova.require('cordova/plugin/gpsDetectionPlugin');
 	        // gpsDetect.checkGPS(function onGPSSuccess(on) {
@@ -111,7 +124,7 @@ define([
 				var on= true;
 	            if(!on){
 	            	//GPS is OFF
-	            	inswit.confirm("GPS/Location is switched off. Please enable the same to continue audit. \n\n Do you want to enable GPS?", function onConfirm(buttonIndex) {
+	            	inswit.confirm("GPS/Location is switched off. Please enable the same to continue audit. \n * Enable GPS with HIGH ACCURACY \n\n Do you want to enable GPS?", function onConfirm(buttonIndex) {
 				        if(buttonIndex == 1) {
 				            gpsDetect.switchToLocationSettings(function onSwitchToLocationSettingsSuccess() {
 
@@ -127,7 +140,7 @@ define([
 						var id = mId.split("-");
 			            var auditId = id[0];
 			            var storeId = id[1];
-			            var channelId = id[2];
+			            //var channelId = id[2];
 
 			            var dist = getDistributor(db, auditId, storeId, function(distributor){
 
@@ -138,6 +151,16 @@ define([
 									return;
 								}
 				            }
+
+                            var allottedAuditId = that.$el.find(".audit_date_range").find("option:selected" ).val();
+
+                            if(allottedAuditId == "select"){
+                                inswit.alert("Please choose audit month");
+                                return;
+                            }
+
+                            console.log("auditId month", auditId);
+
 
 			            	findStore(db, auditId, storeId, function(result){
 				            	//Store basic audit details
@@ -157,6 +180,7 @@ define([
 									}
 								}
 
+
 								var audit = {};
 								audit.storeId = storeId;
 								audit.auditId = auditId;
@@ -170,10 +194,10 @@ define([
 								audit.lng = "";
 								audit.storeImageId = "";
 								audit.signImageId = "";
-								audit.storeVisit = result.store_visit;
-								audit.lastVisit= result.last_visit_date;
-//								audit.auditerName = name;
-//                              audit.phoneNumber = phoneNumber;
+								audit.auditerName = name;
+								audit.phoneNumber = phoneNumber;
+								audit.allottedAuditId = allottedAuditId;
+								
 
 								/**
 								 * Geolocation exists check done here because, 
@@ -186,9 +210,8 @@ define([
 										audit.lng = auditDetails.item(0).lng;
 
 										populateCompAuditTable(db, audit, function(){
-						
+						                    //that.startTimer(storeId);
 								        	var route = "#audits/" + mId + "/products";
-								        	//var route = "#audits/" + mId + "/products/"+ audit.storeVisit;
 											router.navigate(route, {
 								                trigger: true
 								            });
@@ -199,18 +222,17 @@ define([
 
 									}else{
 										populateCompAuditTable(db, audit, function(){
-						
-											var getBack = function(){
-									        	$(".android").unmask();
-									        	var route = "#audits/" + mId + "/products";
-									        	//var route = "#audits/" + mId + "/products/"+ audit.storeVisit;
+//											 var getBack = function(){
+//									        	$(".android").unmask();
+									        	//that.startTimer(storeId);
+									        	var route = "#audits/" + mId + "/categoryList";
 												router.navigate(route, {
 									                trigger: true
 									            });
-											}
+//											 }
 											
-											that.setGeoLocation(auditId, storeId, getBack);
-											$(".android").mask("Capturing Geolocation... Please wait...", 100);
+											that.setGeoLocation(auditId, storeId);
+										//	$(".android").mask("Capturing Geolocation... Please wait...", 100);
 
 										}, function(a, e){
 											//Error callback of populateCompAuditTable function.
@@ -233,6 +255,17 @@ define([
 		finishAudit: function(event){
 			var that = this;
 
+			var name = this.$el.find(".audit_name").val() || "";
+			var phoneNumber = this.$el.find(".audit_number").val() || "";
+
+		/*	if(!name) {
+				alert("Please enter your name");
+				return;
+			}else if(!phoneNumber) {
+				alert("Please enter your phone number");
+				return;
+			}*/
+
 			if($(event.currentTarget).hasClass("clicked")){
 				return;
 			}
@@ -242,7 +275,7 @@ define([
 			var id = mId.split("-");
             var auditId = id[0];
             var storeId = id[1];
-            var channelId = id[2];
+            //var channelId = id[2];
 
             that.auditId = auditId;
             that.storeId = storeId;
@@ -257,6 +290,13 @@ define([
 						return;
 					}
 			    }
+
+			    var allottedAuditId = that.$el.find(".audit_date_range").find("option:selected" ).val();
+
+                if(allottedAuditId == "select"){
+                    inswit.alert("Please choose audit month");
+                    return;
+                }
 
 				var callback = function(isYes){
 					$(event.currentTarget).removeClass("clicked");
@@ -278,7 +318,8 @@ define([
 									}
 								}
 							}
-							
+
+
 							var audit = {};
 							audit.storeId = storeId;
 							audit.auditId = auditId;
@@ -292,6 +333,9 @@ define([
 							audit.lng = "";
 							audit.storeImageId = "";
 							audit.signImageId = "";
+						    audit.auditerName = name;
+                            audit.phoneNumber = phoneNumber;
+                            audit.allottedAuditId = allottedAuditId;
 
 							//Completed products need to cleared for audit status changed from 'YES' to 'NO'.
 							clearCompProducts(db, auditId, storeId, function(){
@@ -317,15 +361,20 @@ define([
 
 									}else{
 										populateCompAuditTable(db, audit, function(){
-											var getBack = function(){
-												$(".android").unmask();
-												router.navigate("/audits/"+ mId + "/upload", {
+//											var getBack = function(){
+//												$(".android").unmask();
+												/*router.navigate("/audits/"+ mId + "/upload", {
 							                        trigger: true
-							                    });
-											}
+							                    });*/
+
+							                    var route = "#audits";
+                                                router.navigate(route, {
+                                                    trigger: true
+                                                });
+//											}
 										
-											that.setGeoLocation(auditId, storeId, getBack);
-											$(".android").mask("Capturing Geolocation... Please wait...", 100);
+											that.setGeoLocation(auditId, storeId);
+//											$(".android").mask("Capturing Geolocation... Please wait...", 100);
 
 										}, function(a, e){
 											// Error callback of populateCompAuditTable function
@@ -338,11 +387,11 @@ define([
 								
 							})
 						});
+						inswit.exitTimer();
+						LocalStorage.removeServerTime(mId);
 					}
 				}
 
-				// var gpsDetect = cordova.require('cordova/plugin/gpsDetectionPlugin');
-		        // gpsDetect.checkGPS(function onGPSSuccess(on) {
 		        	var on= true;
 		        	//Check: GPS is enabled or not
 		            if(!on){
@@ -367,9 +416,6 @@ define([
 
 						inswit.confirm(message, callback, title, buttons);
 		            }
-		        // }, function onGPSError(e) {
-		        //     alert("Error : " + e);
-		        // });
             }, function(){
 
             });
@@ -379,10 +425,13 @@ define([
 		setGeoLocation: function(auditId, storeId, fn){
 			
 			var callback = function(pos){
-				if(pos != ""){
-					updateGeoLocation(db, auditId, storeId, pos);
+				if(pos == ""){
+				    pos = {
+                        lat: "",
+                        lng: ""
+                    };
 				}
-				
+				updateGeoLocation(db, auditId, storeId, pos);
 				if(fn){
 					fn();
 				}
@@ -400,11 +449,12 @@ define([
 			var that = this;
 
 			var mId = $(".continue_audit").attr("href");
-
+            var time = inswit.getCurrentTime();
+            time = inswit.getFormattedDateTime(time);
 			var id = mId.split("-");
             var auditId = id[0];
             var storeId = id[1];
-            var channelId = id[2];
+            //var channelId = id[2];
 
             getStoreCode(db, storeId, function(storeCode){
             	var callback = function(imageURI){
@@ -447,11 +497,18 @@ define([
 			this.scrollView.refresh();
 		},
 
-		auditList: function() {
-		     router.navigate("/audits", {
-                trigger: true
-            });
-		}
+
+        startTimer: function(storeId) {
+            if(inswit.TIMER) {
+                return;
+            }else  {
+                var ele = $(".timer_container").show();
+                var el = "timer";
+                var minutes = LocalStorage.getAuditTimeLimit();
+                var seconds = 0;
+                inswit.setTimer(el, minutes, seconds, storeId);
+            }
+        }
 	});
 
 	return InitAudit;

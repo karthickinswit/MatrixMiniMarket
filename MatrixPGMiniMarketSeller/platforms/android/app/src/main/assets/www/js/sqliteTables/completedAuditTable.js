@@ -2,7 +2,7 @@
  * This method create table to completed audit details.
  */
 function createCompAuditTable(tx, success, error) {
-    var createStatement = "CREATE TABLE IF NOT EXISTS mxpg_comp_audits(store_id TEXT, id TEXT, comp_audit BOOLEAN, audited BOOLEAN, option_id TEXT, audit_id TEXT, store_image TEXT, sign_image TEXT, lat TEXT, lng TEXT, store_image_id TEXT, sign_image_id TEXT, auditer_cmt TEXT, auditor_name TEXT)";
+    var createStatement = "CREATE TABLE IF NOT EXISTS mxpg_comp_audits(store_id TEXT, id TEXT, comp_audit BOOLEAN, audited BOOLEAN, option_id TEXT, audit_id TEXT, store_image TEXT, sign_image TEXT, lat TEXT, lng TEXT, store_image_id TEXT, sign_image_id TEXT, channel_id TEXT, auditer_name TEXT, auditer_number TEXT, month_audit_id TEXT)";
     tx.executeSql(createStatement, [], success, error);
     var createIndex = "CREATE UNIQUE INDEX compAuditIndex ON mxpg_comp_audits(audit_id, store_id)";
     tx.executeSql(createIndex);
@@ -12,11 +12,14 @@ function createCompAuditTable(tx, success, error) {
  * This method create table to completed audit details.
  */
 function createCompProductTable(tx, success, error) {
-    var createStatement = "CREATE TABLE IF NOT EXISTS mxpg_comp_products(store_id TEXT, store_name TEXT, product_id TEXT, product_name TEXT, norm_id TEXT, norm_name TEXT, option_id TEXT, option_name TEXT, remark_id TEXT, remark_name TEXT, image TEXT, image_uri TEXT, audit_id TEXT, store_score BOOLEAN, priority NUMBER, image_id, remark_txt TEXT)";
+    var createStatement = "CREATE TABLE IF NOT EXISTS mxpg_comp_products(store_id TEXT, store_name TEXT, product_id TEXT, product_name TEXT, category_id TEXT, norm_id TEXT, norm_name TEXT, option_id TEXT, option_name TEXT, remark_id TEXT, remark_name TEXT, image TEXT, image_uri TEXT, audit_id TEXT, store_score BOOLEAN, priority NUMBER, image_id TEXT, is_sos TEXT, qr_code TEXT)";
     tx.executeSql(createStatement, [], success, error);
-    var createIndex = "CREATE UNIQUE INDEX compProductIndex ON mxpg_comp_products(audit_id, store_id, product_id, norm_id)";
+    var createIndex = "CREATE UNIQUE INDEX compProductIndex ON mxpg_comp_products(audit_id, store_id, product_id, category_id, norm_id)";
     tx.executeSql(createIndex);
 }
+
+
+
 
 /**
  * This method Insert or Replace the record from Completed Product table of SQLite DB.
@@ -27,8 +30,8 @@ function createCompProductTable(tx, success, error) {
 
 function populateCompAuditTable(db, audit, callback, error) {
     db.transaction(function(tx){
-        tx.executeSql('INSERT OR replace INTO mxpg_comp_audits(store_id, id, comp_audit, audited, option_id, audit_id, store_image, sign_image, lat, lng, store_image_id, sign_image_id, auditer_cmt) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?);',
-            [audit.storeId, audit.id, audit.isCompleted, audit.isContinued, audit.optionId, audit.auditId, audit.storeImage, audit.signImage, audit.lat, audit.lng, audit.storeImageId, audit.signImageId, audit.auditerComment]
+        tx.executeSql('INSERT OR replace INTO mxpg_comp_audits(store_id, id, comp_audit, audited, option_id, audit_id, store_image, sign_image, lat, lng, store_image_id, sign_image_id, channel_id, auditer_name, auditer_number, month_audit_id) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);',
+            [audit.storeId, audit.id, audit.isCompleted, audit.isContinued, audit.optionId, audit.auditId, audit.storeImage, audit.signImage, audit.lat, audit.lng, audit.storeImageId, audit.signImageId, audit.categoryId, audit.auditerName, audit.phoneNumber, audit.allottedAuditId]
         , callback, error);
     });
 }
@@ -50,18 +53,24 @@ function populateCompProductTable(db, product, callback) {
     var imageId = product.imageId;
     var imageURI = product.imageURI;
     var priority = product.priority;
+    var categoryId = product.categoryId;
+    var isSOS = product.isSOS;
+    var qrResult = product.qrResult
 
     var length = product.norms.length;
+
+    $(".product_done").removeClass("clicked");
     db.transaction(function(tx){
         for(var i = 0; i < length; i++){
             var norm = product.norms[i];
             norm.isConsider == "true" ? true : false;
 
-            tx.executeSql('INSERT OR replace INTO  mxpg_comp_products(store_id, store_name, product_id, product_name, norm_id, norm_name, option_id, option_name, remark_id, remark_name, image, image_uri, audit_id, store_score, priority, image_id, remark_txt) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);',
-                [storeId, storeName, norm.productId, norm.productName, norm.normId, norm.normName, norm.optionId, norm.optionName, norm.remarkId, norm.remarkName, image, imageURI, auditId, norm.isConsider, priority, imageId, norm.remarkTxt]);
+            tx.executeSql('INSERT OR replace INTO  mxpg_comp_products(store_id, store_name, product_id, product_name, norm_id, norm_name, option_id, option_name, remark_id, remark_name, image, image_uri, audit_id, store_score, priority, image_id, category_id, is_sos, qr_code) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);',
+                [storeId, storeName, norm.productId, norm.productName, norm.normId, norm.normName, norm.optionId, norm.optionName, norm.remarkId, norm.remarkName, image, imageURI, auditId, norm.isConsider, priority, imageId, categoryId, isSOS, qrResult]);
 
             if(i+1 == length){
-                callback();
+                if(callback)
+                    callback();
             }
         }
     });
@@ -98,10 +107,18 @@ function selectAllCompProducts(db, auditId, storeId, fn) {
  * @param  {json} store
  */
 
-function selectCompProducts(db, auditId, storeId, fn) {
+function selectCompProducts(db, auditId, storeId, fn, categoryId, isSOS) {
 
-    var query = "select DISTINCT product_id, product_name, image_uri, priority, image_id from mxpg_comp_products where audit_id='" + auditId + "' AND store_id='" + storeId + "'";
-    
+    var query = "select DISTINCT product_id, product_name, image_uri, priority, image_id, category_id, is_sos from mxpg_comp_products where audit_id='" + auditId + "' AND store_id= '" + storeId + "' group by image_uri";
+    if(categoryId) {
+        //query = query+ " AND channel_id='" + categoryId + "'";
+    }
+    if(isSOS) {
+        query = query+ " AND is_sos = '1' ";
+    }
+
+    //query = query+ " group by channel_id";
+
     db.transaction(function(tx){
         tx.executeSql(query , [], function(tx, response) {
             var results = [];
@@ -116,6 +133,42 @@ function selectCompProducts(db, auditId, storeId, fn) {
         });
     });
 }
+
+
+
+/**
+ * This method Select the all distinct record from compProductTable
+ * @param  {object} db
+ * @param  {json} store
+ */
+
+function compledProducts(db, auditId, storeId, fn, categoryId, isSOS) {
+
+    var query = "select DISTINCT brand_id from mxpg_mp_seller where store_id= '" + storeId + "' and category_id = "+ categoryId;
+    if(categoryId) {
+        //query = query+ " AND channel_id='" + categoryId + "'";
+    }
+    if(isSOS) {
+        query = query+ " AND is_sos = '1' ";
+    }
+
+    //query = query+ " group by channel_id";
+
+    db.transaction(function(tx){
+        tx.executeSql(query , [], function(tx, response) {
+            var results = [];
+            var len = response.rows.length;
+
+            for(var i = 0; i < len; i++){
+                var obj = response.rows.item(i);
+                results.push(obj);
+            }
+            
+            fn(results);
+        });
+    });
+}
+
 
 /**
  * This method clear the unwanted products from compProductTable
@@ -135,32 +188,119 @@ function clearCompProducts(db, auditId, storeId, fn) {
  * @param  {json} store
  */
 
-function selectProductsToVerify(db, auditId, storeId, productId, fn) {
+function selectProductsToVerify(db, auditId, storeId, productId, fn, categoryId) {
 
-    var query = "select store_id as storeId, product_id as productId, product_name as productName, norm_id as normId, norm_name  as normName, option_id  as optionId, option_name as optionName, remark_id as remarkId, remark_name as remarkName, image, image_uri as imageURI, audit_id as auditId, store_score as isConsider, priority, remark_txt as remarkText from mxpg_comp_products where audit_id='" + auditId + "'";
+    var tempProductId = "0";
 
-    if(storeId){
-        query += " AND store_id='" + storeId + "'";
-    }
-    if(productId){
-        query += " AND product_id='" + productId + "'";
-    }
+    var productQuery = "select t1.product_id as csbProduct, t2.product_id as categoryProduct from mxpg_csb_map t1\
+                        join mxpg_pn_map t2 on t2.category_id = t1.category_id\
+                        where t1.category_id = '" + categoryId +"'\
+                        and t2.category_id = '" + categoryId +"'\
+                        group by t2.product_id, t1.product_id";
 
-    query += " ORDER BY priority DESC";
-    
-    db.transaction(function(tx){
-        tx.executeSql(query , [], function(tx, response) {
-            var results = [];
-            var len = response.rows.length;
+        db.transaction(function(tx){
+            tx.executeSql(productQuery , [], function(tx, response) {
+                var results = [];
+                var len = response.rows.length;
 
-            for(var i = 0; i < len; i++){
-                var obj = response.rows.item(i);
-                results.push(obj);
-            }
-            
-            fn(results);
+                 for(var i = 0; i < len; i++){
+                      var obj = response.rows.item(i);
+
+                      tempProductId += ","+ obj.csbProduct;
+
+                      tempProductId += ","+ obj.categoryProduct;
+
+                 }
+
+                 var query = "select store_id as storeId, product_id as productId, product_name as productName, mxpg_comp_products.norm_id as normId, mxpg_comp_products.norm_name  as normName, mxpg_comp_products.option_id  as optionId, option_name as optionName, mxpg_comp_products.remark_id as remarkId, remark_name as remarkName, image, image_uri as imageURI, audit_id as auditId, store_score as isConsider, priority, qr_code as qrCode, multiple_photo from mxpg_comp_products join mxpg_norm where mxpg_norm.norm_id = mxpg_comp_products.norm_id and audit_id='" + auditId + "' ";
+
+                 if(storeId){
+                     query += " AND store_id='" + storeId + "'"+ "AND category_id in (" + categoryId +", 27) AND product_id in (" + tempProductId +")";
+                 }
+
+                 if(productId){
+                     query += " AND product_id='" + productId + "' ";
+                 }
+
+                 query += " group by productId, mxpg_norm.norm_id ORDER BY priority ASC";
+
+                 db.transaction(function(tx){
+                     tx.executeSql(query , [], function(tx, response) {
+                         var results = [];
+                         var len = response.rows.length;
+
+                         for(var i = 0; i < len; i++){
+                             var obj = response.rows.item(i);
+                             results.push(obj);
+                         }
+
+                         fn(results);
+                     });
+                 });
+
+            })
         });
-    });
+}
+
+
+/**
+ * This method Select all the record from compProductTable
+ * @param  {object} db
+ * @param  {json} store
+ */
+
+function selectSmartSpotProductsToVerify(db, auditId, storeId, productId, fn, categoryId) {
+
+    var tempProductId = "0";
+
+    var productQuery = "select t1.product_id as csbProduct, t2.product_id as categoryProduct from mxpg_csb_map t1\
+                        join mxpg_pn_map t2 on t2.category_id = t1.category_id\
+                        where t1.category_id = '" + categoryId +"'\
+                        and t2.category_id = '" + categoryId +"'\
+                        group by t2.product_id, t1.product_id";
+
+        db.transaction(function(tx){
+            tx.executeSql(productQuery , [], function(tx, response) {
+                var results = [];
+                var len = response.rows.length;
+
+                 for(var i = 0; i < len; i++){
+                      var obj = response.rows.item(i);
+
+                      tempProductId += ","+ obj.csbProduct;
+
+                      tempProductId += ","+ obj.categoryProduct;
+
+                 }
+
+                 var query = "select store_id as storeId, product_id as productId, product_name as productName, norm_id as normId, norm_name  as normName, option_id  as optionId, option_name as optionName, remark_id as remarkId, remark_name as remarkName, image, image_uri as imageURI, audit_id as auditId, store_score as isConsider, priority, qr_code as qrCode from mxpg_comp_products where audit_id='" + auditId + "' ";
+
+                 if(storeId){
+                     query += " AND store_id='" + storeId + "'"+ "AND category_id = 27 AND product_id in (" + tempProductId +")";
+                 }
+
+                 if(productId){
+                     query += " AND product_id='" + productId + "' AND is_sos = 1";
+                 }
+
+                 query += " ORDER BY product_id ASC";
+
+                 db.transaction(function(tx){
+                     tx.executeSql(query , [], function(tx, response) {
+                         var results = [];
+                         var len = response.rows.length;
+
+                         for(var i = 0; i < len; i++){
+                             var obj = response.rows.item(i);
+                             results.push(obj);
+                         }
+
+                         fn(results);
+                     });
+                 });
+
+            })
+        });
 }
 
 /**
@@ -170,7 +310,7 @@ function selectProductsToVerify(db, auditId, storeId, productId, fn) {
  */
 
 function selectAllCompAuditWithJoin(db, callback) {
-    var query = 'SELECT t1.id,t2.audit_id,t2.store_id,t2.store_code,t2.store_name,t2.chl_id,t2.due FROM mxpg_comp_audits t1 JOIN mxpg_store t2 ON t1.id=t2.id WHERE t1.comp_audit=?;';
+    var query = 'SELECT t1.id,t2.audit_id,t2.store_id,t2.store_code,t2.store_name,t2.due FROM mxpg_comp_audits t1 JOIN mxpg_store t2 ON t1.id=t2.id WHERE t1.comp_audit=?;';
     
     db.transaction(function(tx){
         tx.executeSql(query, ["true"], function(tx, response){
@@ -180,7 +320,7 @@ function selectAllCompAuditWithJoin(db, callback) {
 
             for(var i = 0; i < len; i++){
                 var obj = response.rows.item(i);
-                obj.mId = obj.audit_id + "-" + obj.store_id + "-" + obj.chl_id;
+                obj.mId = obj.audit_id + "-" + obj.store_id ;
                 results.push(obj);
             }
             
@@ -226,7 +366,7 @@ function selectCompletedAudit(db, mId, callback, error) {
     var id = mId.split("-");
     var auditId = id[0];
     var storeId = id[1];
-    var channelId = id[2];
+    var categoryId = id[2];
 
     var query = 'SELECT * FROM mxpg_comp_audits WHERE audit_id=? AND store_id=?';
     
@@ -248,10 +388,10 @@ function selectCompletedAudit(db, mId, callback, error) {
  *  @param  {json} storeId
  * @param  {function} callback function
  */
-function updateAuditStatus(db, auditId, storeId, auditorName, success, error){
+function updateAuditStatus(db, auditId, storeId, success, error){
     db.transaction(function(tx){
-        tx.executeSql('UPDATE mxpg_comp_audits SET comp_audit=?, auditor_name=? WHERE audit_id=? AND store_id=?;',
-            [true, auditorName, auditId, storeId]
+        tx.executeSql('UPDATE mxpg_comp_audits SET comp_audit=? WHERE audit_id=? AND store_id=?;',
+            [true, auditId, storeId]
         );
     });
 }
@@ -329,9 +469,9 @@ function updateSignImageId(db, auditId, storeId, imageId, success, error){
  * @param  {json} imageId
  * @param  {function} callback function
  */
-function updateProductImageId(db, auditId, storeId, productId, imageId, success, error){
+function updateProductImageId(db, auditId, storeId, productId, imageId, success, error, categoryId, isSmartSpot){
     var query = 'select priority from mxpg_comp_products WHERE audit_id=? AND store_id=? AND product_id=?;';
-    
+
     db.transaction(function(tx){
         tx.executeSql(query, [auditId, storeId, productId], function(tx, response){
             var priority = "";
@@ -339,18 +479,63 @@ function updateProductImageId(db, auditId, storeId, productId, imageId, success,
                 priority = response.rows.item(0).priority;
             }
 
-            tx.executeSql('UPDATE mxpg_comp_products SET image_id=? WHERE audit_id=? AND store_id=? AND product_id=?;',
-                [imageId, auditId, storeId, productId], success, error
-            );
+            var intCategoryId = parseInt(categoryId);
+             var query;
+             if(categoryId == "30"){
+                 query = 'UPDATE mxpg_comp_sgf SET image_id=? WHERE audit_id=? AND store_id=? AND category_id=? AND saved_brand=?';
+                tx.executeSql(query,
+                    [imageId, auditId, storeId, categoryId, productId], success, error);
+            }else  if(categoryId == "27") {
 
-            if(priority == 10){
+                query = 'UPDATE mxpg_comp_products SET image_id=? WHERE audit_id=? AND store_id=? AND category_id=? and product_id=?'
+                tx.executeSql(query,
+                [imageId, auditId, storeId, categoryId, productId], success, error);
+            }else if(parseInt(categoryId) >= 31){
+                 query = 'UPDATE mxpg_comp_products SET image_id=? WHERE audit_id=? AND store_id=? AND category_id=? and product_id=?'
+                                tx.executeSql(query,
+                                [imageId, auditId, storeId, categoryId, productId], success, error);
+            }else {
+                query = 'UPDATE mxpg_comp_products SET image_id=? WHERE audit_id=? AND store_id=? AND category_id=?'
+                                                tx.executeSql(query,
+                                                [imageId, auditId, storeId, categoryId], success, error);
+            }
+
+            /*if(priority == 10){
                 tx.executeSql('UPDATE mxpg_comp_products SET image_id=? WHERE audit_id=? AND store_id=? AND priority=8;',
                     [imageId, auditId, storeId]
                 );
-            }
+            }*/
         });
     });
 }
+
+
+function updateMPDphotos(db, auditId, storeId, categoryId, imageId, imgURI, position, success, error) {
+
+    if(auditId == "mpd_audits") {
+        db.transaction(function(tx){
+            tx.executeSql('UPDATE mxpg_mpd SET image_id=? WHERE store_id=? AND category_id=? AND image_uri=? AND position=?;',
+                [imageId, storeId, categoryId, imgURI, position]
+            );
+        });
+    }
+
+}
+
+
+function updateMPSellerPhotos(db, auditId, storeId, categoryId, brandId, imageId, imgURI, position, success, error) {
+
+    //if(auditId == "mpd_audits") {
+        db.transaction(function(tx){
+            tx.executeSql('UPDATE mxpg_mp_seller SET image_id=? WHERE store_id=? AND category_id=? AND image_uri=? AND position=? AND brand_id=?;',
+                [imageId, storeId, categoryId, imgURI, position, brandId], success, error
+            );
+        });
+    //}
+
+}
+
+
 
 function updateProductImageIdForHotSpot(db, auditId, storeId, priority, imageId){
     db.transaction(function(tx){
@@ -379,6 +564,16 @@ function removeAudit(db, auditId, storeId, success, error) {
     db.transaction(function(tx){
         tx.executeSql('DELETE FROM mxpg_comp_products WHERE store_id=? AND audit_id=?;', [storeId, auditId]);
     });
+    db.transaction(function(tx){
+        tx.executeSql('DELETE FROM mxpg_comp_sgf WHERE store_id=? AND audit_id=?;', [storeId, auditId]);
+    });
+    db.transaction(function(tx){
+            tx.executeSql('DELETE FROM mxpg_comp_sod WHERE store_id=? AND audit_id=?;', [storeId, auditId]);
+    });
+
+    db.transaction(function(tx){
+         tx.executeSql('DELETE FROM mxpg_mpd WHERE store_id=?;', [storeId]);
+    });
 }
 
 /**
@@ -399,7 +594,7 @@ function removeStore(db, fn) {
             var query2 = 'DELETE FROM mxpg_comp_products WHERE audit_id=? AND store_id=?;';
             var query3 = 'DELETE FROM mxpg_comp_audits WHERE comp_audit=?;';
             var query4 = 'SELECT store_id, audit_id FROM mxpg_comp_audits WHERE comp_audit=?;';
-            
+
             tx.executeSql(query4, ["true"], function(tx, results){
                 var result = results.rows;
                 
@@ -480,7 +675,6 @@ function selectHotSpotExecutionDecision(db, auditId, storeId, pId, success, erro
         }, error);
     });
 }
-
 /**
  * This method Remove the record from Completed Product table where the audit is partial.
  * @param  {object} db
@@ -497,19 +691,83 @@ function removePartialAudit(db, storeId) {
     db.transaction(function(tx){
         tx.executeSql('DELETE FROM mxpg_comp_products WHERE store_id=?;', [storeId]);
     });
-}
 
-/**
- * This method update Geo location position.
- * @param  {object} db
- * @param  {json} auditId
- * @param  {json} storeId
- * @param  {json} pos
- */
-function updateAuditerComment(db, auditId, storeId, comment){
     db.transaction(function(tx){
-        tx.executeSql('UPDATE mxpg_comp_audits SET auditer_cmt=? WHERE audit_id=? AND store_id=?;',
-            [comment, auditId, storeId]
-        );
+        tx.executeSql('DELETE FROM mxpg_comp_audits WHERE store_id=?;', [storeId]);
+    });
+
+     db.transaction(function(tx){
+         tx.executeSql('DELETE FROM mxpg_mpd WHERE store_id=?;', [storeId]);
+     });
+
+    db.transaction(function(tx){
+         tx.executeSql('DELETE FROM mxpg_comp_sgf WHERE store_id=?;', [storeId]);
+    });
+
+    db.transaction(function(tx){
+       tx.executeSql('DELETE FROM mxpg_comp_sod WHERE store_id=?;', [storeId]);
+    });
+
+    db.transaction(function(tx){
+       tx.executeSql('DELETE FROM mxpg_mp_seller WHERE store_id=?;', [storeId]);
     });
 }
+
+
+/**
+ * This method Select one record from Completed SOD table.
+ * @param  {object} db
+ * @param  {json} auditId
+ * @param  {function} callback function
+ */
+
+function selectCompletedSod(db, auditId, storeId, callback, error) {
+    var query = 'SELECT * FROM mxpg_comp_sod WHERE audit_id=? AND store_id=?';
+    
+    db.transaction(function(tx){
+        tx.executeSql(query, [auditId, storeId], function(tx, response){
+
+            var results = [];
+            var len = response.rows.length;
+
+            for(var i = 0; i < len; i++){
+                var obj = response.rows.item(i);
+                results.push(obj);
+            }
+            
+            callback(results);
+
+        }, function(a, e){
+            if(error){
+                error(a, e);
+            }
+        });
+    });
+}
+
+function selectCompletedSGF(db, auditId, storeId, callback, error) {
+    var query = 'SELECT * FROM mxpg_comp_sgf WHERE audit_id=? AND store_id=?';
+    
+    db.transaction(function(tx){
+        tx.executeSql(query, [auditId, storeId], function(tx, response){
+
+            var results = [];
+            var len = response.rows.length;
+
+            for(var i = 0; i < len; i++){
+                var obj = response.rows.item(i);
+                results.push(obj);
+            }
+            
+            callback(results);
+
+        }, function(a, e){
+            if(error){
+                error(a, e);
+            }
+        });
+    });
+}
+
+
+ //group by image_uri

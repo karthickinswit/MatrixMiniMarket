@@ -6,34 +6,6 @@ module.exports = [
         "runs": true
     },
     {
-        "file": "plugins/cordova-plugin-camera/www/CameraConstants.js",
-        "id": "cordova-plugin-camera.Camera",
-        "clobbers": [
-            "Camera"
-        ]
-    },
-    {
-        "file": "plugins/cordova-plugin-camera/www/CameraPopoverOptions.js",
-        "id": "cordova-plugin-camera.CameraPopoverOptions",
-        "clobbers": [
-            "CameraPopoverOptions"
-        ]
-    },
-    {
-        "file": "plugins/cordova-plugin-camera/www/Camera.js",
-        "id": "cordova-plugin-camera.camera",
-        "clobbers": [
-            "navigator.camera"
-        ]
-    },
-    {
-        "file": "plugins/cordova-plugin-camera/www/CameraPopoverHandle.js",
-        "id": "cordova-plugin-camera.CameraPopoverHandle",
-        "clobbers": [
-            "CameraPopoverHandle"
-        ]
-    },
-    {
         "file": "plugins/cordova-plugin-device/www/device.js",
         "id": "cordova-plugin-device.device",
         "clobbers": [
@@ -166,38 +138,6 @@ module.exports = [
         "id": "cordova-plugin-media.Media",
         "clobbers": [
             "window.Media"
-        ]
-    },
-    {
-        "file": "plugins/cordova-plugin-locationservices/www/Coordinates.js",
-        "id": "cordova-plugin-locationservices.Coordinates",
-        "clobbers": [
-            "cordova.plugins.locationServices.Coordinates",
-            "plugin.locationServices.Coordinates"
-        ]
-    },
-    {
-        "file": "plugins/cordova-plugin-locationservices/www/PositionError.js",
-        "id": "cordova-plugin-locationservices.PositionError",
-        "clobbers": [
-            "cordova.plugins.locationServices.PositionError",
-            "plugin.locationServices.PositionError"
-        ]
-    },
-    {
-        "file": "plugins/cordova-plugin-locationservices/www/Position.js",
-        "id": "cordova-plugin-locationservices.Position",
-        "clobbers": [
-            "cordova.plugins.locationServices.PositionError",
-            "plugin.locationServices.PositionError"
-        ]
-    },
-    {
-        "file": "plugins/cordova-plugin-locationservices/www/LocationServices.js",
-        "id": "cordova-plugin-locationservices.LocationServices",
-        "clobbers": [
-            "cordova.plugins.locationServices.geolocation",
-            "plugin.locationServices.geolocation"
         ]
     },
     {
@@ -345,6 +285,73 @@ module.exports = [
             "cordova"
         ],
         "runs": true
+    },
+    {
+        "file": "plugins/cordova-plugin-locationservices/www/Coordinates.js",
+        "id": "cordova-plugin-locationservices.Coordinates",
+        "clobbers": [
+            "cordova.plugins.locationServices.Coordinates",
+            "plugin.locationServices.Coordinates"
+        ]
+    },
+    {
+        "file": "plugins/cordova-plugin-locationservices/www/PositionError.js",
+        "id": "cordova-plugin-locationservices.PositionError",
+        "clobbers": [
+            "cordova.plugins.locationServices.PositionError",
+            "plugin.locationServices.PositionError"
+        ]
+    },
+    {
+        "file": "plugins/cordova-plugin-locationservices/www/Position.js",
+        "id": "cordova-plugin-locationservices.Position",
+        "clobbers": [
+            "cordova.plugins.locationServices.PositionError",
+            "plugin.locationServices.PositionError"
+        ]
+    },
+    {
+        "file": "plugins/cordova-plugin-locationservices/www/LocationServices.js",
+        "id": "cordova-plugin-locationservices.LocationServices",
+        "clobbers": [
+            "cordova.plugins.locationServices.geolocation",
+            "plugin.locationServices.geolocation"
+        ]
+    },
+    {
+        "file": "plugins/cordova-plugin-barcodescanner/www/barcodescanner.js",
+        "id": "cordova-plugin-barcodescanner.BarcodeScanner",
+        "clobbers": [
+            "cordova.plugins.barcodeScanner"
+        ]
+    },
+    {
+        "file": "plugins/cordova-plugin-camera/www/CameraConstants.js",
+        "id": "cordova-plugin-camera.Camera",
+        "clobbers": [
+            "Camera"
+        ]
+    },
+    {
+        "file": "plugins/cordova-plugin-camera/www/CameraPopoverOptions.js",
+        "id": "cordova-plugin-camera.CameraPopoverOptions",
+        "clobbers": [
+            "CameraPopoverOptions"
+        ]
+    },
+    {
+        "file": "plugins/cordova-plugin-camera/www/Camera.js",
+        "id": "cordova-plugin-camera.camera",
+        "clobbers": [
+            "navigator.camera"
+        ]
+    },
+    {
+        "file": "plugins/cordova-plugin-camera/www/CameraPopoverHandle.js",
+        "id": "cordova-plugin-camera.CameraPopoverHandle",
+        "clobbers": [
+            "CameraPopoverHandle"
+        ]
     }
 ];
 module.exports.metadata = 
@@ -361,9 +368,11 @@ module.exports.metadata =
     "cordova-plugin-file-transfer": "1.4.0",
     "com.vliesaputra.deviceinformation": "1.0.1",
     "cordova-plugin-media": "2.3.0",
-    "cordova-plugin-locationservices": "2.1.0",
     "cordova-plugin-file": "3.0.0",
-    "cordova-plugin-compat": "1.0.0"
-}
+    "cordova-plugin-compat": "1.0.0",
+    "cordova-plugin-locationservices": "2.1.0",
+    "cordova-plugin-barcodescanner": "0.7.4",
+    "cordova-plugin-camera": "1.2.0"
+};
 // BOTTOM OF METADATA
 });

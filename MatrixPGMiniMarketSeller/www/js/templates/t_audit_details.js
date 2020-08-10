@@ -3,8 +3,8 @@ define([],function(){
                         <div class="back">\
                             <img src="images/matrix_icons/back_arrow_red_72.png" class="ico_36">\
                         </div>\
-                        <div class="left_content header_border_left">\
-                            <div class="center_content bold font_18">{{name}}</div>\
+                        <div class="left_content">\
+                            <div class="center_content bold font_18  ellipsis width_80p">{{name}}</div>\
                         </div>\
                     </div>\
                     <div id="map">\
@@ -61,11 +61,6 @@ define([],function(){
                                     <td><i class="aud_date"></i></td>\
                                     <td><b>Date of Audit</b></td>\
                                     <td> {{date}}</td>\
-                                </tr>\
-                                <tr>\
-                                    <td><i class="last_audit_date"></i></td>\
-                                    <td><b>Last visit</b></td>\
-                                    <td> {{lastVisit}}</td>\
                                 </tr>\
                                 <tr>\
                                     <td colspan="3">\

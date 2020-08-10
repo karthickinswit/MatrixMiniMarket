@@ -62,14 +62,14 @@ define([
             
             //inswit.errorLog({"Info": "StoreId: " + that.storeId});
             
-            that.channelId = id[2];
+            that.categoryId = id[2];
             
             //inswit.errorLog({"Info": "channelId: " + that.channelId});
             
             that.retry = 0;
 
 			selectCompletedAudit(db, mId, function(audit){
-				//inswit.errorLog({"error":"After fetching completed audit", "audit":audit, "AuditLength": audit.length});
+
 
 				if(audit.length > 0){
 					
@@ -110,16 +110,16 @@ define([
 					//inswit.errorLog({"info":"Audit is audited or not?", "Audited":audited});
 
 					if(completed == "true" && audited == "true"){
-						imageList.push({
+						/*imageList.push({
 							"auditId":that.auditId,
 							"storeId":that.storeId,
 							"productId":"signImage",
-							"productName":"Bill",
+							"productName":"Sign",
 							"imageURI":signImage,
 							"image":signImageId
-						});
+						});*/
 
-						selectAllCompProducts(db, that.auditId, that.storeId, function(products){
+						/*selectAllCompProducts(db, that.auditId, that.storeId, function(products){
 							//inswit.errorLog({"error":"all products fetched", "allproducts":products});
 
 							that.products = products;
@@ -129,11 +129,11 @@ define([
 
 								for(var i = 0; i < productList.length; i++){
 									var p = productList[i];
-									/**
+									*//**
 									 * Priority 8 means hotspot brands
 									 * Hotspot brands should not have images thats why i restricted based on priority
 									 * Sometimes hotspot and Frontage brand also doesn't had image, thats why i am checking image_uri
-									 */
+									 *//*
 									if(p.priority != 8 && p.image_uri){
 										imageList.push({
 											"auditId":that.auditId,
@@ -141,15 +141,112 @@ define([
 											"productId":p.product_id,
 											"productName":p.product_name,
 											"imageURI":p.image_uri,
-											"image":p.image_id
+											"image":p.image_id,
+											"categoryId": p.category_id,
+											"isSmartSpot": (p.is_sos == "1")? true:false
 										});
 									}
 								}
 
-								that.$(".upload_container").hide();
-								that.uploadPhoto(imageList, 0, imageList.length);
+								selectCompletedSGF(db, that.auditId, that.storeId, function(productList){
+
+									for(var i = 0; i < productList.length; i++){
+											var p = productList[i];
+											*//**
+											 * Priority 8 means hotspot brands
+											 * Hotspot brands should not have images thats why i restricted based on priority
+											 * Sometimes hotspot and Frontage brand also doesn't had image, thats why i am checking image_uri
+											 *//*
+											if(p.priority != 8 && p.image_uri){
+												imageList.push({
+													"auditId":that.auditId,
+													"storeId":that.storeId,
+													"productId":p.saved_brand,
+													"productName":"SGF",
+													"imageURI":p.image_uri,
+													"image":p.image_id,
+													"categoryId": p.category_id,
+												});
+											}
+										}
+
+										that.$(".upload_container").hide();
+										//that.uploadPhoto(imageList, 0, imageList.length);
+								});
+
+								selectMPDDetails(db, function(mpdList) {
+
+								    for(var i = 0; i < mpdList.length; i++){
+                                        var mpd = mpdList[i];
+                                        *//**
+                                         * Priority 8 means hotspot brands
+                                         * Hotspot brands should not have images thats why i restricted based on priority
+                                         * Sometimes hotspot and Frontage brand also doesn't had image, thats why i am checking image_uri
+                                         *//*
+                                        if(p.priority != 8 && p.image_uri){
+                                            imageList.push({
+                                                "auditId": "mpd_audits",
+                                                "storeId":mpd.store_id,
+                                                "categoryId":mpd.category_id,
+                                                "brandId":mpd.brand_id,
+                                                "imageURI":mpd.image_uri,
+                                                "image":mpd.image_id,
+                                                "position": mpd.position,
+                                                "productName":"",
+                                            });
+                                        }
+                                    }
+
+                                    that.$(".upload_container").hide();
+                                    that.uploadPhoto(imageList, 0, imageList.length);
+
+								});
+
 							});
-						});
+						});			*/
+
+                        selectCompSellerProducts(db, that.storeId, function(productList){
+
+                            for(var i = 0; i < productList.length; i++){
+                                var p = productList[i];
+                                /**
+                                 * Priority 8 means hotspot brands
+                                 * Hotspot brands should not have images thats why i restricted based on priority
+                                 * Sometimes hotspot and Frontage brand also doesn't had image, thats why i am checking image_uri
+                                 */
+                                if(p.image_uri){
+                                    imageList.push({
+                                        "auditId":that.auditId,
+                                        "storeId":that.storeId,
+                                        "productId":p.brand_id,
+                                        "productName":p.product_name || "",
+                                        "imageURI":p.image_uri,
+                                        "image":p.image_id
+                                    });
+
+                                    if(p.opt_image_uri){
+
+                                        imageList.push({
+                                            "auditId":that.auditId,
+                                            "storeId":that.storeId,
+                                            "productId":p.brand_id,
+                                            "productName":p.product_name || "",
+                                            "imageURI":p.opt_image_uri,
+                                            "image":p.opt_image_id,
+                                            "isHotspotSecond":true
+                                        });
+                                    }
+                                }
+                            }
+
+                            that.$(".upload_container").hide();
+                            that.uploadPhoto(
+                                imageList,
+                                0,
+                                imageList.length);
+                        });
+
+
 					}else{
 						//inswit.errorLog({"Info": "Complted but not audited"});
 						that.uploadPhoto(imageList, 0, imageList.length);
@@ -161,7 +258,7 @@ define([
                 	
                 }
 			}, function(a, e){
-				//inswit.errorLog({"Info":"Database error", "error":e});
+				inswit.errorLog({"Info":"Database error", "error":e});
 				inswit.hideLoaderEl();
 				that.$el.find(".upload_audit").removeClass("clicked");
 			});
@@ -222,7 +319,7 @@ define([
 			}
 
 			var date = new Date().toJSON();
-			var fileName = LocalStorage.getEmployeeId() + "_" + imageList[index].auditId + "_" + imageList[index].storeId + "_"+ imageList[index].productId + "_" + date.replace(/([.:])/g, "-");
+			var fileName = LocalStorage.getEmployeeId() + "_" + imageList[index].auditId + "_" + imageList[index].storeId + "_"+ imageList[index].productId + "_"+ imageList[index].categoryId + "_" + date.replace(/([.:])/g, "-");
 
 			var options = new FileUploadOptions();
 		    options.fileKey = "file"; //depends on the api
@@ -230,6 +327,7 @@ define([
 		    options.mimeType = "image/jpeg";
 		    options.headers = {"X-Requested-With":"XMLHttpRequest"};
 		    options.fileName.replace("." , ":");
+
 
 		    //Success fallback function for image upload
 		    inswit.showLoaderEl("Uploading " + imageList[index].productName + " picture");
@@ -240,6 +338,10 @@ define([
 		    		var auditId = imageList[index].auditId;
 		    		var storeId = imageList[index].storeId;
 		    		var productId = imageList[index].productId;
+		    		var categoryId = imageList[index].categoryId;
+		    		var isSmartSpot = imageList[index].isSmartSpot;
+		    		var imgPosition = imageList[index].position;
+		    		var imgURI = imageList[index].imageURI;
 
 					if(!result.info.id){
 						//Retry the same image
@@ -250,6 +352,19 @@ define([
 					imageList[index].image = image;
 
 					console.log(image);
+
+					if(auditId == "mpd_audits") {
+
+                        updateMPDphotos(db, auditId, storeId, categoryId, image, imgURI, imgPosition, function(){
+                            that.uploadPhoto(imageList, index+1, length-1);
+                            return;
+
+                        }, function(a, e){
+                            that.uploadPhoto(imageList, index, length);
+                            return;
+
+                        });
+					}
 
 					if(productId == "storeImage"){
 						updateStoreImageId(db, auditId, storeId, image, function(){
@@ -281,7 +396,7 @@ define([
 						}, function(a, e){
 							that.uploadPhoto(imageList, index, length);
 							return;
-						});
+						},categoryId, isSmartSpot);
 					}
 		    	}else{
 		    		that.uploadPhoto(imageList, index, length, true);
@@ -296,7 +411,11 @@ define([
 		    	 * else
 		    	 * Retry the same file to upload once again
 		    	 */ 
-		    	
+//		    	var msg = JSON.parse(e.body).message;
+//		    	alert(msg);
+
+                inswit.errorLog({"Info-Imageupload-onFail": e});
+
 		    	if(e.code == FileTransferError.FILE_NOT_FOUND_ERR) {
 		    		console.log("Image not found!");
 		    		that.imageUploadFailure(imageList, index, e);
@@ -383,7 +502,7 @@ define([
 		uploadAudit: function(imageList) {
 			var that = this;
 			
-			//inswit.errorLog({"error":"uploading audit details"});
+		    //inswit.errorLog({"error":"uploading audit details"});
 
 			var success = checkConnection();
 		   	if(!success) {
@@ -396,6 +515,7 @@ define([
 		   	selectAllCompProducts(db, that.auditId, that.storeId, function(products){
 
 		   		//inswit.errorLog({"error":"all completed products fetched Before uploading audits", "allCompletedproducts":products});
+		   		
 		   		var auditDetails = [];
 				var length = 0;
 				if(products){
@@ -407,194 +527,335 @@ define([
 					var productId = product.product_id;
 					var normId = product.norm_id;
 					var optionId = product.option_id;
-					var remarkId = product.remark_id;
-					var remarkTxt = product.remark_txt;
-					var auditerCmt = product.auditer_cmt;
-
+					var remarkId = (product.remark_id == "100")? product.option_name:product.remark_id;
+					var categoryId = product.category_id;
+					var qrResult = product.qr_code;
 					var photoId = "";
 					if(product.image_id){
 						photoId = inswit.URI + "d/drive/docs/" + product.image_id;
 					}
-
-					if(product.option_id == "9") {
-                        remarkTxt = product.option_name;
-                    }
 					
 					var detail = {
 						brandId:productId,
 						normId:normId,
 						optionId:optionId,
 						remarkId:remarkId,
-                        remarkTxt:remarkTxt,
 						photoId:photoId,
-						auditerCmt: auditerCmt
+						categoryId:categoryId,
+						qrCode:qrResult
 					}
 
 					auditDetails.push(detail);
 				}
 
-				var date = new Date();
-		        date = date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate();
+				selectCompletedSGF(db, that.auditId, that.storeId, function(completedSGF){
 
-				var storeImage = "";
-				if(imageList[0] && imageList[0].image){
-					storeImage = inswit.URI + "d/drive/docs/" + imageList[0].image;
-				}
+					var compSgfDetails = [];
+	
+					var length = 0;
+					if(completedSGF){
+						length = completedSGF.length;
+					}
 
-				var signImage = "";
-				if(imageList[1] && imageList[1].image){
-					signImage = inswit.URI + "d/drive/docs/" + imageList[1].image;
-				}
-				
-				findStore(db, that.auditId, that.storeId, function(result){
-
-					//inswit.errorLog({"Info":"Store Deatils fetched", "store": result});
-
-			   		var lat = result.lat;
-			   		var lng = result.lng;
-
-			   		var updateStorePosition = false;
-			   		if(lat == "" || lng == ""){
-			   			updateStorePosition = true;
-			   		}
-
-			   		//Query audit details from the database
-			   		var mId = that.auditId + "-" + that.storeId + "-" + that.channelId;
-			   		selectCompletedAudit(db, mId, function(audit){
-
-			   			//inswit.errorLog({"error":"After fetching completed audit while uploading audit", "audit":audit, "AuditLength": audit.length});
-						if(audit.length > 0){
-							var auditStatus = audit.item(0).option_id;		
-							var id = audit.item(0).id;
-							var latitude = audit.item(0).lat;
-							var longitude = audit.item(0).lng;
-							var auditerCmnt = audit.item(0).auditer_cmt;
-							var auditorName = audit.item(0).auditor_name;
-
-							var processVariables = {
-								"projectId":inswit.UPLOAD_PROCESS.projectId,
-								"workflowId":inswit.UPLOAD_PROCESS.workflowId,
-								"processId":inswit.UPLOAD_PROCESS.processId,
-								"ProcessVariables":{
-									"auditDetails":auditDetails,
-									"auditId":that.auditId,
-									"id":id,
-									"auditor":LocalStorage.getEmployeeId(),
-									"storeId":that.storeId,
-									"date": date,
-									"option": auditStatus,
-									"latitude": latitude,
-									"longitude": longitude,
-									"storeImage":storeImage,
-									"signImage":signImage,
-									"updateStorePosition": updateStorePosition,
-									"version":inswit.VERSION,
-									"auditerComment": auditerCmnt,
-									"auditorName": auditorName || ""
-								}
-							};
-
-							//inswit.errorLog({"info":"After constructing processvariables", "processVariables":processVariables});
-
-							//Upload the Audit details to the Appiyo server
-							inswit.executeProcess(processVariables, {
-								success: function(response){
-									if(response.Error == "0"){
-										//inswit.errorLog({"info":"After Successfull upload of audit"});
-										if(response.ProcessVariables.status == "10"){
-											inswit.alert(response.ProcessVariables.message);
-											
-											router.navigate("/audits", {
-						                        trigger: true
-						                    });
-											return;
-										}
-
-										inswit.clearPhoto(imageList);
-
-										var template = "<div class='success_container'>\
-												<img src='images/matrix_icons/success_48.png' align='middle'>\
-												<p class='alert_msg'>Audit details for <br/><b>{{name}}</b><br/>has been updated successfully</p>\
-												<a class='go_audit_list btn btn-success' href='#audits'>Go to Audit List</button>\
-											</div>";
-
-										var html = Mustache.to_html(template, {"name":that.storeName});
-										inswit.hideLoaderEl();
-										that.$el.empty().append(html);
-
-										//Remove the audit details from the client
-										removeAudit(db, that.auditId, that.storeId);
-									}else{
-										//inswit.errorLog({"info":"Audit upload failed"});
-
-										if(response.ProcessVariables.status == "10"){
-											inswit.alert(response.ProcessVariables.message);
-										}else{
-											inswit.alert("Server Error. Try Again Later!", "Error");
-										}
-
-										var pVariables = {
-										    "projectId":inswit.ERROR_LOG.projectId,
-										    "workflowId":inswit.ERROR_LOG.workflowId,
-										    "processId":inswit.ERROR_LOG.processId,
-										    "ProcessVariables":{
-										    	"errorType": inswit.ERROR_LOG_TYPES.UPLOAD_AUDIT,
-										    	"auditId": that.auditId, 
-										    	"storeId": that.storeId,
-										    	"empId":LocalStorage.getEmployeeId(),
-										    	"issueDate":new Date(),
-										    	"issueDescription": JSON.stringify(processVariables.ProcessVariables),
-										    	"version": inswit.VERSION
-										    }
-										};
-						
-										inswit.executeProcess(pVariables, {
-										    success: function(response){
-										    	inswit.hideLoaderEl();
-										    	if(response.ProcessVariables){
-										    		
-										    	}
-							                }, failure: function(error){
-							                	inswit.hideLoaderEl();
-							                	switch(error){
-							                		case 0:{
-							                			inswit.alert("No Internet Connection!");
-							                			break;
-							                		}
-							                		case 1:{
-							                			inswit.alert("Check your network settings!");
-							                			break;
-							                		}
-							                		case 2:{
-							                			inswit.alert("Server Busy.Try Again!");
-							                			break;
-							                		}
-							                	}
-							                }
-							            });
-									}
-								}, failure: function(error){
-									//inswit.errorLog({"info":"Audit upload failed with server problem", "error": error});
-									inswit.hideLoaderEl();
-									switch(error){
-				                		case 0:{
-				                			inswit.alert("No Internet Connection!");
-				                			break;
-				                		}
-				                		case 1:{
-				                			inswit.alert("Check your network settings!");
-				                			break;
-				                		}
-				                		case 2:{
-				                			inswit.alert("Server Error. Try Again Later!", "Error");
-				                			break;
-				                		}
-				                	}
-								}
-							});
+					for(var j = 0; j < length; j++){
+						var product  = completedSGF[j];
+						var sgfStoreId = product.store_id;
+						var sgfBrandId = product.brand_id;
+						var sgfSavedBrand = product.saved_brand;
+						var sgfNormId = product.norm_id;
+						var optionId = product.option_id;
+						var remarkId = (product.remark_id == "100")? product.option_name:product.remark_id;
+						var photoId = "";
+						if(product.image_id){
+							photoId = inswit.URI + "d/drive/docs/" + product.image_id;
 						}
-					});
-			   	});
+						
+						var detail = {
+							storeId:sgfStoreId,
+							brandId:sgfBrandId,
+							sgfBrand: sgfSavedBrand,
+							normId: sgfNormId,
+							optionId: optionId,
+							photoId:photoId,
+							remarkId: remarkId
+						}
+
+						compSgfDetails.push(detail);
+					}
+
+					selectCompletedSod(db, that.auditId, that.storeId, function(compProducts) {
+					
+						var compSodDetails = [];
+
+						var length = 0;
+						if(compProducts){
+							length = compProducts.length;
+						}
+
+
+						for(var j = 0; j < length; j++){
+							var product  = compProducts[j];
+							var sodAuditId = product.audit_id;
+							var sodBrandId = product.brand_id;
+							var sodcategoryId = product.category_id;
+							var sodSodId = product.sod_id;
+							var sodCount = product.count;
+							
+							
+							var detail = {
+								auditId:sodAuditId,
+								brandId:sodBrandId,
+								categoryId: sodcategoryId,
+								normId:sodSodId,
+								count:sodCount
+							}
+
+							compSodDetails.push(detail);
+						}
+
+
+                        selectCompMPDDetails(db, that.storeId, function(products){
+
+                                var auditMPDPhotos = [];
+                                var length = 0;
+                                if(products){
+                                    length = products.length;
+                                }
+
+                                for(var j = 0; j < length; j++){
+                                    var product  = products[j];
+                                    var categoryId = product.category_id;
+                                    var storeId = product.store_id;
+                                    var brandId = product.brand_id;
+                                    var normId = product.norm_id;
+
+                                    var photoId = "";
+                                    if(product.image_id){
+                                        photoId = inswit.URI + "d/drive/docs/" + product.image_id;
+                                    }
+
+                                    var detail = {
+                                        brandId: brandId,
+                                        photoId: photoId,
+                                        categoryId: categoryId,
+                                        normId: normId
+                                    }
+
+                                    auditMPDPhotos.push(detail);
+                                }
+
+
+                            selectCompSellerProducts(db, that.storeId, function(products){
+
+                                var auditDetails = [];
+                                var length = 0;
+                                if(products){
+                                    length = products.length;
+                                }
+
+                                for(var j = 0; j < length; j++){
+                                    var product  = products[j];
+                                    var productId = product.brand_id;
+                                    var priority = product.priority;
+                                    var executionStatus = (product.non_execution == "true") ? true:false;
+                                    var qrCode = product.qr_code || "";
+
+                                    var optPhotoId = "";
+                                    //if(priority == 10){
+                                        if(product.opt_image_id){
+                                            optPhotoId = inswit.URI + "d/drive/docs/" + product.opt_image_id;
+                                        }
+                                    //}
+
+                                    var photoId = "";
+                                    if(product.image_id){
+                                        photoId = inswit.URI + "d/drive/docs/" + product.image_id;
+                                    }
+
+                                    var detail = {
+                                        brandId:productId,
+                                        photoId:photoId,
+                                        optionalPhotoId:optPhotoId,
+                                        nonExecution: executionStatus,
+                                        qrCode: qrCode
+                                    }
+
+                                    auditDetails.push(detail);
+                                }
+
+
+
+                                var date = new Date();
+                                date = date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate();
+
+                                var storeImage = "";
+                                if(imageList[0] && imageList[0].image){
+                                    storeImage = inswit.URI + "d/drive/docs/" + imageList[0].image;
+                                }
+
+                                var signImage = "";
+                                if(imageList[1] && imageList[1].image){
+                                    signImage = inswit.URI + "d/drive/docs/" + imageList[1].image;
+                                }
+
+                                findStore(db, that.auditId, that.storeId, function(result){
+
+                                    //inswit.errorLog({"Info":"Store Deatils fetched", "store": result});
+
+                                    var lat = result.lat;
+                                    var lng = result.lng;
+
+                                    var updateStorePosition = false;
+                                    if(lat == "" || lng == ""){
+                                        updateStorePosition = true;
+                                    }
+
+                                    //Query audit details from the database
+                                    var mId = that.auditId + "-" + that.storeId + "-" + that.categoryId;
+                                    selectCompletedAudit(db, mId, function(audit){
+
+                                        //inswit.errorLog({"error":"After fetching completed audit while uploading audit", "audit":audit, "AuditLength": audit.length});
+                                        if(audit.length > 0){
+                                            var auditStatus = audit.item(0).option_id;
+                                            var id = audit.item(0).id;
+                                            var latitude = audit.item(0).lat;
+                                            var longitude = audit.item(0).lng;
+                                            var auditerName = audit.item(0).auditer_name;
+                                            var auditerNumber = audit.item(0).auditer_number;
+
+                                            var processVariables = {
+                                                "projectId":inswit.UPLOAD_PROCESS.projectId,
+                                                "workflowId":inswit.UPLOAD_PROCESS.workflowId,
+                                                "processId":inswit.UPLOAD_PROCESS.processId,
+                                                "ProcessVariables":{
+                                                    "auditDetails":auditDetails,
+                                                    "auditSodDetails": compSodDetails,
+                                                    "auditMPDDetails": auditMPDPhotos,
+                                                    "auditId":that.auditId,
+                                                    "id":id,
+                                                    "auditor":LocalStorage.getEmployeeId(),
+                                                    "storeId":that.storeId,
+                                                    "date": date,
+                                                    "option": auditStatus,
+                                                    "latitude": latitude,
+                                                    "longitude": longitude,
+                                                    "storeImage":storeImage,
+                                                    "signImage":signImage,
+                                                    "updateStorePosition": updateStorePosition,
+                                                    "version":inswit.VERSION,
+                                                    "spocName": auditerName,
+                                                    "spocNumber": auditerNumber,
+                                                    "completedSgf": compSgfDetails
+                                                }
+                                            };
+
+                                            //inswit.errorLog({"info":"After constructing processvariables", "processVariables":processVariables});
+
+                                            //Upload the Audit details to the Appiyo server
+                                            inswit.executeProcess(processVariables, {
+                                                success: function(response){
+                                                    if(response.Error == "0"){
+                                                        //inswit.errorLog({"info":"After Successfull upload of audit"});
+                                                        if(response.ProcessVariables.status == "10"){
+                                                            inswit.alert(response.ProcessVariables.message);
+
+                                                            router.navigate("/audits", {
+                                                                trigger: true
+                                                            });
+                                                            return;
+                                                        }
+
+                                                        inswit.clearPhoto(imageList);
+
+                                                        var template = "<div class='success_container'>\
+                                                                <img src='images/matrix_icons/success_48.png' align='middle'>\
+                                                                <p class='alert_msg'>Audit details for <br/><b>{{name}}</b><br/>has been updated successfully</p>\
+                                                                <a class='go_audit_list btn btn-success' href='#audits'>Go to Audit List</button>\
+                                                            </div>";
+
+                                                        var html = Mustache.to_html(template, {"name":that.storeName});
+                                                        inswit.hideLoaderEl();
+                                                        that.$el.empty().append(html);
+
+                                                        //Remove the audit details from the client
+                                                        removeAudit(db, that.auditId, that.storeId);
+                                                    }else{
+                                                        inswit.errorLog({"info":"Audit upload failed ", "response": response});
+
+                                                        if(response.ProcessVariables.status == "10"){
+                                                            inswit.alert(response.ProcessVariables.message);
+                                                        }else{
+                                                            inswit.alert("Server Error. Try Again Later!", "Error");
+                                                        }
+
+                                                        var pVariables = {
+                                                            "projectId":inswit.ERROR_LOG.projectId,
+                                                            "workflowId":inswit.ERROR_LOG.workflowId,
+                                                            "processId":inswit.ERROR_LOG.processId,
+                                                            "ProcessVariables":{
+                                                                "errorType": inswit.ERROR_LOG_TYPES.UPLOAD_AUDIT,
+                                                                "auditId": that.auditId,
+                                                                "storeId": that.storeId,
+                                                                "empId":LocalStorage.getEmployeeId(),
+                                                                "issueDate":new Date(),
+                                                                "issueDescription": JSON.stringify(processVariables.ProcessVariables),
+                                                                "version": inswit.VERSION
+                                                            }
+                                                        };
+
+                                                        inswit.executeProcess(pVariables, {
+                                                            success: function(response){
+                                                                inswit.hideLoaderEl();
+                                                                if(response.ProcessVariables){
+
+                                                                }
+                                                            }, failure: function(error){
+                                                                inswit.hideLoaderEl();
+                                                                switch(error){
+                                                                    case 0:{
+                                                                        inswit.alert("No Internet Connection!");
+                                                                        break;
+                                                                    }
+                                                                    case 1:{
+                                                                        inswit.alert("Check your network settings!");
+                                                                        break;
+                                                                    }
+                                                                    case 2:{
+                                                                        inswit.alert("Server Busy.Try Again!");
+                                                                        break;
+                                                                    }
+                                                                }
+                                                            }
+                                                        });
+                                                    }
+                                                }, failure: function(error){
+
+                                                    inswit.errorLog({"info":"Audit upload failed with server problem", "error": error});
+
+                                                    inswit.hideLoaderEl();
+                                                    switch(error){
+                                                        case 0:{
+                                                            inswit.alert("No Internet Connection!");
+                                                            break;
+                                                        }
+                                                        case 1:{
+                                                            inswit.alert("Check your network settings!");
+                                                            break;
+                                                        }
+                                                        case 2:{
+                                                            inswit.alert("Server Error. Try Again Later!", "Error");
+                                                            break;
+                                                        }
+                                                    }
+                                                }
+                                            });
+                                        }
+                                    });
+                                });
+                            });
+                        });
+                    });
+				});
 		   	});
 		}
 	});

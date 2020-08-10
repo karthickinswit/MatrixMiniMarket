@@ -139,6 +139,12 @@ a:hover, a:active {
 .width_50p{
   width: 50% !important;
 }
+.width_60p{
+  width: 60% !important;
+}
+.width_70p{
+  width: 70% !important;
+}
 .width_40p{
   width: 40% !important;
 }
@@ -157,8 +163,8 @@ a:hover, a:active {
 .width_100p {
   width: 100% !important;
 }
-.width_70p{
-  width: 70% !important;
+.width_33p {
+  width: 33% !important;
 }
 .cover{
   width: 100%;
@@ -171,7 +177,7 @@ a:hover, a:active {
   background-repeat: no-repeat;
 }
 #login-form{
-  margin-top:60%;
+  /*margin-top:60%;*/
 }
 .home_bg input,
 .forgotPassword input{
@@ -200,34 +206,137 @@ a:hover, a:active {
   height: 250px;
   border:1px solid black;
 }
+.timer_container {
+    position: absolute;
+    float: right;
+    width: 100%;
+    margin-top: 12px;
+}
+.timer_container .timer{
+    font-size: 18px;
+    font-weight: bold;
+    padding-top: 7px;
+    padding-right:5px;
+    color: #D5271E;
+}
+.timer_container img {
+    margin: 5px;
+}
+
+table.table-bordered{
+    border:1px solid blue;
+    margin-top:20px;
+}
+table.table-bordered > thead > tr > th{
+    border:1px solid blue;
+}
+table.table-bordered > tbody > tr > td{
+    border:1px solid blue;
+}
+
+.audits .remove_item,
+.audits .add_item,
+.audits .save_sod_audit{
+  color: white !important;
+}
+
+.audits .remove_item,
+.audits .add_item {
+  padding: 7px;
+  border: none;
+  width: 50px;
+}
+
+.category_header{
+  background: #246d14 !important;
+}
+
+.option_header {
+  width: 95% !important;
+}
+.table>thead>tr>th {
+  border: none;
+}
 .field_intent input{
   height: 31px;
   width: 90%;
   margin: 0 5%;
 }
-.audit_textbox {
-  margin-bottom: 5px;
+.audits .brand_select{
+  margin-left: 6.5%;
+  width: 88.5%;
+  padding: 2.5%;
+  font-size: 18px;
+}
+.audits .audit_textbox{
+    margin-bottom: 5px;
 }
 
-.disabled {
-  pointer-events: none;
-  cursor: default;
-  opacity: 0.6;
+.audits .audit_name,
+.audits .audit_number{
+    visibility: hidden;
 }
 
-.auditor_name {
-    width: 94%;
-    margin-left: 12px;
+.audits .qrcode_text{
+    margin-left: 13px;
+    margin-top: 13px;
+    height: 35px;
+    width: 65%;
+}
+
+.audits .scan_qr {
+    width: 27% !important;
+    height: 37px;
+    float: right;
+    margin-right: 11px;
+    margin-top: 12px;
+    padding-top: 2px;
+}
+
+.qr_scan_block {
+   margin-bottom: 20px
+}
+
+.gillette_table .add_item {
+   margin-top: 6px;
+   margin-left: 7px;
+}
+
+.audits .multiple_photo_table .remove_item {
     margin-top: 5px;
-    margin-bottom: 30px;
+    margin-right: 15px;
+    border-radius: 35px;
+    width: 35px;
+    margin-bottom: 10px;
 }
 
-.auditor_label {
-    margin-left: 10px;
+.audits .multiple_photo_table {
+     margin-bottom:0px;
 }
 
-.auditer_comment {
-    margin-left: 29px;
-    width: 87%;
-    margin-top: 17px;
+.audits .multiple_photo {
+     position: relative;
+}
+
+.audits .single_photo {
+    position: relative;
+    margin-left: 8px;
+    margin-right: 8px;
+}
+
+.upload_ico{
+	background: url("../images/matrix_icons/upload.png");
+	background-size: cover;
+	vertical-align: -3px;
+	margin:18px 20px 0px 0px;
+}
+
+.force_clear {
+   margin-left: -45px;
+}
+
+.uuid_container {
+  color: #FFF;
+  font-weight: bold;
+  font-size: 20px;
 }

@@ -17,7 +17,7 @@
     "com.example.hello": "^0.7.0",
     "cordova-android": "^8.1.0",
     "cordova-plugin-advanced-geolocation": "^1.6.2",
-    "cordova-plugin-android-imei": "^1.0.0",
+    "cordova-plugin-android-imei": "file:custom_plugin/cordova-plugin-android-imei",
     "cordova-plugin-androidx": "^2.0.0",
     "cordova-plugin-androidx-adapter": "^1.1.1",
     "cordova-plugin-camera": "file:custom_plugin/cordova-plugin-camera",
@@ -37,7 +37,9 @@
   },
   "cordova": {
     "plugins": {
-      "cordova-plugin-camera": {},
+      "cordova-plugin-camera": {
+        "ANDROID_SUPPORT_V4_VERSION": "27.+"
+      },
       "com.example.hello": {},
       "cordova-plugin-device": {},
       "cordova-plugin-dialogs": {},
@@ -46,17 +48,23 @@
       "cordova-plugin-network-information": {},
       "cordova-plugin-splashscreen": {},
       "cordova-plugin-file-transfer": {},
-      "cordova-plugin-android-imei": {},
       "cordova-plugin-advanced-geolocation": {},
       "cordova-plugin-locationservices": {},
       "org.apache.cordova.geolocation": {},
-      "cordova.plugins.diagnostic": {},
+      "cordova.plugins.diagnostic": {
+        "ANDROIDX_VERSION": "1.+"
+      },
       "com.adjust.sdk": {},
       "cordova-plugin-androidx": {},
       "cordova-plugin-androidx-adapter": {},
-      "phonegap-plugin-barcodescanner": {},
-      "cordova-plugin-request-location-accuracy": {},
-      "cordova-plugin-whitelist": {}
+      "phonegap-plugin-barcodescanner": {
+        "ANDROID_SUPPORT_V4_VERSION": "27.+"
+      },
+      "cordova-plugin-request-location-accuracy": {
+        "PLAY_SERVICES_LOCATION_VERSION": "16.+"
+      },
+      "cordova-plugin-whitelist": {},
+      "cordova-plugin-android-imei": {}
     },
     "platforms": [
       "android"

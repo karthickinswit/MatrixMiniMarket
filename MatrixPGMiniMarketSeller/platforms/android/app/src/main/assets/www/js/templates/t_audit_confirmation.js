@@ -1,10 +1,10 @@
 define([],function(){
     var template =  '<div class="audit_header">\
-                        <!--<div class="back">\
+                        <div class="back">\
                             <img src="images/matrix_icons/back_arrow_red_72.png" class="ico_36">\
-                        </div>-->\
+                        </div>\
                         <div class="left_content">\
-                            <div class="center_content bold font_18">{{name}}</div>\
+                            <div class="center_content bold font_18  ellipsis width_80p">{{name}}</div>\
                         </div>\
                     </div>\
                     <div id="continue_audit_wrapper" class="scroll_parent audit_continue">\
@@ -33,13 +33,20 @@ define([],function(){
                                         {{#noStoreOptions}}<option value={{status_id}}>{{status_name}}</option>{{/noStoreOptions}}\
                                     </select>\
                                 </div>\
-                             </div>\
-                            <!-- <div class="auditer_detail text-center">\
-                                 <div class="audit_textbox text-center"><input class="width_70p audit_name" placeholder="Enter spoc name" value="{{auditerName}}" type="textbox">\
-                                 </input></div>\
-                                 <div class="audit_textbox text-center"><input class="width_70p audit_number" placeholder="Enter spoc phonenumber" value="{{auditerNumber}}" type="number">\
-                                 </input></div>\
-                             </div> -->\
+                                <div class="con_adt_header font_18 bold">Audit month :</div>\
+                                <select class="audit_date_range" type="select">\
+                                    <option>select</option>\
+                                    {{#monthRange}}\
+                                        <option value={{audit_id}} id={{audit_id}} {{selected}}>{{audit_month}}</option>\
+                                    {{/monthRange}}\
+                                </select>\
+                            </div>\
+                             <div class="auditer_detail" style="display:none">\
+                                <div class="audit_textbox"><input class="width_70p audit_name" placeholder="Enter spoc name" value="{{auditerName}}" type="textbox">\
+                                </input></div>\
+                                <div class="audit_textbox"><input class="width_70p audit_number" placeholder="Enter spoc phonenumber" value="{{auditerNumber}}" type="number">\
+                                </input></div>\
+                            </div>\
                             <button class="continue_audit btn btn-success" href="{{mId}}">Continue Audit</button>\
                             <button class="finish_audit btn btn-success" href="{{mId}}" style="display:none">Complete Audit</button>\
                         </div>\
