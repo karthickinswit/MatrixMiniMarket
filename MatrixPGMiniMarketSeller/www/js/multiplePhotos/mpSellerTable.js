@@ -110,11 +110,11 @@ function selectCompSellerProducts(db, storeId, fn, categoryId, isSOS) {
     });
 }
 
-function isFullAuditCompleted(db, storeId, channelId, fn) {
+function isFullAuditCompleted(db, auditMonthId, storeId, channelId, fn) {
 
     var query1 = "select count(DISTINCT category_id) as categoryCount from mxpg_mp_seller where store_id = '" + storeId + "'";
 
-    var query2 = "select count(t1.category_id) as categoryCount from mxpg_cc_map t1 join mxpg_category t2 on t2.category_id = t1.category_id where t1.channel_id = "+ channelId +" order by t2.category_id asc";
+    var query2 = "select count(t1.category_id) as categoryCount from mxpg_cc_map t1 join mxpg_category t2 on t2.category_id = t1.category_id where t1.channel_id = "+ channelId +" and audit_month_id = "+ auditMonthId +" order by t2.category_id asc";
 
 
     db.transaction(function(tx){

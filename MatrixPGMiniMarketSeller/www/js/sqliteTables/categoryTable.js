@@ -230,7 +230,7 @@ function isAuditCompleted(db, auditId, categoryId, channelId, success, error){
 }
 
 
-function mpSellerCompleted(db, categoryId, channelId, storeId, success, error) {
+function mpSellerCompleted(db, auditMonthId, categoryId, channelId, storeId, success, error) {
     var query = "select count(Distinct (brand_id)) as completedBrandCount from mxpg_mp_seller where category_id = " + categoryId + " and store_id =" + storeId + " and brand_id in (select product_id from mxpg_pn_map where category_id = " + categoryId + ")";
 
     db.transaction(function(tx){
@@ -241,7 +241,7 @@ function mpSellerCompleted(db, categoryId, channelId, storeId, success, error) {
             if(len > 0){
                 completedBrandCount = response.rows.item(0).completedBrandCount;
             }
-            var query = "select count(product_id) as brandCount from mxpg_pn_map where category_id = " + categoryId + " and channel_id = "+ channelId;
+            var query = "select count(product_id) as brandCount from mxpg_pn_map where category_id = " + categoryId + " and channel_id = "+ channelId + " and audit_month_id = "+ auditMonthId;
             tx.executeSql(query, [], function(tx, response){
                 var rows = response.rows;
                 var len = rows.length;

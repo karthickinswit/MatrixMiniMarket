@@ -75,10 +75,14 @@ define([
 
                             that.refreshScroll("wrapper_products");
 
-                            isFullAuditCompleted(db, storeId, channelId, function(isCompleted) {
-                                if(isCompleted) {
-                                    that.$el.find(".complete_audit, .audit-btn").prop("disabled", false);
-                                }
+                            selectAuditedMonth(db, storeId, function(auditMonthId){
+
+                                isFullAuditCompleted(db, auditMonthId, storeId, channelId, function(isCompleted) {
+                                    if(isCompleted) {
+                                        that.$el.find(".complete_audit, .audit-btn").prop("disabled", false);
+                                    }
+                                });
+
                             });
 
 
@@ -121,7 +125,11 @@ define([
                     that.$el.find(".list-group-item span"+ "#"+categoryId).find("img").show();
                 }
             };
-            mpSellerCompleted(db, categoryId, channelId, storeId, callback);
+
+            selectAuditedMonth(db, storeId, function(auditMonthId){
+                 mpSellerCompleted(db, auditMonthId, categoryId, channelId, storeId, callback);
+            });
+
         },
 
 		checkPromoBrandComplete: function(categoryId, channelId, storeId) {
