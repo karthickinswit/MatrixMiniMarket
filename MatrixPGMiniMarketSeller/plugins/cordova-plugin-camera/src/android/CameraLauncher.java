@@ -1132,16 +1132,33 @@ public class CameraLauncher extends CordovaPlugin implements MediaScannerConnect
                         text = text + " - " + superImposeText;
                     }
 
+//                    Canvas cs = new Canvas(scaledBitmap);
+//                    Paint tPaint = new Paint();
+//
+//                    if(options.outWidth > options.outHeight) {
+//                        tPaint.setTextSize(25);
+//                    }else{
+//                        tPaint.setTextSize(40);
+//                    }
+//                    tPaint.setColor(Color.WHITE);
+//                    tPaint.setStyle(Paint.Style.FILL);
+//
+//
+//                    cs.rotate(90, 10f, 30f);
+//                    cs.drawText(text, 40f, 30f, tPaint);
+
                     Canvas cs = new Canvas(scaledBitmap);
                     Paint tPaint = new Paint();
-                    tPaint.setTextSize(40);
+                    tPaint.setTextSize(30);
                     tPaint.setColor(Color.WHITE);
                     tPaint.setStyle(Paint.Style.FILL);
 
+                    float height = tPaint.measureText("yY");
+                    cs.drawText(text, 20f, scaledBitmap.getHeight() - (height+5f), tPaint);
 
-                    cs.rotate(90, 10f, 30f);
 
-                    cs.drawText(text, 40f, 30f, tPaint);               
+
+
                 }
     
             }catch (Exception e) {
@@ -1459,4 +1476,7 @@ public class CameraLauncher extends CordovaPlugin implements MediaScannerConnect
         return path;
     }
 }
+
+
+
 

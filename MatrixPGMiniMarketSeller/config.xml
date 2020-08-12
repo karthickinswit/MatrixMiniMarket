@@ -14,6 +14,7 @@
         <allow-intent href="market:*" />
 	<icon src="res/android/icon.png"/>
     	<splash src="res/android/screen.png"/>
+	<preference name="orientation" value="portrait" />
     </platform>
     <platform name="ios">
         <allow-intent href="itms:*" />

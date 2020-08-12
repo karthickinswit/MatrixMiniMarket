@@ -37,7 +37,11 @@ require.config({
     }
 });
 
+var platform;
+
 function onDeviceReady(isDesktop) {
+    platform = cordova.platformId;
+
     require(["router", "jquery.loadmask"], function(Router) {
         try{
 

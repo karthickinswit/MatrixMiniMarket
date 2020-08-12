@@ -22,7 +22,7 @@
   "_resolved": "https://registry.npmjs.org/cordova-plugin-android-imei/-/cordova-plugin-android-imei-1.0.0.tgz",
   "_shasum": "d122d342eabe333e5a3d28f2daff5bfd22652459",
   "_spec": "cordova-plugin-android-imei",
-  "_where": "/media/christus/9cfe9003-fd7a-4a1b-b8e6-759076d91f2e/matrix/checkin/MatrixPGSellerMobile",
+  "_where": "/media/christus/9cfe9003-fd7a-4a1b-b8e6-759076d91f2e/matrix/checkin/MatrixPGMiniMarketSeller",
   "author": {
     "name": "Mirza Kapetanovic"
   },

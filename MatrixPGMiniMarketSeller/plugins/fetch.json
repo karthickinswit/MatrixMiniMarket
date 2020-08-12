@@ -1,14 +1,4 @@
 {
-  "cordova-plugin-camera": {
-    "source": {
-      "type": "registry",
-      "id": "file:custom_plugin/cordova-plugin-camera"
-    },
-    "is_top_level": true,
-    "variables": {
-      "ANDROID_SUPPORT_V4_VERSION": "27.+"
-    }
-  },
   "com.example.hello": {
     "source": {
       "type": "registry",
@@ -161,8 +151,16 @@
   },
   "cordova-plugin-android-imei": {
     "source": {
+      "type": "registry",
+      "id": "cordova-plugin-android-imei"
+    },
+    "is_top_level": true,
+    "variables": {}
+  },
+  "cordova-plugin-camera": {
+    "source": {
       "type": "local",
-      "path": "/media/christus/9cfe9003-fd7a-4a1b-b8e6-759076d91f2e/matrix/checkin/MatrixPGMiniMarketSeller/node_modules/cordova-plugin-android-imei"
+      "path": "/media/christus/9cfe9003-fd7a-4a1b-b8e6-759076d91f2e/matrix/checkin/MatrixPGMiniMarketSeller/node_modules/cordova-plugin-camera"
     },
     "is_top_level": true,
     "variables": {}

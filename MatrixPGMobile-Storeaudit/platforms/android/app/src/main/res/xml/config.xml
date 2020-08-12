@@ -83,13 +83,7 @@
         <param name="android-package" value="cordova.plugins.Diagnostic_External_Storage" />
         <param name="onload" value="true" />
     </feature>
-    <name>HelloCordova</name>
-    <description>
-        A sample Apache Cordova application that responds to the deviceready event.
-    </description>
-    <author email="dev@cordova.apache.org" href="http://cordova.io">
-        Apache Cordova Team
-    </author>
+    <name>MatrixPG</name>
     <content src="index.html" />
     <access origin="*" />
     <allow-intent href="http://*/*" />
@@ -99,6 +93,8 @@
     <allow-intent href="mailto:*" />
     <allow-intent href="geo:*" />
     <allow-intent href="market:*" />
+    <icon src="res/android/icon.png" />
+    <splash src="res/android/screen.png" />
     <preference name="loglevel" value="DEBUG" />
     <preference name="android-minSdkVersion" value="23" />
 </widget>

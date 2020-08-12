@@ -17,7 +17,7 @@
     "com.example.hello": "^0.7.0",
     "cordova-android": "^8.1.0",
     "cordova-plugin-advanced-geolocation": "^1.6.2",
-    "cordova-plugin-android-imei": "file:custom_plugin/cordova-plugin-android-imei",
+    "cordova-plugin-android-imei": "^1.0.0",
     "cordova-plugin-androidx": "^2.0.0",
     "cordova-plugin-androidx-adapter": "^1.1.1",
     "cordova-plugin-camera": "file:custom_plugin/cordova-plugin-camera",
@@ -37,9 +37,6 @@
   },
   "cordova": {
     "plugins": {
-      "cordova-plugin-camera": {
-        "ANDROID_SUPPORT_V4_VERSION": "27.+"
-      },
       "com.example.hello": {},
       "cordova-plugin-device": {},
       "cordova-plugin-dialogs": {},
@@ -64,7 +61,10 @@
         "PLAY_SERVICES_LOCATION_VERSION": "16.+"
       },
       "cordova-plugin-whitelist": {},
-      "cordova-plugin-android-imei": {}
+      "cordova-plugin-android-imei": {},
+      "cordova-plugin-camera": {
+        "ANDROID_SUPPORT_V4_VERSION": "27.+"
+      }
     },
     "platforms": [
       "android"
