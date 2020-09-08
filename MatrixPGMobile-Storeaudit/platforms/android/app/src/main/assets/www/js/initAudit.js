@@ -361,7 +361,7 @@ define([
 			var options = {
 		    	maximumAge:inswit.MAXIMUM_AGE,
 		    	timeout:inswit.TIMEOUT,
-		    	enableHighAccuracy:true
+		    	enableHighAccuracy:false
 			};
 			inswit.getLatLng(callback, options, false);
 		},

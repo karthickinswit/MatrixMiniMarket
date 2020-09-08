@@ -224,6 +224,7 @@ function handleLocationAuthorizationStatus(status) {
         case cordova.plugins.diagnostic.permissionStatus.GRANTED_WHEN_IN_USE:
             // iOS only
             onError("Location services is already switched ON");
+            _makeRequest();
             break;
     }
 }

@@ -1,4 +1,10 @@
 {
+  "_args": [
+    [
+      "cordova-plugin-splashscreen@6.0.0",
+      "/media/christus/9cfe9003-fd7a-4a1b-b8e6-759076d91f2e/matrix/checkin/MatrixPGMobile-Storeaudit"
+    ]
+  ],
   "_from": "cordova-plugin-splashscreen@6.0.0",
   "_id": "cordova-plugin-splashscreen@6.0.0",
   "_inBundle": false,
@@ -16,20 +22,17 @@
     "fetchSpec": "6.0.0"
   },
   "_requiredBy": [
-    "#USER",
     "/"
   ],
   "_resolved": "https://registry.npmjs.org/cordova-plugin-splashscreen/-/cordova-plugin-splashscreen-6.0.0.tgz",
-  "_shasum": "674718f87894cd75615da2b55905eb4cc719cf01",
-  "_spec": "cordova-plugin-splashscreen@6.0.0",
-  "_where": "/media/christus/9cfe9003-fd7a-4a1b-b8e6-759076d91f2e/matrix/checkin/MatrixPGMobile",
+  "_spec": "6.0.0",
+  "_where": "/media/christus/9cfe9003-fd7a-4a1b-b8e6-759076d91f2e/matrix/checkin/MatrixPGMobile-Storeaudit",
   "author": {
     "name": "Apache Software Foundation"
   },
   "bugs": {
     "url": "https://github.com/apache/cordova-plugin-splashscreen/issues"
   },
-  "bundleDependencies": false,
   "cordova": {
     "id": "cordova-plugin-splashscreen",
     "platforms": [
@@ -38,7 +41,6 @@
       "browser"
     ]
   },
-  "deprecated": false,
   "description": "Cordova Splashscreen Plugin",
   "devDependencies": {
     "@cordova/eslint-config": "^3.0.0"

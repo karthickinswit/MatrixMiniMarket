@@ -7,6 +7,9 @@
     "files": {}
   },
   "installed_plugins": {
+    "cordova-plugin-whitelist": {
+      "PACKAGE_NAME": "com.appiyo.matrix"
+    },
     "cordova-plugin-camera": {
       "ANDROID_SUPPORT_V4_VERSION": "27.+",
       "PACKAGE_NAME": "com.appiyo.matrix"
@@ -17,16 +20,13 @@
     "cordova-plugin-dialogs": {
       "PACKAGE_NAME": "com.appiyo.matrix"
     },
-    "cordova-plugin-file": {
-      "PACKAGE_NAME": "com.appiyo.matrix"
-    },
     "cordova-plugin-inappbrowser": {
       "PACKAGE_NAME": "com.appiyo.matrix"
     },
-    "cordova-plugin-network-information": {
+    "cordova-plugin-file": {
       "PACKAGE_NAME": "com.appiyo.matrix"
     },
-    "cordova-plugin-whitelist": {
+    "cordova-plugin-network-information": {
       "PACKAGE_NAME": "com.appiyo.matrix"
     },
     "cordova-plugin-splashscreen": {
@@ -62,6 +62,10 @@
     },
     "cordova.plugins.diagnostic": {
       "ANDROIDX_VERSION": "1.+",
+      "PACKAGE_NAME": "com.appiyo.matrix"
+    },
+    "cordova-plugin-request-location-accuracy": {
+      "PLAY_SERVICES_LOCATION_VERSION": "16.+",
       "PACKAGE_NAME": "com.appiyo.matrix"
     }
   },
