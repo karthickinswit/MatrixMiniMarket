@@ -40,13 +40,6 @@
     "cordova-plugin-locationservices": {
       "PACKAGE_NAME": "com.appiyo.matrix_bangladesh"
     },
-    "org.apache.cordova.geolocation": {
-      "PACKAGE_NAME": "com.appiyo.matrix_bangladesh"
-    },
-    "cordova.plugins.diagnostic": {
-      "ANDROIDX_VERSION": "1.+",
-      "PACKAGE_NAME": "com.appiyo.matrix_bangladesh"
-    },
     "com.adjust.sdk": {
       "PACKAGE_NAME": "com.appiyo.matrix_bangladesh"
     },
@@ -67,6 +60,13 @@
     "cordova-plugin-camera": {
       "ANDROID_SUPPORT_V4_VERSION": "27.+",
       "PACKAGE_NAME": "com.appiyo.matrix_bangladesh"
+    },
+    "cordova.plugins.diagnostic": {
+      "ANDROIDX_VERSION": "1.+",
+      "PACKAGE_NAME": "com.appiyo.matrix_srilanka"
+    },
+    "org.apache.cordova.geolocation": {
+      "PACKAGE_NAME": "com.appiyo.matrix_srilanka"
     }
   },
   "dependent_plugins": {}

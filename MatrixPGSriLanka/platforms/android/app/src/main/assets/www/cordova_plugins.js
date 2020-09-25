@@ -299,35 +299,91 @@ cordova.define('cordova/plugin_list', function(require, exports, module) {
       ]
     },
     {
-      "id": "org.apache.cordova.geolocation.Coordinates",
-      "file": "plugins/org.apache.cordova.geolocation/www/Coordinates.js",
-      "pluginId": "org.apache.cordova.geolocation",
+      "id": "com.adjust.sdk.Adjust",
+      "file": "plugins/com.adjust.sdk/www/adjust.js",
+      "pluginId": "com.adjust.sdk",
       "clobbers": [
-        "Coordinates"
+        "Adjust"
       ]
     },
     {
-      "id": "org.apache.cordova.geolocation.PositionError",
-      "file": "plugins/org.apache.cordova.geolocation/www/PositionError.js",
-      "pluginId": "org.apache.cordova.geolocation",
+      "id": "com.adjust.sdk.AdjustConfig",
+      "file": "plugins/com.adjust.sdk/www/adjust_config.js",
+      "pluginId": "com.adjust.sdk",
       "clobbers": [
-        "PositionError"
+        "AdjustConfig"
       ]
     },
     {
-      "id": "org.apache.cordova.geolocation.Position",
-      "file": "plugins/org.apache.cordova.geolocation/www/Position.js",
-      "pluginId": "org.apache.cordova.geolocation",
+      "id": "com.adjust.sdk.AdjustEvent",
+      "file": "plugins/com.adjust.sdk/www/adjust_event.js",
+      "pluginId": "com.adjust.sdk",
       "clobbers": [
-        "Position"
+        "AdjustEvent"
       ]
     },
     {
-      "id": "org.apache.cordova.geolocation.geolocation",
-      "file": "plugins/org.apache.cordova.geolocation/www/geolocation.js",
-      "pluginId": "org.apache.cordova.geolocation",
+      "id": "com.adjust.sdk.AdjustAppStoreSubscription",
+      "file": "plugins/com.adjust.sdk/www/adjust_app_store_subscription.js",
+      "pluginId": "com.adjust.sdk",
       "clobbers": [
-        "navigator.geolocation"
+        "AdjustAppStoreSubscription"
+      ]
+    },
+    {
+      "id": "com.adjust.sdk.AdjustPlayStoreSubscription",
+      "file": "plugins/com.adjust.sdk/www/adjust_play_store_subscription.js",
+      "pluginId": "com.adjust.sdk",
+      "clobbers": [
+        "AdjustPlayStoreSubscription"
+      ]
+    },
+    {
+      "id": "phonegap-plugin-barcodescanner.BarcodeScanner",
+      "file": "plugins/phonegap-plugin-barcodescanner/www/barcodescanner.js",
+      "pluginId": "phonegap-plugin-barcodescanner",
+      "clobbers": [
+        "cordova.plugins.barcodeScanner"
+      ]
+    },
+    {
+      "id": "cordova-plugin-request-location-accuracy.RequestLocationAccuracy",
+      "file": "plugins/cordova-plugin-request-location-accuracy/www/android/RequestLocationAccuracy.js",
+      "pluginId": "cordova-plugin-request-location-accuracy",
+      "clobbers": [
+        "cordova.plugins.locationAccuracy"
+      ]
+    },
+    {
+      "id": "cordova-plugin-camera.Camera",
+      "file": "plugins/cordova-plugin-camera/www/CameraConstants.js",
+      "pluginId": "cordova-plugin-camera",
+      "clobbers": [
+        "Camera"
+      ]
+    },
+    {
+      "id": "cordova-plugin-camera.CameraPopoverOptions",
+      "file": "plugins/cordova-plugin-camera/www/CameraPopoverOptions.js",
+      "pluginId": "cordova-plugin-camera",
+      "clobbers": [
+        "CameraPopoverOptions"
+      ]
+    },
+    {
+      "id": "cordova-plugin-camera.camera",
+      "file": "plugins/cordova-plugin-camera/www/Camera.js",
+      "pluginId": "cordova-plugin-camera",
+      "clobbers": [
+        "navigator.camera"
+      ]
+    },
+    {
+      "id": "cordova-plugin-camera.CameraPopoverHandle",
+      "file": "plugins/cordova-plugin-camera/www/CameraPopoverHandle.js",
+      "pluginId": "cordova-plugin-camera",
+      "clobbers": [
+        "CameraPopoverHandle"
       ]
     },
     {
@@ -419,91 +475,35 @@ cordova.define('cordova/plugin_list', function(require, exports, module) {
       ]
     },
     {
-      "id": "com.adjust.sdk.Adjust",
-      "file": "plugins/com.adjust.sdk/www/adjust.js",
-      "pluginId": "com.adjust.sdk",
+      "id": "org.apache.cordova.geolocation.Coordinates",
+      "file": "plugins/org.apache.cordova.geolocation/www/Coordinates.js",
+      "pluginId": "org.apache.cordova.geolocation",
       "clobbers": [
-        "Adjust"
+        "Coordinates"
       ]
     },
     {
-      "id": "com.adjust.sdk.AdjustConfig",
-      "file": "plugins/com.adjust.sdk/www/adjust_config.js",
-      "pluginId": "com.adjust.sdk",
+      "id": "org.apache.cordova.geolocation.PositionError",
+      "file": "plugins/org.apache.cordova.geolocation/www/PositionError.js",
+      "pluginId": "org.apache.cordova.geolocation",
       "clobbers": [
-        "AdjustConfig"
+        "PositionError"
       ]
     },
     {
-      "id": "com.adjust.sdk.AdjustEvent",
-      "file": "plugins/com.adjust.sdk/www/adjust_event.js",
-      "pluginId": "com.adjust.sdk",
+      "id": "org.apache.cordova.geolocation.Position",
+      "file": "plugins/org.apache.cordova.geolocation/www/Position.js",
+      "pluginId": "org.apache.cordova.geolocation",
       "clobbers": [
-        "AdjustEvent"
+        "Position"
       ]
     },
     {
-      "id": "com.adjust.sdk.AdjustAppStoreSubscription",
-      "file": "plugins/com.adjust.sdk/www/adjust_app_store_subscription.js",
-      "pluginId": "com.adjust.sdk",
+      "id": "org.apache.cordova.geolocation.geolocation",
+      "file": "plugins/org.apache.cordova.geolocation/www/geolocation.js",
+      "pluginId": "org.apache.cordova.geolocation",
       "clobbers": [
-        "AdjustAppStoreSubscription"
-      ]
-    },
-    {
-      "id": "com.adjust.sdk.AdjustPlayStoreSubscription",
-      "file": "plugins/com.adjust.sdk/www/adjust_play_store_subscription.js",
-      "pluginId": "com.adjust.sdk",
-      "clobbers": [
-        "AdjustPlayStoreSubscription"
-      ]
-    },
-    {
-      "id": "phonegap-plugin-barcodescanner.BarcodeScanner",
-      "file": "plugins/phonegap-plugin-barcodescanner/www/barcodescanner.js",
-      "pluginId": "phonegap-plugin-barcodescanner",
-      "clobbers": [
-        "cordova.plugins.barcodeScanner"
-      ]
-    },
-    {
-      "id": "cordova-plugin-request-location-accuracy.RequestLocationAccuracy",
-      "file": "plugins/cordova-plugin-request-location-accuracy/www/android/RequestLocationAccuracy.js",
-      "pluginId": "cordova-plugin-request-location-accuracy",
-      "clobbers": [
-        "cordova.plugins.locationAccuracy"
-      ]
-    },
-    {
-      "id": "cordova-plugin-camera.Camera",
-      "file": "plugins/cordova-plugin-camera/www/CameraConstants.js",
-      "pluginId": "cordova-plugin-camera",
-      "clobbers": [
-        "Camera"
-      ]
-    },
-    {
-      "id": "cordova-plugin-camera.CameraPopoverOptions",
-      "file": "plugins/cordova-plugin-camera/www/CameraPopoverOptions.js",
-      "pluginId": "cordova-plugin-camera",
-      "clobbers": [
-        "CameraPopoverOptions"
-      ]
-    },
-    {
-      "id": "cordova-plugin-camera.camera",
-      "file": "plugins/cordova-plugin-camera/www/Camera.js",
-      "pluginId": "cordova-plugin-camera",
-      "clobbers": [
-        "navigator.camera"
-      ]
-    },
-    {
-      "id": "cordova-plugin-camera.CameraPopoverHandle",
-      "file": "plugins/cordova-plugin-camera/www/CameraPopoverHandle.js",
-      "pluginId": "cordova-plugin-camera",
-      "clobbers": [
-        "CameraPopoverHandle"
+        "navigator.geolocation"
       ]
     }
   ];
@@ -519,13 +519,13 @@ cordova.define('cordova/plugin_list', function(require, exports, module) {
     "cordova-plugin-android-imei": "1.0.0",
     "cordova-plugin-advanced-geolocation": "1.1.0",
     "cordova-plugin-locationservices": "2.1.0",
-    "org.apache.cordova.geolocation": "0.3.6",
-    "cordova.plugins.diagnostic": "6.0.2",
     "com.adjust.sdk": "4.22.1",
     "cordova-plugin-androidx": "2.0.0",
     "cordova-plugin-androidx-adapter": "1.1.1",
     "phonegap-plugin-barcodescanner": "8.1.0",
     "cordova-plugin-request-location-accuracy": "2.3.0",
-    "cordova-plugin-camera": "4.1.0"
+    "cordova-plugin-camera": "4.1.0",
+    "cordova.plugins.diagnostic": "6.0.2",
+    "org.apache.cordova.geolocation": "0.3.6"
   };
 });

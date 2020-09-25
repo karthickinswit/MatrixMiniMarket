@@ -178,15 +178,13 @@ define([
                             }else{
                                 populateCompAuditTable(db, audit, function(){
 
-                                    var getBack = function(){
-                                        $(".android").unmask();
-                                        var route = "#audits/" + mId + "/products";
-                                        router.navigate(route, {
-                                            trigger: true
-                                        });
-                                    }
+									$(".android").unmask();
+									var route = "#audits/" + mId + "/products";
+									router.navigate(route, {
+										trigger: true
+									});
 
-                                    that.setGeoLocation(auditId, storeId, getBack);
+                                    that.setGeoLocation(auditId, storeId);
                                     //$(".android").mask("Capturing Geolocation... Please wait...", 100);
 
                                 }, function(a, e){
@@ -297,14 +295,13 @@ define([
 
 									}else{
 										populateCompAuditTable(db, audit, function(){
-											var getBack = function(){
-												$(".android").unmask();
-												router.navigate("/audits/"+ mId + "/upload", {
-							                        trigger: true
-							                    });
-											}
+											
+											$(".android").unmask();
+											router.navigate("/audits/"+ mId + "/upload", {
+												trigger: true
+											});
 										
-											that.setGeoLocation(auditId, storeId, getBack);
+											that.setGeoLocation(auditId, storeId);
 											//$(".android").mask("Capturing Geolocation... Please wait...", 100);
 
 										}, function(a, e){
@@ -357,12 +354,12 @@ define([
 		},
 
 		//Get latitude and longitude position of the device
-        setGeoLocation: function(auditId, storeId, fn){
+        setGeoLocation: function(auditId, storeId){
             var pos = {
                 lat: "",
                 lng: ""
             };
-            /*var that = this;
+           var that = this;
 
             var callback = function(pos, retry){
                 if(retry){
@@ -372,34 +369,34 @@ define([
                         "storeId":storeId
                     });
 
-                    that.setGeoLocation(auditId, storeId, fn);
+                    that.setGeoLocation(auditId, storeId);
                     return;
-                }*/
+                }
 
-//				if(pos != ""){
+				if(pos != ""){
                     updateGeoLocation(db, auditId, storeId, pos);
-                    if(fn){
-                        fn();
-                    }
-                /*}else{
+                }else{
+					pos = {
+						lat: "",
+						lng: ""
+					};
+					updateGeoLocation(db, auditId, storeId, pos);
+
                     inswit.errorLog({
                         "error":"GPS signal is weak, Not able to capture LAT/LNG",
                         "auditId":auditId,
                         "storeId":storeId
                     });
                     $(".android").unmask();
-                    if(fn){
-                        fn();
-                    }
                 }
             };
 
             var options = {
                 maximumAge:inswit.MAXIMUM_AGE,
                 timeout:inswit.TIMEOUT,
-                enableHighAccuracy:true
+                enableHighAccuracy:false
             };
-            inswit.getLatLng(callback, options, false);*/
+            inswit.getLatLng(callback, options, false);
         },
 
 		takeStorePicture:function(event){

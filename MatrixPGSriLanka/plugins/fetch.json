@@ -87,22 +87,6 @@
     "is_top_level": true,
     "variables": {}
   },
-  "org.apache.cordova.geolocation": {
-    "source": {
-      "type": "registry",
-      "id": "org.apache.cordova.geolocation"
-    },
-    "is_top_level": true,
-    "variables": {}
-  },
-  "cordova.plugins.diagnostic": {
-    "source": {
-      "type": "registry",
-      "id": "cordova.plugins.diagnostic@6.0.2"
-    },
-    "is_top_level": true,
-    "variables": {}
-  },
   "com.adjust.sdk": {
     "source": {
       "type": "registry",
@@ -147,6 +131,22 @@
     "source": {
       "type": "local",
       "path": "/media/christus/9cfe9003-fd7a-4a1b-b8e6-759076d91f2e/matrix/checkin/MatrixPGBangladesh/node_modules/cordova-plugin-camera"
+    },
+    "is_top_level": true,
+    "variables": {}
+  },
+  "cordova.plugins.diagnostic": {
+    "source": {
+      "type": "registry",
+      "id": "cordova.plugins.diagnostic@6.0.2"
+    },
+    "is_top_level": true,
+    "variables": {}
+  },
+  "org.apache.cordova.geolocation": {
+    "source": {
+      "type": "registry",
+      "id": "org.apache.cordova.geolocation"
     },
     "is_top_level": true,
     "variables": {}

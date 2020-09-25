@@ -69,10 +69,14 @@ function onDeviceReady(isDesktop) {
         
         $('body').addClass("android cover");
         select2Intitialize();
+
+        inswit.events = _.extend({}, Backbone.Events);
+
+            // Make the request
+        requestLocationAccuracy();
+
     });
 
-    // Make the request
-    requestLocationAccuracy();
 }
 
 if (!isDesktop()) {
@@ -220,10 +224,12 @@ function handleLocationAuthorizationStatus(status) {
         case cordova.plugins.diagnostic.permissionStatus.DENIED_ALWAYS:
             // Android only
             onError("User denied permission to use location");
+            requestLocationAuthorization();
             break;
         case cordova.plugins.diagnostic.permissionStatus.GRANTED_WHEN_IN_USE:
             // iOS only
             onError("Location services is already switched ON");
+            _makeRequest();
             break;
     }
 }
@@ -261,3 +267,6 @@ function _makeRequest(){
         }
     });
 }
+
+
+
