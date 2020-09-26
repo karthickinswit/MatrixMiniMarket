@@ -361,10 +361,10 @@ define([
             };
            var that = this;
 
-            var callback = function(pos, retry){
+            var callback = function(pos, retry, error){
                 if(retry){
                     inswit.errorLog({
-                        "error":"GPS signal is weak, Not able to capture LAT/LNG",
+                        "error": error,
                         "auditId":auditId,
                         "storeId":storeId
                     });
@@ -382,8 +382,10 @@ define([
 					};
 					updateGeoLocation(db, auditId, storeId, pos);
 
+					console.log("GPS ErrorLog", error);
+
                     inswit.errorLog({
-                        "error":"GPS signal is weak, Not able to capture LAT/LNG",
+                        "error": error,
                         "auditId":auditId,
                         "storeId":storeId
                     });
