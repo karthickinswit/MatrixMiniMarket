@@ -33,7 +33,6 @@ define(["backbone", "bootstrap", "mustache"], function() {
         routes: {
             "":"renderLogin",
             "forgotpassword" : "showForgotPassword",
-            "register" : "showRegister",
             "audits" : "getAuditList",
             "audits/:id" : "showAuditDetails",
             "audits/:id/continue" : "startAudit",
@@ -184,17 +183,6 @@ define(["backbone", "bootstrap", "mustache"], function() {
                 that.appendView(forgotpasswordView);
             });
             $(".timer_container").hide();
-        },
-
-	showRegister: function() {
-            var that = this;
-            require(["register"], function(RegisterUniqueId){
-                var registerModel = new RegisterUniqueId.Model({});
-                var registerView = new RegisterUniqueId.View({model:registerModel});
-
-                registerView.render();
-                that.appendView(registerView);
-            });
         },
 
         showNorms: function(mId, pId){
