@@ -190,8 +190,8 @@ define([
                                         });
                                     }
 
-                                    that.setGeoLocation(auditId, storeId, getBack);
-                                    //$(".android").mask("Capturing Geolocation... Please wait...", 100);
+                                   // that.setGeoLocation(auditId, storeId, getBack);
+                                  //  $(".android").mask("Capturing Geolocation... Please wait...", 100);
 
                                 }, function(a, e){
                                     //Error callback of populateCompAuditTable function.
@@ -307,7 +307,7 @@ define([
 							                    });
 											}
 										
-											that.setGeoLocation(auditId, storeId, getBack);
+											//that.setGeoLocation(auditId, storeId, getBack);
 											//$(".android").mask("Capturing Geolocation... Please wait...", 100);
 
 										}, function(a, e){
@@ -360,7 +360,7 @@ define([
                 lat: "",
                 lng: ""
             };
-			/*var that = this;
+			var that = this;
 
 			var callback = function(pos, retry){
 				if(retry){
@@ -372,14 +372,16 @@ define([
 
 					that.setGeoLocation(auditId, storeId, fn);
 					return;
-				}*/
+				}
 
-//				if(pos != ""){
+				if(pos.lat){
 					updateGeoLocation(db, auditId, storeId, pos);
 					if(fn){
 						fn();
 					}
-				/*}else{
+				}else{
+					console.log("GPS error"+ pos);
+					inswit.alert(""+pos.message);
 					inswit.errorLog({
 						"error":"GPS signal is weak, Not able to capture LAT/LNG", 
 						"auditId":auditId, 
@@ -397,7 +399,8 @@ define([
 		    	timeout:inswit.TIMEOUT,
 		    	enableHighAccuracy:true
 			};
-			inswit.getLatLng(callback, options, false);*/
+			inswit.getLatLng(callback, options, false);
+
 		},
 
 		takeStorePicture:function(event){
@@ -409,16 +412,22 @@ define([
 			var id = mId.split("-");
             var auditId = id[0];
             var storeId = id[1];
-            var channelId = id[2];
-
-            getStoreCode(db, storeId, function(storeCode){
-            	var callback = function(imageURI){
-					that.refreshScroll("continue_audit_wrapper");
-				}
-
-				var takeEl = "take_store_photo";
-				var retakeEl = "retake_store_photo";
-				inswit.takePicture(callback, takeEl, retakeEl, storeCode, time);
+			var channelId = id[2];
+			
+			selectCompletedAudit(db, mId, function(data){
+				var auditData = data[0];
+				var lat = auditData.lat;
+				var lng = auditData.lng;
+				getStoreCode(db, storeId, function(storeCode){
+					var callback = function(imageURI){
+						that.refreshScroll("continue_audit_wrapper");
+					}
+	
+					var takeEl = "take_store_photo";
+					var retakeEl = "retake_store_photo";
+					storeCode = storeCode + "Z" + "Lat: "+ lat + "Z" + "Lng: "+lng;
+					inswit.takePicture(callback, takeEl, retakeEl, storeCode, time);
+				});
 			});
 		},
 

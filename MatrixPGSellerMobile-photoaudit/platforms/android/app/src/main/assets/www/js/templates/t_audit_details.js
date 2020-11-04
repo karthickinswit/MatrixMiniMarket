@@ -64,7 +64,7 @@ define([],function(){
                                 </tr>\
                                 <tr>\
                                     <td colspan="3">\
-                                    <a href="#audits/{{mId}}/continue" id="{{id}}" class="start_audit btn btn-danger">Start</a></td>\
+                                    <button class="start_audit btn btn-danger" href="{{mId}}">Start</button>\
                                 </tr>\
                             </table>\
                         </div>\
@@ -72,3 +72,5 @@ define([],function(){
 
     return template;
 });
+
+//<a href="#audits/{{mId}}/continue" id="{{id}}" class="start_audit btn btn-danger">Start</a></td>\

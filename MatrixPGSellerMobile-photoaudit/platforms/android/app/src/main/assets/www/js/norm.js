@@ -194,17 +194,24 @@ define([
 			var id = mId.split("-");
             var auditId = id[0];
             var storeId = id[1];
-            var channelId = id[2];
+			var channelId = id[2];
+			
+			selectCompletedAudit(db, mId, function(data){
+				var auditData = data[0];
+				var lat = auditData.lat;
+				var lng = auditData.lng;
 
-			getStoreCode(db, storeId, function(storeCode){
-			 	var callback = function(imageURI){
-					that.refreshScroll("wrapper_norms");
-				}
-				
-				var takeEl = "take_product_photo";
-				var retakeEl = "retake_product_photo";
+				getStoreCode(db, storeId, function(storeCode){
+					var callback = function(imageURI){
+						that.refreshScroll("wrapper_norms");
+					}
+					
+					var takeEl = "take_product_photo";
+					var retakeEl = "retake_product_photo";
 
-				inswit.takePicture(callback, takeEl, retakeEl, storeCode, time);
+					storeCode = storeCode + "Z" + "Lat: "+ lat + "Z" + "Lng: "+lng;
+					inswit.takePicture(callback, takeEl, retakeEl, storeCode, time);
+				});
 			});
 		},
 
@@ -219,20 +226,27 @@ define([
 			var id = mId.split("-");
             var auditId = id[0];
             var storeId = id[1];
-            var channelId = id[2];
+			var channelId = id[2];
+			
+			selectCompletedAudit(db, mId, function(data){
+				var auditData = data[0];
+				var lat = auditData.lat;
+				var lng = auditData.lng;
 
-			getStoreCode(db, storeId, function(storeCode){
-			 	var callback = function(imageURI){
-					that.refreshScroll("wrapper_norms");
-				}
+				getStoreCode(db, storeId, function(storeCode){
+					var callback = function(imageURI){
+						that.refreshScroll("wrapper_norms");
+					}
 
-				var priority = $(event.currentTarget).parents(".norms").attr("href");
-				
-				var takeEl = "take_second_product_photo";
-				var retakeEl = "retake_second_product_photo";
-				var appendEl = "opt_photo_block";
+					var priority = $(event.currentTarget).parents(".norms").attr("href");
+					
+					var takeEl = "take_second_product_photo";
+					var retakeEl = "retake_second_product_photo";
+					var appendEl = "opt_photo_block";
 
-				inswit.takePicture(callback, takeEl, retakeEl, storeCode, time, appendEl, priority);
+					storeCode = storeCode + "Z" + "Lat: "+ lat + "Z" + "Lng: "+lng;
+					inswit.takePicture(callback, takeEl, retakeEl, storeCode, time, appendEl, priority);
+				});
 			});
 		},
 

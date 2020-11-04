@@ -1112,12 +1112,18 @@ public class CameraLauncher extends CordovaPlugin implements MediaScannerConnect
             
             try {
                 if(superImposeTimeStamp) {
+                    
+                    String lat= "";
+                    String lng= "";
 
                     SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yy HH:mm:ss");
                     String text = sdf.format(Calendar.getInstance().getTime()); // reading local time in the system
 
                     if(!superImposeText.isEmpty()) {
-                        text = text + " - " + superImposeText;
+                        String[] arrOfSuperImposeTxt = superImposeText.split("Z", 3); 
+                        text = text + " - " + arrOfSuperImposeTxt[0];
+                        lat = arrOfSuperImposeTxt[1];
+                        lng = arrOfSuperImposeTxt[2];
                     }
 
                     Canvas cs = new Canvas(scaledBitmap);
@@ -1127,6 +1133,17 @@ public class CameraLauncher extends CordovaPlugin implements MediaScannerConnect
                     tPaint.setStyle(Paint.Style.FILL);
  		    
                     drawCenter(cs, tPaint, text);
+                    
+                    tPaint.setTextSize(30);
+                    tPaint.setColor(Color.WHITE);
+                    tPaint.setStyle(Paint.Style.FILL);
+
+                    float height = tPaint.measureText("yY");
+                    cs.drawText(lat, 20f, scaledBitmap.getHeight() - (height+50f), tPaint);
+
+                    cs.drawText(lng, 20f, scaledBitmap.getHeight() - (height+5f), tPaint);
+
+
 
                    //cs.rotate(90, 10f, 30f);
 
@@ -1149,6 +1166,28 @@ public class CameraLauncher extends CordovaPlugin implements MediaScannerConnect
         }
 
     }
+
+    private void setTextSizeForWidth(Paint paint, float desiredHeight,
+                                        String text) {
+
+        // Pick a reasonably large value for the test. Larger values produce
+        // more accurate results, but may cause problems with hardware
+        // acceleration. But there are workarounds for that, too; refer to
+        // http://stackoverflow.com/questions/6253528/font-size-too-large-to-fit-in-cache
+        final float testTextSize = 48f;
+
+        // Get the bounds of the text, using our testTextSize.
+        paint.setTextSize(testTextSize);
+        Rect bounds = new Rect();
+        paint.getTextBounds(text, 0, text.length(), bounds);
+
+        // Calculate the desired size as a proportion of our testTextSize.
+        float desiredTextSize = testTextSize * desiredHeight / bounds.height();
+
+        // Set the paint for that size.
+        paint.setTextSize(desiredTextSize);
+    }
+
 
    private void drawCenter(Canvas canvas, Paint paint, String text) {
         Rect r = new Rect();

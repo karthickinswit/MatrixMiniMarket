@@ -14,7 +14,8 @@ define([
 		className: "audits",
 
 		events:{
-			"click .back": "back"
+			"click .back": "back",
+			"click .start_audit": "startAudit"
 		},
 
 		showAuditDetails: function(mId){
@@ -201,7 +202,92 @@ define([
 				this.scrollView = new iScroll(wrapperEle);
 			}
 			this.scrollView.refresh();
-		}
+		},
+
+		startAudit: function(event) {
+			var that = this;
+			var mId = $(event.currentTarget).attr("href");
+			
+			var id = mId.split("-");
+            var auditId = id[0];
+            var storeId = id[1];
+            var channelId = id[2];
+			that.setGeoLocation(auditId, storeId, function(){
+				var route = "#audits/" + mId + "/continue";
+				router.navigate(route, {
+					trigger: true
+				});
+			});
+		},
+
+
+		//Get latitude and longitude position of the device
+		setGeoLocation: function(auditId, storeId, fn){
+			$(".android").mask("Capturing Geolocation... Please wait...", 100);
+			var pos = {
+                lat: "",
+                lng: ""
+            };
+			var that = this;
+
+			var callback = function(pos, retry){
+				if(retry){
+					inswit.errorLog({
+						"error":"GPS signal is weak, Not able to capture LAT/LNG", 
+						"auditId":auditId, 
+						"storeId":storeId
+					});
+
+					that.setGeoLocation(auditId, storeId, fn);
+					return;
+				}
+
+				if(pos.lat){
+
+					var audit = {};
+					audit.storeId = storeId;
+					audit.auditId = auditId;
+					audit.id = "";
+					audit.isContinued = true;
+					audit.isCompleted = false;
+					audit.optionId = "";
+					audit.signImage = "";
+					audit.storeImage = "";
+					audit.lat = "";
+					audit.lng = "";
+					audit.storeImageId = "";
+					audit.signImageId = "";
+						
+					populateCompAuditTable(db, audit, function(){
+						updateGeoLocation(db, auditId, storeId, pos);
+						if(fn){
+							fn();
+						}
+					});
+					$(".android").unmask();
+				}else{
+					console.log("GPS error"+ pos);
+					inswit.alert(""+pos.message);
+					inswit.errorLog({
+						"error":"GPS signal is weak, Not able to capture LAT/LNG", 
+						"auditId":auditId, 
+						"storeId":storeId
+					});
+					$(".android").unmask();
+					if(fn){
+                    	fn();
+                    }
+				}
+			};
+
+			var options = {
+		    	maximumAge:inswit.MAXIMUM_AGE,
+		    	timeout:inswit.TIMEOUT,
+		    	enableHighAccuracy:true
+			};
+			inswit.getLatLng(callback, options, false);
+
+		},
 
 	});
 

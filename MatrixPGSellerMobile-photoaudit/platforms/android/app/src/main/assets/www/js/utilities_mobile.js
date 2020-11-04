@@ -1,7 +1,7 @@
 //var PROJECTID = "1c62737aae0d11e59d090050569cb68c";   //development
 //var PROJECTID = "97677c1832bc11e5a9bb0050569ccb08"; //demo
-//var PROJECTID = "d27520ec813311e5a9bb0050569ccb08"; //process
-var PROJECTID = "c7806c3ef39a11e69d090050569cb68c" //production - photoAudit
+var PROJECTID = "d27520ec813311e5a9bb0050569ccb08"; //process
+//var PROJECTID = "c7806c3ef39a11e69d090050569cb68c" //production - photoAudit
 var inswit = {
 
 	URI: "https://www.appiyo.com/",
@@ -552,6 +552,17 @@ var inswit = {
 	getLatLng: function(callback, options, retry){
 		var that = this;
 
+		options = {
+			enableHighAccuracy:true,
+			maximumAge:inswit.MAXIMUM_AGE,
+			timeout: LocalStorage.getGpsTimeOut(),
+			priority: inswit.PRIORITY.PRIORITY_HIGH_ACCURACY
+		};
+
+		that.getLatLngUsingLocationServices(callback, options, false);
+
+		return;
+
         if(!this.startTime)
             this.startTime = new Date().getTime();
 
@@ -640,6 +651,7 @@ var inswit = {
 				return;
 
 			}, function(error) {
+				callback(error);
 				if(retry){
 					
 					/*inswit.confirm("GPS signal is weak. Not able to capture LAT/LNG", function onConfirm(buttonIndex) {
@@ -660,15 +672,15 @@ var inswit = {
 				    that.getMobileNetworkLatLng(callback, options, false);
 					return;
 				}
+				/* Low accuracy GPS */
+		    	// options = {
+		    	// 	enableHighAccuracy:false,
+			    // 	maximumAge:inswit.MAXIMUM_AGE,
+		    	// 	timeout: LocalStorage.getGpsTimeOut(),
+			    // 	priority: inswit.PRIORITY.PRIORITY_NO_POWER
+				// };
 
-		    	options = {
-		    		enableHighAccuracy:false,
-			    	maximumAge:inswit.MAXIMUM_AGE,
-		    		timeout: LocalStorage.getGpsTimeOut(),
-			    	priority: inswit.PRIORITY.PRIORITY_NO_POWER
-				};
-
-				that.getLatLngUsingLocationServices(callback, options, true);
+				// that.getLatLngUsingLocationServices(callback, options, true);
 
 		    }, options);
 	},

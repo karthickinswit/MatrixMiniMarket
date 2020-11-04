@@ -146,7 +146,7 @@
   "cordova-plugin-camera": {
     "source": {
       "type": "local",
-      "path": "/media/christus/9cfe9003-fd7a-4a1b-b8e6-759076d91f2e/matrix/checkin/MatrixPGSellerMobile/node_modules/cordova-plugin-camera"
+      "path": "/Users/christusvalerian/Documents/Matrix/MatrixPGSellerMobile-photoaudit/node_modules/cordova-plugin-camera"
     },
     "is_top_level": true,
     "variables": {}
