@@ -84,6 +84,10 @@ function onDeviceReady(isDesktop) {
 
      // Make the request
      requestLocationAccuracy();
+
+     document.addEventListener("offline", onOffline, false);
+     document.addEventListener("online", onOnline, false);
+ 
 }
 
 if(!isDesktop()) {
@@ -205,6 +209,7 @@ function handleLocationAuthorizationStatus(status) {
         case cordova.plugins.diagnostic.permissionStatus.GRANTED_WHEN_IN_USE:
             // iOS only
             onError("Location services is already switched ON");
+            _makeRequest();
             break;
     }
 }
@@ -242,3 +247,20 @@ function _makeRequest(){
         }
     });
 }
+
+function onOffline() {
+}
+ 
+function onOnline() {
+    alert('You are now online!');
+    getErrorLog(db, function(result){
+        for(var i = 0; i < result.length; i++){
+            console.log("DB result"+ result);
+            var auditId = result[0].audit_id;
+            var storeId = result[0].store_id;
+            var error = result[0].error;
+            inswit.logGPSError(auditId, storeId, error);
+        }
+    })
+ }
+ 

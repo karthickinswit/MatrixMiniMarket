@@ -2,7 +2,7 @@
  * This method create table to completed audit details.
  */
 function createCompAuditTable(tx, success, error) {
-    var createStatement = "CREATE TABLE IF NOT EXISTS mxpg_comp_audits(store_id TEXT, id TEXT, comp_audit BOOLEAN, audited BOOLEAN, option_id TEXT, audit_id TEXT, store_image TEXT, lat TEXT, lng TEXT, store_image_id TEXT)";
+    var createStatement = "CREATE TABLE IF NOT EXISTS mxpg_comp_audits(store_id TEXT, id TEXT, comp_audit BOOLEAN, audited BOOLEAN, option_id TEXT, audit_id TEXT, store_image TEXT, lat TEXT, lng TEXT, store_image_id TEXT, accuracy TEXT)";
     tx.executeSql(createStatement, [], success, error);
     var createIndex = "CREATE UNIQUE INDEX compAuditIndex ON mxpg_comp_audits(audit_id, store_id)";
     tx.executeSql(createIndex);
@@ -27,8 +27,8 @@ function createCompProductTable(tx, success, error) {
 
 function populateCompAuditTable(db, audit, callback, error) {
     db.transaction(function(tx){
-        tx.executeSql('INSERT OR replace INTO mxpg_comp_audits(store_id, id, comp_audit, audited, option_id, audit_id, store_image, lat, lng, store_image_id) VALUES (?,?,?,?,?,?,?,?,?,?);',
-            [audit.storeId, audit.id, audit.isCompleted, audit.isContinued, audit.optionId, audit.auditId, audit.storeImage, audit.lat, audit.lng, audit.storeImageId]
+        tx.executeSql('INSERT OR replace INTO mxpg_comp_audits(store_id, id, comp_audit, audited, option_id, audit_id, store_image, lat, lng, store_image_id, accuracy) VALUES (?,?,?,?,?,?,?,?,?,?,?);',
+            [audit.storeId, audit.id, audit.isCompleted, audit.isContinued, audit.optionId, audit.auditId, audit.storeImage, audit.lat, audit.lng, audit.storeImageId, audit.accuracy]
         , callback, error);
     });
 }
@@ -266,8 +266,8 @@ function updateAuditStatus(db, auditId, storeId, success, error){
  */
 function updateGeoLocation(db, auditId, storeId, pos){
     db.transaction(function(tx){
-        tx.executeSql('UPDATE mxpg_comp_audits SET lat=?, lng=? WHERE audit_id=? AND store_id=?;',
-            [pos.lat, pos.lng, auditId, storeId]
+        tx.executeSql('UPDATE mxpg_comp_audits SET lat=?, lng=?, accuracy=? WHERE audit_id=? AND store_id=?;',
+            [pos.lat, pos.lng, pos.accuracy, auditId, storeId]
         );
     });
 }

@@ -515,7 +515,15 @@ define([
 										                }
 										            });
 					                         	}
-					                        );
+											);
+											
+											createErrorLogTable(
+												tx,
+												function(){},
+												function(error, info){
+													console.log("createErrorLogTable"+error);
+												}
+											);
 
 					                        createQrCodePnMap(
 					                            tx,

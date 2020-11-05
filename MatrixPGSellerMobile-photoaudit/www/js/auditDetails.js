@@ -21,6 +21,8 @@ define([
 		showAuditDetails: function(mId){
 			var that = this;
 
+			requestLocationAccuracy();
+
 			var id = mId.split("-");
             var auditId = id[0];
             var storeId = id[1];
@@ -211,13 +213,19 @@ define([
 			var id = mId.split("-");
             var auditId = id[0];
             var storeId = id[1];
-            var channelId = id[2];
-			that.setGeoLocation(auditId, storeId, function(){
-				var route = "#audits/" + mId + "/continue";
-				router.navigate(route, {
-					trigger: true
+			var channelId = id[2];
+
+
+			setTimeout(function(){
+				that.setGeoLocation(auditId, storeId, function(pos){
+					var route = "#audits/" + mId + "/continue/" + 
+					JSON.stringify(pos);
+					router.navigate(route, {
+						trigger: true
+					});
 				});
-			});
+			}, 0);
+
 		},
 
 
@@ -231,52 +239,30 @@ define([
 			var that = this;
 
 			var callback = function(pos, retry){
-				if(retry){
-					inswit.errorLog({
-						"error":"GPS signal is weak, Not able to capture LAT/LNG", 
-						"auditId":auditId, 
-						"storeId":storeId
-					});
+				// if(retry){
+				// 	inswit.errorLog({
+				// 		"error":"GPS signal is weak, Not able to capture LAT/LNG", 
+				// 		"auditId":auditId, 
+				// 		"storeId":storeId
+				// 	});
 
-					that.setGeoLocation(auditId, storeId, fn);
-					return;
-				}
+				// 	that.setGeoLocation(auditId, storeId, fn);
+				// 	return;
+				// }
 
 				if(pos.lat){
-
-					var audit = {};
-					audit.storeId = storeId;
-					audit.auditId = auditId;
-					audit.id = "";
-					audit.isContinued = true;
-					audit.isCompleted = false;
-					audit.optionId = "";
-					audit.signImage = "";
-					audit.storeImage = "";
-					audit.lat = "";
-					audit.lng = "";
-					audit.storeImageId = "";
-					audit.signImageId = "";
-						
-					populateCompAuditTable(db, audit, function(){
-						updateGeoLocation(db, auditId, storeId, pos);
-						if(fn){
-							fn();
-						}
-					});
+					if(fn){
+						fn(pos);
+					}
 					$(".android").unmask();
 				}else{
 					console.log("GPS error"+ pos);
 					inswit.alert(""+pos.message);
-					inswit.errorLog({
-						"error":"GPS signal is weak, Not able to capture LAT/LNG", 
-						"auditId":auditId, 
-						"storeId":storeId
-					});
+	
+					//Log GPS error in appiyo
+					inswit.logGPSError(auditId, storeId, pos);
+					
 					$(".android").unmask();
-					if(fn){
-                    	fn();
-                    }
 				}
 			};
 
@@ -287,6 +273,53 @@ define([
 			};
 			inswit.getLatLng(callback, options, false);
 
+		},
+
+		logGPSError: function(auditId, storeId, error) {
+			//this.$(".upload_container").show();
+			//inswit.hideLoaderEl();
+            var that = this;
+			
+			var pVariables = {
+			    "projectId":inswit.ERROR_LOG.projectId,
+			    "workflowId":inswit.ERROR_LOG.workflowId,
+			    "processId":inswit.ERROR_LOG.processId,
+			    "ProcessVariables":{
+			    	"isSellerAudit": inswit.ISSELLERAUDIT,
+			    	"errorType": inswit.ERROR_LOG_TYPES.GPS_FAIL,
+			    	"auditId": auditId, 
+			    	"storeId": storeId,
+			    	"empId":LocalStorage.getEmployeeId(),
+			    	"issueDate":new Date(),
+			    	"issueDescription": JSON.stringify(error),
+			    	"version": inswit.VERSION
+			    }
+			};
+
+			inswit.executeProcess(pVariables, {
+			    success: function(response){
+			    	if(response.ProcessVariables){
+			    		
+			    	}
+                }, failure: function(error){
+					//inswit.hideLoaderEl();
+					populateErrorLogTable(db, auditId, storeId, error);
+                	switch(error){
+                		case 0:{
+                		    inswit.alert("No internet connection, please enable");
+                			break;
+                		}
+                		case 1:{
+                			inswit.alert("Check your network settings!");
+                			break;
+                		}
+                		case 2:{
+                			inswit.alert("Server Busy.Try Again!");
+                			break;
+                		}
+                	}
+                }
+            });
 		},
 
 	});

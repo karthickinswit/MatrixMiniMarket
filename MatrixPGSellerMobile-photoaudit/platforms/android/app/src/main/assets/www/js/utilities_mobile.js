@@ -183,7 +183,8 @@ var inswit = {
 		DB_UPDATION: "DB_UPDATION",
 		UPLOAD_AUDIT: "UPLOAD_AUDIT",
 		UPDATE_MASTER: "UPDATE_MASTER",
-		BULK_UPLOAD_FAIL: "BULK_UPLOAD_FAIL"
+		BULK_UPLOAD_FAIL: "BULK_UPLOAD_FAIL",
+		GPS_FAIL: "GPS_CAPTURE_FAIL"
 	},
 
 	alert: function(msg, title) {
@@ -556,7 +557,8 @@ var inswit = {
 			enableHighAccuracy:true,
 			maximumAge:inswit.MAXIMUM_AGE,
 			timeout: LocalStorage.getGpsTimeOut(),
-			priority: inswit.PRIORITY.PRIORITY_HIGH_ACCURACY
+			priority: inswit.PRIORITY.PRIORITY_HIGH_ACCURACY,
+			fastInterval: 1000
 		};
 
 		that.getLatLngUsingLocationServices(callback, options, false);
@@ -645,7 +647,8 @@ var inswit = {
 			function(position) {
 				var pos = {
 					lat: position.coords.latitude || "",
-					lng: position.coords.longitude || ""
+					lng: position.coords.longitude || "",
+					accuracy: position.coords.accuracy || ""
 				};
 				callback(pos);
 				return;
@@ -702,7 +705,8 @@ var inswit = {
                     function(position) {
                         var pos = {
                             lat: position.coords.latitude || "",
-                            lng: position.coords.longitude || ""
+							lng: position.coords.longitude || "",
+							accuracy: position.coords.accuracy || ""
                         };
                         console.log("latitude"+position.coords.latitude);
 
@@ -1230,6 +1234,61 @@ var inswit = {
         });
 
         removePartialAudit(db, storeId);
-     }
+	 },
+
+	logGPSError: function(auditId, storeId, gpsError) {
+		//this.$(".upload_container").show();
+		//inswit.hideLoaderEl();
+		var that = this;
+
+		this.auditId = auditId;
+		this.storeId = storeId;
+		this.errorDesc = gpsError;
+		
+		var pVariables = {
+			"projectId":inswit.ERROR_LOG.projectId,
+			"workflowId":inswit.ERROR_LOG.workflowId,
+			"processId":inswit.ERROR_LOG.processId,
+			"ProcessVariables":{
+				"isSellerAudit": inswit.ISSELLERAUDIT,
+				"errorType": inswit.ERROR_LOG_TYPES.GPS_FAIL,
+				"auditId": this.auditId, 
+				"storeId": this.storeId,
+				"empId":LocalStorage.getEmployeeId(),
+				"issueDate":new Date(),
+				"issueDescription": JSON.stringify(this.errorDesc),
+				"version": inswit.VERSION
+			}
+		};
+
+		inswit.executeProcess(pVariables, {
+			success: function(response){
+				if(response.ProcessVariables){
+					removeErrorLog(db, that.auditId, that.storeId);
+				}
+			}, failure: function(error){
+				//inswit.hideLoaderEl();
+				populateErrorLogTable(db, auditId, storeId, JSON.stringify(gpsError), function(result){
+				}, function(error){
+				});
+				switch(error){
+					case 0:{
+						inswit.alert("No internet connection, please enable");
+						break;
+					}
+					case 1:{
+						inswit.alert("Check your network settings!");
+						break;
+					}
+					case 2:{
+						inswit.alert("Server Busy.Try Again!");
+						break;
+					}
+				}
+			}
+		});
+	},
+	 
+
 
 };
