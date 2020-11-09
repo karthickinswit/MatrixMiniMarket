@@ -19,6 +19,10 @@
     "cordova-plugin-androidx-adapter": {
       "PACKAGE_NAME": "com.appiyo.photoaudit"
     },
+    "cordova-plugin-camera": {
+      "ANDROID_SUPPORT_V4_VERSION": "27.+",
+      "PACKAGE_NAME": "com.appiyo.photoaudit"
+    },
     "cordova-plugin-device": {
       "PACKAGE_NAME": "com.appiyo.photoaudit"
     },
@@ -58,10 +62,6 @@
       "PACKAGE_NAME": "com.appiyo.photoaudit"
     },
     "phonegap-plugin-barcodescanner": {
-      "ANDROID_SUPPORT_V4_VERSION": "27.+",
-      "PACKAGE_NAME": "com.appiyo.photoaudit"
-    },
-    "cordova-plugin-camera": {
       "ANDROID_SUPPORT_V4_VERSION": "27.+",
       "PACKAGE_NAME": "com.appiyo.photoaudit"
     },

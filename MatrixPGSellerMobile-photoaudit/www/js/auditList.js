@@ -123,8 +123,9 @@ define([
 			    	LocalStorage.setAuditTimeLimit(cutOffTime);
 
 			    	var gpsTimer = (response.ProcessVariables.gpsCutOffTime || 1) * 1000;
-			    	inswit.TIMEOUT = parseInt(gpsTimer / 5); // Browser & GPS timeout configuration.
-			    	LocalStorage.setGpsTimeOut(inswit.TIMEOUT);
+			    	//inswit.TIMEOUT = parseInt(gpsTimer / 5); // Browser & GPS timeout configuration.
+					inswit.TIMEOUT = gpsTimer;
+					LocalStorage.setGpsTimeOut(inswit.TIMEOUT);
 			    	LocalStorage.setNetworkGpsTimeout(inswit.TIMEOUT); // Mobile Network Timeout configuration.
 
                     var assertQrcodeDetails = response.ProcessVariables.assertQrcodeDetails || "";
