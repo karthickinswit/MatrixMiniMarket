@@ -273,55 +273,8 @@ define([
 			};
 			inswit.getLatLng(callback, options, false);
 
-		},
-
-		logGPSError: function(auditId, storeId, error) {
-			//this.$(".upload_container").show();
-			//inswit.hideLoaderEl();
-            var that = this;
-			
-			var pVariables = {
-			    "projectId":inswit.ERROR_LOG.projectId,
-			    "workflowId":inswit.ERROR_LOG.workflowId,
-			    "processId":inswit.ERROR_LOG.processId,
-			    "ProcessVariables":{
-			    	"isSellerAudit": inswit.ISSELLERAUDIT,
-			    	"errorType": inswit.ERROR_LOG_TYPES.GPS_FAIL,
-			    	"auditId": auditId, 
-			    	"storeId": storeId,
-			    	"empId":LocalStorage.getEmployeeId(),
-			    	"issueDate":new Date(),
-			    	"issueDescription": JSON.stringify(error),
-			    	"version": inswit.VERSION
-			    }
-			};
-
-			inswit.executeProcess(pVariables, {
-			    success: function(response){
-			    	if(response.ProcessVariables){
-			    		
-			    	}
-                }, failure: function(error){
-					//inswit.hideLoaderEl();
-					populateErrorLogTable(db, auditId, storeId, error);
-                	switch(error){
-                		case 0:{
-                		    inswit.alert("No internet connection, please enable");
-                			break;
-                		}
-                		case 1:{
-                			inswit.alert("Check your network settings!");
-                			break;
-                		}
-                		case 2:{
-                			inswit.alert("Server Busy.Try Again!");
-                			break;
-                		}
-                	}
-                }
-            });
-		},
-
+		}
+		
 	});
 
 	return AuditDetails;

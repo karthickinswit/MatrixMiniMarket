@@ -516,7 +516,6 @@ var inswit = {
 						console.log('imei', imei)
 						callback(imei);
 					});
-
 				}else {
 					inswit.alert("Login Failed.Try Again!");
 					inswit.hideLoaderEl();

@@ -3,6 +3,8 @@ package dk.kapetanovic.imei;
 import android.Manifest;
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.media.MediaDrm;
+import android.provider.Settings;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 
@@ -16,7 +18,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.UUID;
 
 public class ImeiPlugin extends CordovaPlugin {
     private static final String READ_PHONE_STATE = Manifest.permission.READ_PHONE_STATE;
@@ -87,7 +91,9 @@ public class ImeiPlugin extends CordovaPlugin {
     }
 
     private void getDeviceIdWithPermission(CallbackContext callbackContext) throws JSONException {
-        String id = telephonyManager.getDeviceId();
+        String id = getUniqueID();
+        System.out.println("Unique Id******$$$$$$"+id);
+
         callbackContext.sendPluginResult(OK(id));
     }
 
@@ -108,4 +114,21 @@ public class ImeiPlugin extends CordovaPlugin {
         json.put("data", obj == null ? JSONObject.NULL : obj);
         return new PluginResult(status, json);
     }
+
+
+    String getUniqueID() {
+        UUID wideVineUuid = new UUID(-0x121074568629b532L, -0x5c37d8232ae2de13L);
+        try {
+            MediaDrm wvDrm = new MediaDrm(wideVineUuid);
+            byte[] wideVineId = wvDrm.getPropertyByteArray(MediaDrm.PROPERTY_DEVICE_UNIQUE_ID);
+            return Arrays.toString(wideVineId);
+        } catch (Exception e) {
+            // Inspect exception
+            return null;
+        }
+        // Close resources with close() or release() depending on platform API
+        // Use ARM on Android P platform or higher, where MediaDrm has the close() method
+    }
+
 }
+

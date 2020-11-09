@@ -748,6 +748,7 @@ define([
 							var id = audit.item(0).id;
 							var latitude = audit.item(0).lat;
 							var longitude = audit.item(0).lng;
+							var accuracy = audit.item(0).accuracy;
 
 							var processVariables = {
 								"projectId":inswit.UPLOAD_PROCESS.projectId,
@@ -765,7 +766,8 @@ define([
 									"longitude": longitude,
 									"storeImage":storeImage,
 									"updateStorePosition": updateStorePosition,
-									"version":inswit.VERSION
+									"version":inswit.VERSION,
+									"accuracy": accuracy
 								}
 							};
 

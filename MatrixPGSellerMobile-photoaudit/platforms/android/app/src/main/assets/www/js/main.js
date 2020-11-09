@@ -209,7 +209,7 @@ function handleLocationAuthorizationStatus(status) {
         case cordova.plugins.diagnostic.permissionStatus.GRANTED_WHEN_IN_USE:
             // iOS only
             onError("Location services is already switched ON");
-            _makeRequest();
+           // _makeRequest();
             break;
     }
 }
@@ -252,15 +252,21 @@ function onOffline() {
 }
  
 function onOnline() {
-    alert('You are now online!');
-    getErrorLog(db, function(result){
-        for(var i = 0; i < result.length; i++){
-            console.log("DB result"+ result);
-            var auditId = result[0].audit_id;
-            var storeId = result[0].store_id;
-            var error = result[0].error;
-            inswit.logGPSError(auditId, storeId, error);
+   // alert('You are now online!');
+   var tableName = "mxpg_error_log";
+   isTableExist(tableName, function(result) {
+       var length = result.rows.length;
+       if(length == 1) {
+            getErrorLog(db, function(result){
+                for(var i = 0; i < result.length; i++){
+                    console.log("DB result"+ result);
+                    var auditId = result[0].audit_id;
+                    var storeId = result[0].store_id;
+                    var error = result[0].error;
+                    inswit.logGPSError(auditId, storeId, error);
+                }
+            });
         }
-    })
+   });
  }
  
