@@ -25,6 +25,10 @@ define([
 		startAudit: function(mId){
 			var that = this;
 
+			var pos = this.model.get("pos");
+			console.log("position"+pos.lat);
+
+
 			var id = mId.split("-");
             var auditId = id[0];
             var storeId = id[1];
@@ -99,6 +103,13 @@ define([
 			var name = this.$el.find(".audit_name").val() || "";
 			var phoneNumber = this.$el.find(".audit_number").val() || "";
 
+			var mId = $(event.currentTarget).attr("href");
+			var id = mId.split("-");
+			var auditId = id[0];
+			var storeId = id[1];
+			var channelId = id[2];
+			var position = this.model.get("pos");
+
 			/*if(!name) {
 				alert("Please enter spoc name");
 				return;
@@ -136,10 +147,7 @@ define([
 	            }else{
 	            	setTimeout(function(){
 						
-						var mId = $(event.currentTarget).attr("href");
-						var id = mId.split("-");
-			            var auditId = id[0];
-			            var storeId = id[1];
+			
 			            //var channelId = id[2];
 
 			            var dist = getDistributor(db, auditId, storeId, function(distributor){
@@ -190,13 +198,15 @@ define([
 								audit.optionId = auditStatus;
 								audit.signImage = "";
 								audit.storeImage = image;
-								audit.lat = "";
-								audit.lng = "";
+								audit.lat = position.lat;
+								audit.lng = position.lng;
 								audit.storeImageId = "";
 								audit.signImageId = "";
 								audit.auditerName = name;
 								audit.phoneNumber = phoneNumber;
 								audit.allottedAuditId = allottedAuditId;
+								audit.accuracy = position.accuracy;
+
 								
 
 								/**
@@ -206,8 +216,8 @@ define([
 								 */
 								selectCompletedAudit(db, mId, function(auditDetails){
 									if(auditDetails && auditDetails.length > 0 && auditDetails.item(0).lat){
-										audit.lat = auditDetails.item(0).lat;
-										audit.lng = auditDetails.item(0).lng;
+										// audit.lat = auditDetails.item(0).lat;
+										// audit.lng = auditDetails.item(0).lng;
 
 										populateCompAuditTable(db, audit, function(){
 						                    //that.startTimer(storeId);
@@ -231,7 +241,7 @@ define([
 									            });
 //											 }
 											
-											that.setGeoLocation(auditId, storeId);
+											//that.setGeoLocation(auditId, storeId);
 										//	$(".android").mask("Capturing Geolocation... Please wait...", 100);
 
 										}, function(a, e){
@@ -329,13 +339,15 @@ define([
 							audit.optionId = auditStatus;
 							audit.storeImage = image || "";
 							audit.signImage = "";
-							audit.lat = "";
-							audit.lng = "";
+							audit.lat = position.lat;
+							audit.lng = position.lng;
 							audit.storeImageId = "";
 							audit.signImageId = "";
 						    audit.auditerName = name;
                             audit.phoneNumber = phoneNumber;
-                            audit.allottedAuditId = allottedAuditId;
+							audit.allottedAuditId = allottedAuditId;
+							audit.accuracy = position.accuracy;
+
 
 							//Completed products need to cleared for audit status changed from 'YES' to 'NO'.
 							clearCompProducts(db, auditId, storeId, function(){
@@ -347,8 +359,8 @@ define([
 								 */
 								selectCompletedAudit(db, mId, function(auditDetails){
 									if(auditDetails && auditDetails.length > 0 && auditDetails.item(0).lat){
-										audit.lat = auditDetails.item(0).lat;
-										audit.lng = auditDetails.item(0).lng;
+										// audit.lat = auditDetails.item(0).lat;
+										// audit.lng = auditDetails.item(0).lng;
 
 										populateCompAuditTable(db, audit, function(){
 											router.navigate("/audits/"+ mId + "/upload", {
@@ -373,7 +385,7 @@ define([
                                                 });
 //											}
 										
-											that.setGeoLocation(auditId, storeId);
+											//that.setGeoLocation(auditId, storeId);
 //											$(".android").mask("Capturing Geolocation... Please wait...", 100);
 
 										}, function(a, e){
@@ -454,16 +466,23 @@ define([
 			var id = mId.split("-");
             var auditId = id[0];
             var storeId = id[1];
-            //var channelId = id[2];
+			//var channelId = id[2];
+			var pos = this.model.get("pos");
+			selectCompletedAudit(db, mId, function(data){
+				var auditData = data[0];
+				var lat = pos.lat;
+				var lng = pos.lng;
 
-            getStoreCode(db, storeId, function(storeCode){
-            	var callback = function(imageURI){
-					that.refreshScroll("continue_audit_wrapper");
-				}
+				getStoreCode(db, storeId, function(storeCode){
+					var callback = function(imageURI){
+						that.refreshScroll("continue_audit_wrapper");
+					}
 
-				var takeEl = "take_store_photo";
-				var retakeEl = "retake_store_photo";
-				inswit.takePicture(callback, takeEl, retakeEl, storeCode);
+					var takeEl = "take_store_photo";
+					var retakeEl = "retake_store_photo";
+					storeCode = storeCode + "Z" + "Lat: "+ lat + "Z" + "Lng: "+lng;
+					inswit.takePicture(callback, takeEl, retakeEl, storeCode);
+				});
 			});
 		},
 

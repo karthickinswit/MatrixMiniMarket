@@ -1124,12 +1124,19 @@ public class CameraLauncher extends CordovaPlugin implements MediaScannerConnect
             
             try {
                 if(superImposeTimeStamp) {
+                    
+                    String lat= "";
+                    String lng= "";
+
 
                     SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yy HH:mm:ss");
                     String text = sdf.format(Calendar.getInstance().getTime()); // reading local time in the system
 
                     if(!superImposeText.isEmpty()) {
-                        text = text + " - " + superImposeText;
+                         String[] arrOfSuperImposeTxt = superImposeText.split("Z", 3); 
+                        text = text + " - " + arrOfSuperImposeTxt[0];
+                        lat = arrOfSuperImposeTxt[1];
+                        lng = arrOfSuperImposeTxt[2];
                     }
 
 //                    Canvas cs = new Canvas(scaledBitmap);
@@ -1155,6 +1162,15 @@ public class CameraLauncher extends CordovaPlugin implements MediaScannerConnect
 
                     float height = tPaint.measureText("yY");
                     cs.drawText(text, 20f, scaledBitmap.getHeight() - (height+5f), tPaint);
+
+                    tPaint.setTextSize(30);
+                    tPaint.setColor(Color.WHITE);
+                    tPaint.setStyle(Paint.Style.FILL);
+
+                    height = tPaint.measureText("yY");
+                    cs.drawText(lat, 20f, 50f, tPaint);
+
+                    cs.drawText(lng, 20f, 100f, tPaint);
 
 
 

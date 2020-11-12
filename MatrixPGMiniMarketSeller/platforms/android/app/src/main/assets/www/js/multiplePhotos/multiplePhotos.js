@@ -90,16 +90,24 @@ define([
                 var storeId = id[1];
                 var channelId = id[2];
 
-                getStoreCode(db, storeId, function(storeCode){
-                  var callback = function(imageURI){
-                      inswit.events.trigger("refreshScroll");
-                  }
+                selectCompletedAudit(db, mId, function(data){
+                    var auditData = data[0];
+                    var lat = auditData.lat;
+                    var lng = auditData.lng;
+    
+                    getStoreCode(db, storeId, function(storeCode){
+                    var callback = function(imageURI){
+                        inswit.events.trigger("refreshScroll");
+                    }
 
-                  var takeEl = "take_product_photo";
-                  var retakeEl = "retake_product_photo";
-                  inswit.takePicture(callback, takeEl, retakeEl, storeCode, parentsEl);
-                  that.$el.find(".execution_checkbox").attr("disabled", true);
+                    var takeEl = "take_product_photo";
+                    var retakeEl = "retake_product_photo";
+                    storeCode = storeCode + "Z" + "Lat: "+ lat + "Z" + "Lng: "+lng;
+
+                    inswit.takePicture(callback, takeEl, retakeEl, storeCode, parentsEl);
+                    that.$el.find(".execution_checkbox").attr("disabled", true);
                 });
+            });
           },
 
           nonExecutionBrand: function() {

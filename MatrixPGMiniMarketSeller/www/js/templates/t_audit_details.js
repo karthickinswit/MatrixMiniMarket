@@ -64,7 +64,7 @@ define([],function(){
                                 </tr>\
                                 <tr>\
                                     <td colspan="3">\
-                                    <a href="#audits/{{mId}}/continue" id="{{id}}" class="start_audit btn btn-danger">Start Audit</a></td>\
+                                    <button  href="{{mId}}" class="start_audit btn btn-danger">Start Audit</button></td>\
                                 </tr>\
                             </table>\
                         </div>\

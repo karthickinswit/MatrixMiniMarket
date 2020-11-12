@@ -36,7 +36,7 @@ define(["backbone", "bootstrap", "mustache"], function() {
 	        "register" : "showRegister",
             "audits" : "getAuditList",
             "audits/:id" : "showAuditDetails",
-            "audits/:id/continue" : "startAudit",
+            "audits/:id/continue/:pos" : "startAudit",
             "audits/:id/categoryList" : "showCategory",
             "audits/:id/products" : "showProducts",
             "audits/:id/category/:id/brands" : "showBrands",
@@ -122,7 +122,7 @@ define(["backbone", "bootstrap", "mustache"], function() {
             $(".timer_container").hide();
         },
 
-        startAudit: function(mId){
+        startAudit: function(mId, pos){
             var that = this;
 
 //            var callback = function(time, noInternet){
@@ -135,9 +135,12 @@ define(["backbone", "bootstrap", "mustache"], function() {
 
                 LocalStorage.setServerTime(mId, time);
 
+                var position = JSON.parse(pos);
+
                 require(["initAudit"], function(InitAudit) {
                     var InitAuditModel = new InitAudit.Model({
-                        "mId":mId
+                        "mId":mId,
+                        "pos": position
                     });
                     var InitAuditView = new InitAudit.View({
                         model: InitAuditModel

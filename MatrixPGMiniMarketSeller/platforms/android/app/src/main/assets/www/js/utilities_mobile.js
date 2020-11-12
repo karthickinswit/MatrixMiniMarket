@@ -136,7 +136,7 @@ var inswit = {
 	//To this distributor photo is not mandatory
 	DISTRIBUTOR: 33,
 
-	TIMEOUT: 100000,
+	TIMEOUT: 3000,
 
 	MAXIMUM_AGE: 10000,
 
@@ -557,6 +557,18 @@ var inswit = {
 	 */
 	getLatLng: function(callback, options, retry){
 		var that = this;
+
+		options = {
+			enableHighAccuracy:true,
+			maximumAge:inswit.MAXIMUM_AGE,
+			timeout: inswit.TIMEOUT,
+			priority: inswit.PRIORITY.PRIORITY_HIGH_ACCURACY,
+			fastInterval: 1000
+		};
+
+		that.getLatLngUsingLocationServices(callback, options, false);
+
+		return;
 		
 		if(navigator.geolocation) {
 		    navigator.geolocation.getCurrentPosition(
@@ -626,20 +638,21 @@ var inswit = {
 				return;
 
 			}, function(error) {
+				callback(error);
 				if(retry){
 					
 					callback("");
 					return;
 				}
 
-		    	options = {
-		    		enableHighAccuracy:true,
-			    	maximumAge:inswit.MAXIMUM_AGE,
-		    		timeout:inswit.TIMEOUT,
-			    	priority: inswit.PRIORITY.PRIORITY_HIGH_ACCURACY
-				};
+		    	// options = {
+		    	// 	enableHighAccuracy:true,
+			    // 	maximumAge:inswit.MAXIMUM_AGE,
+		    	// 	timeout:inswit.TIMEOUT,
+			    // 	priority: inswit.PRIORITY.PRIORITY_HIGH_ACCURACY
+				// };
 
-				that.getLatLngUsingLocationServices(callback, options, true);
+				// that.getLatLngUsingLocationServices(callback, options, true);
 
 		    }, options);
 	},
@@ -1426,5 +1439,58 @@ var inswit = {
     getFormattedDateTime: function(date) {
         var formatDate = date = date.getDate() + "-" + (date.getMonth() + 1) + "-" + date.getFullYear() + " " + date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds();
         return formatDate;
-    }
+	},
+	
+	logGPSError: function(auditId, storeId, gpsError) {
+		//this.$(".upload_container").show();
+		//inswit.hideLoaderEl();
+		var that = this;
+
+		this.auditId = auditId;
+		this.storeId = storeId;
+		this.errorDesc = gpsError;
+		
+		var pVariables = {
+			"projectId":inswit.ERROR_LOG.projectId,
+			"workflowId":inswit.ERROR_LOG.workflowId,
+			"processId":inswit.ERROR_LOG.processId,
+			"ProcessVariables":{
+			//	"isSellerAudit": inswit.ISSELLERAUDIT,
+				"errorType": inswit.ERROR_LOG_TYPES.GPS_FAIL,
+				"auditId": this.auditId, 
+				"storeId": this.storeId,
+				"empId":LocalStorage.getEmployeeId(),
+				"issueDate":new Date(),
+				"issueDescription": JSON.stringify(this.errorDesc),
+				"version": inswit.VERSION
+			}
+		};
+
+		inswit.executeProcess(pVariables, {
+			success: function(response){
+				if(response.ProcessVariables){
+					removeErrorLog(db, that.auditId, that.storeId);
+				}
+			}, failure: function(error){
+				//inswit.hideLoaderEl();
+				populateErrorLogTable(db, auditId, storeId, JSON.stringify(gpsError), function(result){
+				}, function(error){
+				});
+				switch(error){
+					case 0:{
+						inswit.alert("No internet connection, please enable");
+						break;
+					}
+					case 1:{
+						inswit.alert("Check your network settings!");
+						break;
+					}
+					case 2:{
+						inswit.alert("Server Busy.Try Again!");
+						break;
+					}
+				}
+			}
+		});
+	},
 };

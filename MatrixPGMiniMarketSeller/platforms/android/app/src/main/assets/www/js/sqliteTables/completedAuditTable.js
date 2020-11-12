@@ -771,3 +771,29 @@ function selectCompletedSGF(db, auditId, storeId, callback, error) {
 
 
  //group by image_uri
+
+ /**
+ * This method Select one record from Completed Audit table.
+ * @param  {object} db
+ * @param  {json} auditId
+ * @param  {function} callback function
+ */
+
+function selectCompletedAudit(db, mId, callback, error) {
+    var id = mId.split("-");
+    var auditId = id[0];
+    var storeId = id[1];
+    var channelId = id[2];
+
+    var query = 'SELECT * FROM mxpg_comp_audits WHERE audit_id=? AND store_id=?';
+    
+    db.transaction(function(tx){
+        tx.executeSql(query, [auditId, storeId], function(tx, response){
+            callback(response.rows);
+        }, function(a, e){
+            if(error){
+                error(a, e);
+            }
+        });
+    });
+}

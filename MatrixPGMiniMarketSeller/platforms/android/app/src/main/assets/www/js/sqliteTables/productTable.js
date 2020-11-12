@@ -206,3 +206,12 @@ function getBrandId(db, channelId, categoryId, fn) {
         });
     });
 }
+
+function isTableExist(db, tableName, fn) {
+    var query = "SELECT name FROM sqlite_master WHERE type='table' AND name= ?" ;
+    db.transaction(function(tx){
+        tx.executeSql(query , [tableName], function(tx, response) {
+            fn(response);
+        });
+    });
+}
