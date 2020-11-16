@@ -280,7 +280,7 @@ define([
 		takePhoto: function(parentsEl) {
             var that = this;
 
-            var mId = $(".product_done").attr("href");
+            var mId = $(".complete_audit").attr("href");
 
             var time = inswit.getCurrentTime();
             time = inswit.getFormattedDateTime(time);

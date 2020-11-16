@@ -149,18 +149,18 @@
     "is_top_level": true,
     "variables": {}
   },
-  "cordova-plugin-android-imei": {
-    "source": {
-      "type": "registry",
-      "id": "cordova-plugin-android-imei"
-    },
-    "is_top_level": true,
-    "variables": {}
-  },
   "cordova-plugin-camera": {
     "source": {
       "type": "local",
       "path": "/media/christus/9cfe9003-fd7a-4a1b-b8e6-759076d91f2e/matrix/checkin/MatrixPGMiniMarketSeller/node_modules/cordova-plugin-camera"
+    },
+    "is_top_level": true,
+    "variables": {}
+  },
+  "cordova-plugin-android-imei": {
+    "source": {
+      "type": "local",
+      "path": "/Users/christusvalerian/Documents/Matrix/MatrixPGMiniMarketSeller/node_modules/cordova-plugin-android-imei"
     },
     "is_top_level": true,
     "variables": {}

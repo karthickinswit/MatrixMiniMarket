@@ -10,10 +10,6 @@
     <feature name="AdvancedGeolocation">
         <param name="android-package" value="com.esri.cordova.geolocation.AdvancedGeolocation" />
     </feature>
-    <feature name="ImeiPlugin">
-        <param name="android-package" value="dk.kapetanovic.imei.ImeiPlugin" />
-        <param name="onload" value="true" />
-    </feature>
     <feature name="Camera">
         <param name="android-package" value="org.apache.cordova.camera.CameraLauncher" />
     </feature>
@@ -53,6 +49,10 @@
     </feature>
     <feature name="BarcodeScanner">
         <param name="android-package" value="com.phonegap.plugins.barcodescanner.BarcodeScanner" />
+    </feature>
+    <feature name="ImeiPlugin">
+        <param name="android-package" value="dk.kapetanovic.imei.ImeiPlugin" />
+        <param name="onload" value="true" />
     </feature>
     <feature name="RequestLocationAccuracy">
         <param name="android-package" value="cordova.plugin.RequestLocationAccuracy" />

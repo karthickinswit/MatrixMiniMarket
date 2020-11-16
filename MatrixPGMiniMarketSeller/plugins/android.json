@@ -16,9 +16,6 @@
     "cordova-plugin-advanced-geolocation": {
       "PACKAGE_NAME": "com.appiyo.matrix_mini_market_seller"
     },
-    "cordova-plugin-android-imei": {
-      "PACKAGE_NAME": "com.appiyo.matrix_mini_market_seller"
-    },
     "cordova-plugin-androidx": {
       "PACKAGE_NAME": "com.appiyo.matrix_mini_market_seller"
     },
@@ -69,6 +66,9 @@
     },
     "phonegap-plugin-barcodescanner": {
       "ANDROID_SUPPORT_V4_VERSION": "27.+",
+      "PACKAGE_NAME": "com.appiyo.matrix_mini_market_seller"
+    },
+    "cordova-plugin-android-imei": {
       "PACKAGE_NAME": "com.appiyo.matrix_mini_market_seller"
     }
   },

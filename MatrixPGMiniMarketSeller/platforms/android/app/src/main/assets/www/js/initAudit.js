@@ -267,6 +267,7 @@ define([
 
 			var name = this.$el.find(".audit_name").val() || "";
 			var phoneNumber = this.$el.find(".audit_number").val() || "";
+			var position = this.model.get("pos");
 
 		/*	if(!name) {
 				alert("Please enter your name");

@@ -754,6 +754,7 @@ define([
 							var id = audit.item(0).id;
 							var latitude = audit.item(0).lat;
 							var longitude = audit.item(0).lng;
+							var accuracy = audit.item(0).accuracy;
 							var allotAuditId = audit.item(0).month_audit_id;
 
 							var processVariables = {
@@ -774,7 +775,8 @@ define([
 									"storeImage":storeImage,
 									"updateStorePosition": updateStorePosition,
 									"version":inswit.VERSION,
-									"mobileAuditId": allotAuditId
+									"mobileAuditId": allotAuditId,
+									"accuracy": accuracy
 								}
 							};
 

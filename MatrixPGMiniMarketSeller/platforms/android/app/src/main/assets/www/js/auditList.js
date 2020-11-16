@@ -129,7 +129,13 @@ define([
 			    		}
 			    	}
 			    	var cutOffTime = response.ProcessVariables.cutOffTime;
-                    LocalStorage.setAuditTimeLimit(cutOffTime);
+					LocalStorage.setAuditTimeLimit(cutOffTime);
+					
+					var gpsTimer = (response.ProcessVariables.gpsCutOffTime || 1) * 1000;
+			    	//inswit.TIMEOUT = parseInt(gpsTimer / 5); // Browser & GPS timeout configuration.
+					inswit.TIMEOUT = gpsTimer;
+					LocalStorage.setGpsTimeOut(inswit.TIMEOUT);
+
 
                     var storeEndDateExtend = response.ProcessVariables.storeEndDateExtend;
                     populateAuditDateRange(db, storeEndDateExtend);

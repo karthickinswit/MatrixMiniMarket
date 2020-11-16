@@ -138,7 +138,7 @@ var inswit = {
 
 	TIMEOUT: 3000,
 
-	MAXIMUM_AGE: 10000,
+	MAXIMUM_AGE: 0,
 
 	TIMER: 0,
 
@@ -183,7 +183,8 @@ var inswit = {
 		DB_CREATION: "DB_CREATION",
 		DB_UPDATION: "DB_UPDATION",
 		UPLOAD_AUDIT: "UPLOAD_AUDIT",
-		UPDATE_MASTER: "UPDATE_MASTER"
+		UPDATE_MASTER: "UPDATE_MASTER",
+		GPS_FAIL: "GPS_CAPTURE_FAIL"
 	},
 
 	FIELD_TYPES: {
@@ -561,9 +562,8 @@ var inswit = {
 		options = {
 			enableHighAccuracy:true,
 			maximumAge:inswit.MAXIMUM_AGE,
-			timeout: inswit.TIMEOUT,
+			timeout: LocalStorage.getGpsTimeOut(),
 			priority: inswit.PRIORITY.PRIORITY_HIGH_ACCURACY,
-			fastInterval: 1000
 		};
 
 		that.getLatLngUsingLocationServices(callback, options, false);
@@ -631,7 +631,8 @@ var inswit = {
 			function(position) {
 				var pos = {
 					lat: position.coords.latitude || "",
-					lng: position.coords.longitude || ""
+					lng: position.coords.longitude || "",
+					accuracy: position.coords.accuracy || ""
 				};
 					
 				callback(pos);
@@ -1451,9 +1452,9 @@ var inswit = {
 		this.errorDesc = gpsError;
 		
 		var pVariables = {
-			"projectId":inswit.ERROR_LOG.projectId,
-			"workflowId":inswit.ERROR_LOG.workflowId,
-			"processId":inswit.ERROR_LOG.processId,
+			"projectId":inswit.ERROR_LOG_UPLOAD.projectId,
+			"workflowId":inswit.ERROR_LOG_UPLOAD.workflowId,
+			"processId":inswit.ERROR_LOG_UPLOAD.processId,
 			"ProcessVariables":{
 			//	"isSellerAudit": inswit.ISSELLERAUDIT,
 				"errorType": inswit.ERROR_LOG_TYPES.GPS_FAIL,

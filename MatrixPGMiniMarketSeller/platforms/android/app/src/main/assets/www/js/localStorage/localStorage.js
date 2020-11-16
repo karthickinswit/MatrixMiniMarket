@@ -119,6 +119,15 @@ var LocalStorage = {
 
     removeLoginStatus: function() {
         localStorage.removeItem("loginDone");
-    }
+    },
+
+    setGpsTimeOut: function(time) {
+      localStorage.setItem("gpsTimeout", time);
+    },
+
+    getGpsTimeOut: function() {
+        return parseInt(localStorage.getItem("gpsTimeout"));
+    },
+
 
 };
