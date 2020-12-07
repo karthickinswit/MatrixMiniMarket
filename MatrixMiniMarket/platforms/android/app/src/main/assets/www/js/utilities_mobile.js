@@ -92,7 +92,13 @@ var inswit = {
         "projectId":PROJECTID,
         "workflowId":"c33bd4a78755407ba70352624144de7c",
         "processId":"935ec05204224e53bcac63f6d84813bd"
-    },
+	},
+	
+	REGISTER_PROCESS: {
+		"projectId":PROJECTID,
+		"workflowId":"4242ac00daee11eaa360c282e0885855",
+		"processId":"426bc4d2daee11eaa360c282e0885855"
+	},
 
 
 	//Don't change the order.
@@ -500,11 +506,11 @@ var inswit = {
                if(response.token) {
                		LocalStorage.setAccessToken(response.token);
 
-					cordova.plugins.IMEI(function (err, imei) {
-						console.log('imei', imei)
-						callback(imei);
-					});
-					  
+					// cordova.plugins.IMEI(function (err, imei) {
+					// 	console.log('imei', imei)
+					// 	callback(imei);
+					// });
+					callback();
 
 				}else {
 					inswit.alert("Login Failed.Try Again!");

@@ -339,3 +339,16 @@ table.table-bordered > tbody > tr > td{
 .non_co_auditer {
     text-align: center;
 }
+.register_padding_top{
+  padding-top: 76% !important;
+}
+.unique_text{
+  font-size: 18px;
+  color: #000;
+  font-style: italic;
+}
+.uuid_txt {
+  color: #000;
+  font-weight: bold;
+  font-size: 32px;
+}

@@ -46,7 +46,8 @@ define(["backbone", "bootstrap", "mustache"], function() {
             "audits/:id/upload" : "onUploadAudit",
             "audits/:id/category/:id/SOD" : "openSOD",
             "holistic/:id": "openHolisticScreen",
-            "signature/:id": "showSignatureScreen"
+            "signature/:id": "showSignatureScreen",
+            "register" : "showRegister",
             /* "audits/upload" : "uploadAll"*/
         },
 
@@ -459,7 +460,20 @@ define(["backbone", "bootstrap", "mustache"], function() {
 
             $("#content").empty().append(view.$el);
             this.currentView = view;
+        },
+
+
+        showRegister: function() {
+            var that = this;
+            require(["register"], function(RegisterUniqueId){
+                var registerModel = new RegisterUniqueId.Model({});
+                var registerView = new RegisterUniqueId.View({model:registerModel});
+
+                registerView.render();
+                that.appendView(registerView);
+            });
         }
+
 
     });
     return Router;
