@@ -346,9 +346,15 @@ table.table-bordered > tbody > tr > td{
   font-size: 18px;
   color: #000;
   font-style: italic;
+  background-color: black;
+  color: #fff;
+  display: inline;
+  padding: 0.5rem;
+  -webkit-box-decoration-break: clone;
 }
 .uuid_txt {
   color: #000;
   font-weight: bold;
   font-size: 32px;
+  
 }

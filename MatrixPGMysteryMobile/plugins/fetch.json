@@ -71,14 +71,6 @@
     "is_top_level": true,
     "variables": {}
   },
-  "cordova-plugin-android-imei": {
-    "source": {
-      "type": "registry",
-      "id": "cordova-plugin-android-imei@^1.0.0"
-    },
-    "is_top_level": true,
-    "variables": {}
-  },
   "cordova-plugin-advanced-geolocation": {
     "source": {
       "type": "registry",
@@ -147,6 +139,14 @@
     "source": {
       "type": "registry",
       "id": "cordova-plugin-request-location-accuracy"
+    },
+    "is_top_level": true,
+    "variables": {}
+  },
+  "cordova-plugin-android-imei": {
+    "source": {
+      "type": "local",
+      "path": "/Users/christusvalerian/Documents/Matrix/MatrixPGMysteryMobile/node_modules/cordova-plugin-android-imei"
     },
     "is_top_level": true,
     "variables": {}

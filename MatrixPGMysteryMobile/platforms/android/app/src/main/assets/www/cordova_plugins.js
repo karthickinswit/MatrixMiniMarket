@@ -279,14 +279,6 @@ cordova.define('cordova/plugin_list', function(require, exports, module) {
       ]
     },
     {
-      "id": "cordova-plugin-android-imei.IMEI",
-      "file": "plugins/cordova-plugin-android-imei/www/index.js",
-      "pluginId": "cordova-plugin-android-imei",
-      "clobbers": [
-        "cordova.plugins.IMEI"
-      ]
-    },
-    {
       "id": "cordova-plugin-advanced-geolocation.AdvancedGeolocation",
       "file": "plugins/cordova-plugin-advanced-geolocation/www/AdvancedGeolocation.js",
       "pluginId": "cordova-plugin-advanced-geolocation",
@@ -505,6 +497,14 @@ cordova.define('cordova/plugin_list', function(require, exports, module) {
       "clobbers": [
         "cordova.plugins.locationAccuracy"
       ]
+    },
+    {
+      "id": "cordova-plugin-android-imei.IMEI",
+      "file": "plugins/cordova-plugin-android-imei/www/index.js",
+      "pluginId": "cordova-plugin-android-imei",
+      "clobbers": [
+        "cordova.plugins.IMEI"
+      ]
     }
   ];
   module.exports.metadata = {
@@ -517,7 +517,6 @@ cordova.define('cordova/plugin_list', function(require, exports, module) {
     "cordova-plugin-network-information": "2.0.2",
     "cordova-plugin-splashscreen": "6.0.0",
     "cordova-plugin-file-transfer": "1.7.1",
-    "cordova-plugin-android-imei": "1.0.0",
     "cordova-plugin-advanced-geolocation": "1.1.0",
     "cordova-plugin-locationservices": "2.1.0",
     "org.apache.cordova.geolocation": "0.3.6",
@@ -526,6 +525,7 @@ cordova.define('cordova/plugin_list', function(require, exports, module) {
     "cordova-plugin-androidx": "2.0.0",
     "cordova-plugin-androidx-adapter": "1.1.1",
     "phonegap-plugin-barcodescanner": "8.1.0",
-    "cordova-plugin-request-location-accuracy": "2.3.0"
+    "cordova-plugin-request-location-accuracy": "2.3.0",
+    "cordova-plugin-android-imei": "1.0.0"
   };
 });

@@ -83,6 +83,7 @@ define([
 
 		continueAudit: function(event){
 			var that = this;
+			requestLocationAccuracy();
 			//var name = this.$el.find(".audit_name").val();
             //var phoneNumber = this.$el.find(".audit_number").val();
 

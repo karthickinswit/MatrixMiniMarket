@@ -31,10 +31,6 @@
     <feature name="FileTransfer">
         <param name="android-package" value="org.apache.cordova.filetransfer.FileTransfer" />
     </feature>
-    <feature name="ImeiPlugin">
-        <param name="android-package" value="dk.kapetanovic.imei.ImeiPlugin" />
-        <param name="onload" value="true" />
-    </feature>
     <feature name="AdvancedGeolocation">
         <param name="android-package" value="com.esri.cordova.geolocation.AdvancedGeolocation" />
     </feature>
@@ -50,6 +46,10 @@
     </feature>
     <feature name="BarcodeScanner">
         <param name="android-package" value="com.phonegap.plugins.barcodescanner.BarcodeScanner" />
+    </feature>
+    <feature name="ImeiPlugin">
+        <param name="android-package" value="dk.kapetanovic.imei.ImeiPlugin" />
+        <param name="onload" value="true" />
     </feature>
     <feature name="Diagnostic">
         <param name="android-package" value="cordova.plugins.Diagnostic" />
@@ -86,13 +86,7 @@
     <feature name="RequestLocationAccuracy">
         <param name="android-package" value="cordova.plugin.RequestLocationAccuracy" />
     </feature>
-    <name>HelloCordova</name>
-    <description>
-        A sample Apache Cordova application that responds to the deviceready event.
-    </description>
-    <author email="dev@cordova.apache.org" href="http://cordova.io">
-        Apache Cordova Team
-    </author>
+    <name>Matrix mystery</name>
     <content src="index.html" />
     <access origin="*" />
     <allow-intent href="http://*/*" />
@@ -102,6 +96,8 @@
     <allow-intent href="mailto:*" />
     <allow-intent href="geo:*" />
     <allow-intent href="market:*" />
+    <icon src="res/android/icon.png" />
+    <splash src="res/android/screen.png" />
     <preference name="loglevel" value="DEBUG" />
     <preference name="android-minSdkVersion" value="23" />
 </widget>

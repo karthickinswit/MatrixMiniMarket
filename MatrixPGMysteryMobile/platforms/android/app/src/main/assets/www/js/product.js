@@ -82,6 +82,16 @@ define([
 		},
 
 		back: function(){
+            var mId = this.model.get("mId");
+
+            var isSelfieContainer = $(".upload_container");
+            console.log("isSelfieContainer length"+ isSelfieContainer.length);
+            if(isSelfieContainer.length == 1) {
+                location.reload();
+                return;
+            }
+          
+
 			window.history.back();
 		},
 

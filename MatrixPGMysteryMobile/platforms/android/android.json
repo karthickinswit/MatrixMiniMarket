@@ -49,14 +49,6 @@
               "count": 1
             },
             {
-              "xml": "<preference name=\"android-minSdkVersion\" value=\"23\" />",
-              "count": 1
-            },
-            {
-              "xml": "<feature name=\"ImeiPlugin\"><param name=\"android-package\" value=\"dk.kapetanovic.imei.ImeiPlugin\" /><param name=\"onload\" value=\"true\" /></feature>",
-              "count": 1
-            },
-            {
               "xml": "<feature name=\"AdvancedGeolocation\"><param name=\"android-package\" value=\"com.esri.cordova.geolocation.AdvancedGeolocation\" /></feature>",
               "count": 1
             },
@@ -74,6 +66,14 @@
             },
             {
               "xml": "<feature name=\"BarcodeScanner\"><param name=\"android-package\" value=\"com.phonegap.plugins.barcodescanner.BarcodeScanner\" /></feature>",
+              "count": 1
+            },
+            {
+              "xml": "<preference name=\"android-minSdkVersion\" value=\"23\" />",
+              "count": 1
+            },
+            {
+              "xml": "<feature name=\"ImeiPlugin\"><param name=\"android-package\" value=\"dk.kapetanovic.imei.ImeiPlugin\" /><param name=\"onload\" value=\"true\" /></feature>",
               "count": 1
             }
           ]
@@ -119,10 +119,6 @@
           ],
           "/manifest": [
             {
-              "xml": "<uses-permission android:name=\"android.permission.READ_PHONE_STATE\" />",
-              "count": 1
-            },
-            {
               "xml": "<uses-permission android:name=\"android.permission.INTERNET\" />",
               "count": 1
             },
@@ -144,6 +140,14 @@
             },
             {
               "xml": "<uses-feature android:name=\"android.hardware.camera\" android:required=\"true\" />",
+              "count": 1
+            },
+            {
+              "xml": "<uses-permission android:name=\"android.permission.READ_PHONE_STATE\" />",
+              "count": 1
+            },
+            {
+              "xml": "<uses-permission android:name=\"android.permission.READ_PRIVILEGED_PHONE_STATE\" />",
               "count": 1
             }
           ],
@@ -236,9 +240,6 @@
     "cordova-plugin-file-transfer": {
       "PACKAGE_NAME": "com.appiyo.matrix_mystery"
     },
-    "cordova-plugin-android-imei": {
-      "PACKAGE_NAME": "com.appiyo.matrix_mystery"
-    },
     "cordova-plugin-advanced-geolocation": {
       "PACKAGE_NAME": "com.appiyo.matrix_mystery"
     },
@@ -267,6 +268,9 @@
     },
     "cordova-plugin-request-location-accuracy": {
       "PLAY_SERVICES_LOCATION_VERSION": "16.+",
+      "PACKAGE_NAME": "com.appiyo.matrix_mystery"
+    },
+    "cordova-plugin-android-imei": {
       "PACKAGE_NAME": "com.appiyo.matrix_mystery"
     }
   },
@@ -551,14 +555,6 @@
       ]
     },
     {
-      "id": "cordova-plugin-android-imei.IMEI",
-      "file": "plugins/cordova-plugin-android-imei/www/index.js",
-      "pluginId": "cordova-plugin-android-imei",
-      "clobbers": [
-        "cordova.plugins.IMEI"
-      ]
-    },
-    {
       "id": "cordova-plugin-advanced-geolocation.AdvancedGeolocation",
       "file": "plugins/cordova-plugin-advanced-geolocation/www/AdvancedGeolocation.js",
       "pluginId": "cordova-plugin-advanced-geolocation",
@@ -777,6 +773,14 @@
       "clobbers": [
         "cordova.plugins.locationAccuracy"
       ]
+    },
+    {
+      "id": "cordova-plugin-android-imei.IMEI",
+      "file": "plugins/cordova-plugin-android-imei/www/index.js",
+      "pluginId": "cordova-plugin-android-imei",
+      "clobbers": [
+        "cordova.plugins.IMEI"
+      ]
     }
   ],
   "plugin_metadata": {
@@ -789,7 +793,6 @@
     "cordova-plugin-network-information": "2.0.2",
     "cordova-plugin-splashscreen": "6.0.0",
     "cordova-plugin-file-transfer": "1.7.1",
-    "cordova-plugin-android-imei": "1.0.0",
     "cordova-plugin-advanced-geolocation": "1.1.0",
     "cordova-plugin-locationservices": "2.1.0",
     "org.apache.cordova.geolocation": "0.3.6",
@@ -798,6 +801,7 @@
     "cordova-plugin-androidx": "2.0.0",
     "cordova-plugin-androidx-adapter": "1.1.1",
     "phonegap-plugin-barcodescanner": "8.1.0",
-    "cordova-plugin-request-location-accuracy": "2.3.0"
+    "cordova-plugin-request-location-accuracy": "2.3.0",
+    "cordova-plugin-android-imei": "1.0.0"
   }
 }

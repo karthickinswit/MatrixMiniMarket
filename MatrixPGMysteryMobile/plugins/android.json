@@ -35,9 +35,6 @@
     "cordova-plugin-file-transfer": {
       "PACKAGE_NAME": "com.appiyo.matrix_mystery"
     },
-    "cordova-plugin-android-imei": {
-      "PACKAGE_NAME": "com.appiyo.matrix_mystery"
-    },
     "cordova-plugin-advanced-geolocation": {
       "PACKAGE_NAME": "com.appiyo.matrix_mystery"
     },
@@ -66,6 +63,9 @@
     },
     "cordova-plugin-request-location-accuracy": {
       "PLAY_SERVICES_LOCATION_VERSION": "16.+",
+      "PACKAGE_NAME": "com.appiyo.matrix_mystery"
+    },
+    "cordova-plugin-android-imei": {
       "PACKAGE_NAME": "com.appiyo.matrix_mystery"
     }
   },
