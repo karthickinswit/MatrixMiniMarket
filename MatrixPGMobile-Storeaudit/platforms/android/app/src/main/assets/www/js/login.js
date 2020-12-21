@@ -60,6 +60,7 @@ define([
 
 				var loginToMatrix = function(imei){
 					//imei = "911433805803104"; //Sample IMEI number for testing
+					var uuid = device.uuid;
 					var processVariables = {
 						"projectId":inswit.LOGIN_PROCESS.projectId,
 						"workflowId":inswit.LOGIN_PROCESS.workflowId,
@@ -67,7 +68,7 @@ define([
 						"ProcessVariables":{
 							"email":userName,
 							"password":password, 
-							"imei": imei,
+							"UUID":uuid,
 							"version": inswit.VERSION
 						}
 					};

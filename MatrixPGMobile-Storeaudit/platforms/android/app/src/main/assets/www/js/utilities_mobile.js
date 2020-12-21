@@ -1,7 +1,7 @@
 //var PROJECTID = "1c62737aae0d11e59d090050569cb68c";   //development
-//var PROJECTID = "4f9b261ea32d11e5a9bb0050569ccb08"; //production
+var PROJECTID = "4f9b261ea32d11e5a9bb0050569ccb08"; //production
 //var PROJECTID = "97677c1832bc11e5a9bb0050569ccb08"; //demo
-var PROJECTID = "d27520ec813311e5a9bb0050569ccb08"; //process
+//var PROJECTID = "d27520ec813311e5a9bb0050569ccb08"; //process
 
 var inswit = {
 
@@ -80,6 +80,12 @@ var inswit = {
 		"projectId":PROJECTID,
 		"workflowId":"9e8b3fa899b711e6a9bc0050569ccb08",
 		"processId":"9edc962899b711e6a9bc0050569ccb08"
+	},
+
+	REGISTER_PROCESS: {
+		"projectId":PROJECTID,
+		"workflowId":"7d9893cedaed11eaa360c282e0885855",
+		"processId":"7dca5c38daed11eaa360c282e0885855"
 	},
 
 	//Don't change the order.
@@ -466,10 +472,12 @@ var inswit = {
                if(response.token) {
                		LocalStorage.setAccessToken(response.token);
 					   
-					cordova.plugins.IMEI(function (err, imei) {
-						console.log('imei', imei)
-						callback(imei);
-					});
+					// cordova.plugins.IMEI(function (err, imei) {
+					// 	console.log('imei', imei)
+					// 	callback(imei);
+					// });
+					callback();
+
 
 				}else {
 					inswit.alert("Login Failed.Try Again!");

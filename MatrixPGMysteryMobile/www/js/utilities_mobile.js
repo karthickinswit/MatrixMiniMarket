@@ -1,7 +1,7 @@
 //var PROJECTID = "1c62737aae0d11e59d090050569cb68c";   //development
-var PROJECTID = "98c096b6494411e8a9bf0050569ccb08"; //production
+//var PROJECTID = "98c096b6494411e8a9bf0050569ccb08"; //production
 //var PROJECTID = "97677c1832bc11e5a9bb0050569ccb08"; //demo
-//var PROJECTID = "f152c28a2b3b11e8a9bf0050569ccb08"; //process
+var PROJECTID = "f152c28a2b3b11e8a9bf0050569ccb08"; //process
 
 var inswit = {
 
@@ -22,7 +22,7 @@ var inswit = {
 		password: "",
 	},
 	
-	VERSION : "2.2",
+	VERSION : "2.3",
 
 	LOGIN_CREDENTIAL: {
 		"email": "minimarket@matrixbsindia.com",
