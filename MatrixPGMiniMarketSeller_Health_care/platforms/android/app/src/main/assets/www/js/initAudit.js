@@ -152,12 +152,20 @@ define([
 								}
 				            }
 
-                            var allottedAuditId = that.$el.find(".audit_date_range").find("option:selected" ).val();
+                            // var allottedAuditId = that.$el.find(".audit_date_range").find("option:selected" ).val();
 
-                            if(allottedAuditId == "select"){
-                                inswit.alert("Please choose audit month");
-                                return;
-                            }
+                            // if(allottedAuditId == "select"){
+                            //     inswit.alert("Please choose audit month");
+                            //     return;
+							// }
+							
+							var allottedAuditId;
+							findMonthRange(db, storeId, function(result) {
+								console.log("******result range", result);
+								allottedAuditId = result[0].audit_id;
+								console.log("******allottedAuditId", allottedAuditId);
+							});
+
 
                             console.log("auditId month", auditId);
 
@@ -291,12 +299,20 @@ define([
 					}
 			    }
 
-			    var allottedAuditId = that.$el.find(".audit_date_range").find("option:selected" ).val();
+			    // var allottedAuditId = that.$el.find(".audit_date_range").find("option:selected" ).val();
 
-                if(allottedAuditId == "select"){
-                    inswit.alert("Please choose audit month");
-                    return;
-                }
+                // if(allottedAuditId == "select"){
+                //     inswit.alert("Please choose audit month");
+                //     return;
+				// }
+				
+				var allottedAuditId;
+				findMonthRange(db, storeId, function(result) {
+					console.log("******result range", result);
+					allottedAuditId = result[0].audit_id;
+					console.log("******allottedAuditId", allottedAuditId);
+				});
+
 
 				var callback = function(isYes){
 					$(event.currentTarget).removeClass("clicked");

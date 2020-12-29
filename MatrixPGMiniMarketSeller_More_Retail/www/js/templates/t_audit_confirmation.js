@@ -33,8 +33,8 @@ define([],function(){
                                         {{#noStoreOptions}}<option value={{status_id}}>{{status_name}}</option>{{/noStoreOptions}}\
                                     </select>\
                                 </div>\
-                                <div class="con_adt_header font_18 bold" style="display:none">Audit month :</div>\
-                                <select class="audit_date_range"  style="display:none" type="select">\
+                                <div class="con_adt_header font_18 bold">Audit month :</div>\
+                                <select class="audit_date_range" type="select">\
                                     <option>select</option>\
                                     {{#monthRange}}\
                                         <option value={{audit_id}} id={{audit_id}} {{selected}}>{{audit_month}}</option>\
