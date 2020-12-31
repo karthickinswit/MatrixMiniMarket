@@ -27,7 +27,7 @@ var inswit = {
 		password: "",
 	},
 
-	VERSION : "1.0",
+	VERSION : "1.1",
 
 	LOGIN_CREDENTIAL: {
 	   "email": "pandghealth@matrixbsindia.com",
