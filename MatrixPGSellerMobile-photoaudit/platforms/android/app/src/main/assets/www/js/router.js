@@ -39,7 +39,8 @@ define(["backbone", "bootstrap", "mustache"], function() {
             "audits/:id/products" : "showProducts",
             "audits/:id/products/:id" : "showNorms",
             "audits/:id/upload" : "onUploadAudit",
-            "audits/upload/all" : "uploadAll"
+            "audits/upload/all" : "uploadAll",
+            "register" : "showRegister"
         },
 
         renderLogin: function() {
@@ -253,6 +254,17 @@ define(["backbone", "bootstrap", "mustache"], function() {
 
             $("#content").empty().append(view.$el);
             this.currentView = view;
+        },
+
+        showRegister: function() {
+            var that = this;
+            require(["register"], function(RegisterUniqueId){
+                var registerModel = new RegisterUniqueId.Model({});
+                var registerView = new RegisterUniqueId.View({model:registerModel});
+
+                registerView.render();
+                that.appendView(registerView);
+            });
         }
 
     });

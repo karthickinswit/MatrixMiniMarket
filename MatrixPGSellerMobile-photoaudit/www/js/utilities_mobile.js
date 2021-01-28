@@ -94,6 +94,13 @@ var inswit = {
 		"processId":"9edc962899b711e6a9bc0050569ccb08"
 	},
 
+	REGISTER_PROCESS: {
+		"projectId":PROJECTID,
+		"workflowId":"7d9893cedaed11eaa360c282e0885855",
+		"processId":"7dca5c38daed11eaa360c282e0885855"
+	},
+
+
 	//Don't change the order.
 	COLORS:[
 		"#FF0000",

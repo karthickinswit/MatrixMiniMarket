@@ -74,14 +74,12 @@ define([],function(){
                                                 {{^textBox}}\
                                                     <div class="question" rel={{isConsider}} id={{#options}}{{optionId}}{{/options}}>\
                                                         <span class="product_name option_header field_type" id="{{normId}}-{{productId}}-{{product_name}}" rel="{{normName}}">{{question}}</span>\
-                                                        <div>\
                                                             <select  id="frontage_applicable" class="option {{#hotspotExecution}}hotspot_decision{{/hotspotExecution}}" style="margin-bottom:10px" type="select">\
                                                                 <option>select</option>\
                                                                 {{#options}}\
                                                                     <option id={{optionId}} {{selected}}>{{optionName}}</option>\
                                                                 {{/options}}\
                                                             </select>\
-                                                        </div>\
                                                         <div class="remarks_1" style="display:{{show1}}">\
                                                             <select class="audit_yes" type="select">\
                                                                 <option>select</option>\
@@ -123,14 +121,12 @@ define([],function(){
                                         {{^textBox}}\
                                             <div class="question" rel={{isConsider}} id={{#options}}{{optionId}}{{/options}}>\
                                                 <span class="product_name option_header field_type"  id="{{normId}}-0-0" rel="{{normName}}">{{question}}</span>\
-                                                <div>\
                                                     <select id="frontage_applicable" rel="category" class="option {{#hotspotExecution}}hotspot_decision{{/hotspotExecution}}" style="margin-bottom:10px" type="select">\
                                                         <option>select</option>\
                                                         {{#options}}\
                                                             <option id={{optionId}} {{selected}}>{{optionName}}</option>\
                                                         {{/options}}\
                                                     </select>\
-                                                </div>\
                                                 <div class="remarks_1" style="display:none;">\
                                                     <select class="audit_yes" type="select">\
                                                         <option>select</option>\

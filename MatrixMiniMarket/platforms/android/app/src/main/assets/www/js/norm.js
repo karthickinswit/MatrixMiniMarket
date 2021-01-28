@@ -245,8 +245,8 @@ define([
 
 			if(isCategory) {
 				return;
-			}
-			
+            }            
+            
 			if(option == "Yes" || option == "100"){
 				$(e.target).parents(".question").find(".remarks_1").show();
 				$(e.target).parents(".question").find(".remarks_2").hide();
@@ -282,7 +282,12 @@ define([
 
                     $(e.target).parents(".question").find(".gillette_table, .add_product_photo").addClass("hide");
                 }
-			}
+            }
+            
+            if(option != "Yes"){
+                var ids = $(e.target.parentElement).find(".field_type").attr("id");
+                this.checkScoreValidation(ids, option);
+            }
 		},
 
 		toggleFrontage: function(event){
@@ -461,6 +466,8 @@ define([
                         $(questionEl).find(".remarks_2").show();
                         $(questionEl).find(".option option:selected").removeAttr("selected");
                         $(questionEl).next().attr("rel", false);
+                        var ids = $(questionEl).find(".field_type").attr("id");
+                        this.checkScoreValidation(ids, value);    
                     }
                     $(questionEl).find("#frontage_applicable option:eq(2)").prop('selected', true);
                     $(questionEl).find(".remarks_2 option:eq(1)").attr("selected", "true");
@@ -476,7 +483,6 @@ define([
 
 
 			}
-
 			this.refreshScroll("wrapper_norms");
 		},
 
@@ -705,7 +711,90 @@ define([
        removePhoto: function(event) {
            var target =  $(event.target).parents().parents().parents().get(0);
            target.remove();
-       }
+       },
+
+       checkScoreValidationAPI: function(data) {
+            inswit.showLoaderEl("Checking please wait....");
+
+            var processVariables = {
+                "projectId":inswit.SCORE_VALIDATION.projectId,
+                "workflowId":inswit.SCORE_VALIDATION.workflowId,
+                "processId":inswit.SCORE_VALIDATION.processId,
+                "ProcessVariables":{
+                    "auditid": data.auditid,
+                    "storeid": data.storeid,
+                    "brandid": data.brandid,
+                    "normid": data.normid,
+                    "categoryId": data.categoryId
+                }
+            };
+
+            inswit.executeProcess(processVariables, {
+                success: function(response){
+                    if(response.Error == "0"){
+                        console.log("response",response);
+                        var message = response.ProcessVariables.message;
+                        if(message.type == "0") {
+                            alert(message.value)
+                        }
+                    }
+                    inswit.hideLoaderEl();
+                },
+                failure: function(error){
+                    inswit.hideLoaderEl();
+                    switch(error){
+                        case 0:{
+                            inswit.alert("No Internet Connection!");
+                            break;
+                        }
+                        case 1:{
+                            inswit.alert("Check your network settings!");
+                            break;
+                        }
+                        case 2:{
+                            inswit.alert("Server Busy.Try Again!");
+                            break;
+                        }
+                    }
+                }
+            });
+        },
+
+        checkScoreValidation: function(ids, option) {
+            var mId = $(".product_done").attr("href");
+
+		    var id = mId.split("-");
+            var auditId = id[0];
+            var storeId = id[1];
+            var channelId = id[2];
+            var categoryId = this.model.get("categoryId");
+
+            var normId = ids.split("-")[0];
+            var brandId = ids.split("-")[1];
+            var empId = LocalStorage.getEmployeeId();
+
+            if(categoryId == "30"){
+                brandId = $('.sgf .brand_select').find(":selected").attr("id");
+            }
+           
+            let data = {
+                "auditid": auditId,
+                "storeid": storeId,
+                "brandid": brandId,
+                "normid": normId,
+                "categoryId": categoryId,
+                "empId": empId
+            }
+
+            console.log("Data", data);
+
+            if(option != "Yes"){
+                if(data.brandid){
+                    this.checkScoreValidationAPI(data);
+                }
+            }
+
+        }
 
 	});
 
