@@ -19,7 +19,7 @@ var inswit = {
 		password: "",
 	},
 	
-	VERSION : "2.5",
+	VERSION : "2.6",
 
 	ISSELLERAUDIT: true,
 
@@ -519,10 +519,11 @@ var inswit = {
                if(response.token) {
                		LocalStorage.setAccessToken(response.token);
 					   
-					cordova.plugins.IMEI(function (err, imei) {
-						console.log('imei', imei)
-						callback(imei);
-					});
+					// cordova.plugins.IMEI(function (err, imei) {
+					// 	console.log('imei', imei)
+					// 	callback(imei);
+					// });
+					callback();
 				}else {
 					inswit.alert("Login Failed.Try Again!");
 					inswit.hideLoaderEl();
