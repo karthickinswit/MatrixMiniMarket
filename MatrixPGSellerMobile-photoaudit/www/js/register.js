@@ -119,12 +119,15 @@ define([
 					
 					if(source == ""){
 						error = "Email Address Should not be empty";
-					} else {
-						error = "Please Enter Valid Email Address";
+						data["status"] = false;
+						data["error"] = error;
+					}else {
+						data["status"] = true;
 					}
-
-					data["status"] = regex.test(source);
-					data["error"] = error;
+					// else {
+					// 	error = "Please Enter Valid Email Address";
+					// }
+					
 					
 					break;
 				}

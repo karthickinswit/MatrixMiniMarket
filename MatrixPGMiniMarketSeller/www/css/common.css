@@ -335,8 +335,22 @@ table.table-bordered > tbody > tr > td{
    margin-left: -45px;
 }
 
-.uuid_container {
-  color: #FFF;
+.unique_text{
+  font-size: 18px;
+  color: #000;
+  font-style: italic;
+  background-color: black;
+  color: #fff;
+  display: inline;
+  padding: 0.5rem;
+  -webkit-box-decoration-break: clone;
+}
+.uuid_txt {
+  color: #000;
   font-weight: bold;
-  font-size: 20px;
+  font-size: 32px;
+  
+}
+.register_padding_top {
+  padding-top: 76% !important;
 }

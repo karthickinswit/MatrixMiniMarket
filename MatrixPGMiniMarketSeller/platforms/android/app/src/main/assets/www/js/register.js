@@ -26,13 +26,14 @@ define([
         render: function() {
             var that = this;
             var html ;
-            cordova.plugins.IMEI(function (err, imei) {
-                console.log('imei', imei);
-                that.model.set("imei", imei);
-                var uuid = device.uuid;
-                html = Mustache.to_html(that.template, {"imei": imei, "uuid": uuid});
-                that.$el.html(html);
-            });
+            // cordova.plugins.IMEI(function (err, imei) {
+            //     console.log('imei', imei);
+            //     that.model.set("imei", imei);
+			// });
+			this.uuid = device.uuid;
+			html = Mustache.to_html(that.template, {"uuid": this.uuid});
+			that.$el.html(html);
+
 
 			return that;
 		},
@@ -41,7 +42,7 @@ define([
 			var that = this;
 
 			var userName = this.$el.find("#name").val().trim();
-			var uuid = this.$el.find(".uuid").text().trim();
+			var uuid = this.uuid;
 
 			var isValidEmail = this.validate(userName, "email");
 
@@ -49,7 +50,11 @@ define([
 				"projectId":inswit.REGISTER_PROCESS.projectId,
 				"workflowId":inswit.REGISTER_PROCESS.workflowId,
 				"processId":inswit.REGISTER_PROCESS.processId,
-				"ProcessVariables":{"email_id": userName, "UUID": uuid}
+				"ProcessVariables":{
+					"email_id": userName, 
+					"UUID": uuid,
+					"isSellerAudit": true
+				}
 			};
 
 			if(!isValidEmail.status) {
@@ -114,13 +119,11 @@ define([
 					
 					if(source == ""){
 						error = "Email Address Should not be empty";
-					} else {
-						error = "Please Enter Valid Email Address";
-					}
-
-					data["status"] = regex.test(source);
-					data["error"] = error;
-					
+						data["status"] = false;
+						data["error"] = error;
+					}else {
+						data["status"] = true;
+					}					
 					break;
 				}
 				case "resetcode":{
