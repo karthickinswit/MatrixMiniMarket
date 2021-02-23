@@ -284,10 +284,10 @@ define([
                 }
             }
             
-            if(option != "Yes"){
-                var ids = $(e.target.parentElement).find(".field_type").attr("id");
-                this.checkScoreValidation(ids, option);
-            }
+            // if(option != "Yes"){
+            //     var ids = $(e.target.parentElement).find(".field_type").attr("id");
+            //     this.checkScoreValidation(ids, option);
+            // }
 		},
 
 		toggleFrontage: function(event){
@@ -466,8 +466,8 @@ define([
                         $(questionEl).find(".remarks_2").show();
                         $(questionEl).find(".option option:selected").removeAttr("selected");
                         $(questionEl).next().attr("rel", false);
-                        var ids = $(questionEl).find(".field_type").attr("id");
-                        this.checkScoreValidation(ids, value);    
+                        // var ids = $(questionEl).find(".field_type").attr("id");
+                        // this.checkScoreValidation(ids, value);    
                     }
                     $(questionEl).find("#frontage_applicable option:eq(2)").prop('selected', true);
                     $(questionEl).find(".remarks_2 option:eq(1)").attr("selected", "true");
