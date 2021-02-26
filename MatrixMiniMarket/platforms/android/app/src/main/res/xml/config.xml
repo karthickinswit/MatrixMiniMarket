@@ -51,6 +51,9 @@
     <feature name="Camera">
         <param name="android-package" value="org.apache.cordova.camera.CameraLauncher" />
     </feature>
+    <feature name="CDVOrientation">
+        <param name="android-package" value="cordova.plugins.screenorientation.CDVOrientation" />
+    </feature>
     <feature name="CameraPreview">
         <param name="android-package" value="com.cordovaplugincamerapreview.CameraPreview" />
         <param name="onload" value="true" />
@@ -89,6 +92,9 @@
     <feature name="Diagnostic_External_Storage">
         <param name="android-package" value="cordova.plugins.Diagnostic_External_Storage" />
         <param name="onload" value="true" />
+    </feature>
+    <feature name="Keyboard">
+        <param name="android-package" onload="true" value="org.apache.cordova.labs.keyboard.Keyboard" />
     </feature>
     <name>MatrixMiniMarket</name>
     <description>

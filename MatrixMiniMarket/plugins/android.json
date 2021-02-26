@@ -67,9 +67,19 @@
       "ANDROID_SUPPORT_V4_VERSION": "27.+",
       "PACKAGE_NAME": "com.appiyo.matrix_mini_market"
     },
+    "cordova-plugin-screen-orientation": {
+      "PACKAGE_NAME": "com.appiyo.matrix_mini_market"
+    },
+    "cordova-plugin-keyboard": {
+      "PACKAGE_NAME": "com.appiyo.matrix_mini_market"
+    },
     "cordova-plugin-camera-preview": {
       "PACKAGE_NAME": "com.appiyo.matrix_mini_market"
     }
   },
-  "dependent_plugins": {}
+  "dependent_plugins": {
+    "es6-promise-plugin": {
+      "PACKAGE_NAME": "com.appiyo.matrix_mini_market"
+    }
+  }
 }

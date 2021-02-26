@@ -70,21 +70,22 @@ function onDeviceReady(isDesktop) {
         $('body').addClass("android cover");
         select2Intitialize();
 
-        $("#takePic").click(function(){
-            CameraPreview.takePicture(function(filePath) {
-                console.log("filePath", filePath[0]);
-                var image = document.getElementById('capturedImage');
-                image.src = "file://"+filePath[0];            
-                stopCamera();
-            });
-        });
+        screen.orientation.lock('portrait');
+        // $("#takePic").click(function(){
+        //     CameraPreview.takePicture(function(filePath) {
+        //         console.log("filePath", filePath[0]);
+        //         var image = document.getElementById('capturedImage');
+        //         image.src = "file://"+filePath[0];            
+        //         stopCamera();
+        //     });
+        // });
+
     });
 
     document.addEventListener("backbutton", backKeyDown, false);
 
     // Make the request
     requestLocationAccuracy();
-
 }
 
 if (!isDesktop()) {

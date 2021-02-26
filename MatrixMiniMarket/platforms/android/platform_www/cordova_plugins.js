@@ -507,6 +507,28 @@ cordova.define('cordova/plugin_list', function(require, exports, module) {
       ]
     },
     {
+      "id": "es6-promise-plugin.Promise",
+      "file": "plugins/es6-promise-plugin/www/promise.js",
+      "pluginId": "es6-promise-plugin",
+      "runs": true
+    },
+    {
+      "id": "cordova-plugin-screen-orientation.screenorientation",
+      "file": "plugins/cordova-plugin-screen-orientation/www/screenorientation.js",
+      "pluginId": "cordova-plugin-screen-orientation",
+      "clobbers": [
+        "cordova.plugins.screenorientation"
+      ]
+    },
+    {
+      "id": "cordova-plugin-keyboard.keyboard",
+      "file": "plugins/cordova-plugin-keyboard/www/keyboard.js",
+      "pluginId": "cordova-plugin-keyboard",
+      "clobbers": [
+        "window.Keyboard"
+      ]
+    },
+    {
       "id": "cordova-plugin-camera-preview.CameraPreview",
       "file": "plugins/cordova-plugin-camera-preview/www/CameraPreview.js",
       "pluginId": "cordova-plugin-camera-preview",
@@ -535,6 +557,9 @@ cordova.define('cordova/plugin_list', function(require, exports, module) {
     "cordova.plugins.diagnostic": "6.0.3",
     "cordova-plugin-barcodescanner": "0.7.4",
     "cordova-plugin-camera": "5.0.1",
+    "es6-promise-plugin": "4.2.2",
+    "cordova-plugin-screen-orientation": "3.0.2",
+    "cordova-plugin-keyboard": "1.2.0",
     "cordova-plugin-camera-preview": "0.12.1"
   };
 });

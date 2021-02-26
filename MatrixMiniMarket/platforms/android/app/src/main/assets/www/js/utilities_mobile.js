@@ -747,55 +747,135 @@ var inswit = {
 			return;
 		}
 
-		var cameraOptions = {
-			quality: 50,
-			destinationType: Camera.DestinationType.FILE_URI,//0=DATA_URL, 1=FILE_URI      
-			sourceType: Camera.PictureSourceType.CAMERA,  // 0=Photo Library, 1=Camera, 2=Saved Album
-			encodingType: Camera.EncodingType.JPEG,// 0=JPEG 1=PNG,
-			targetWidth: 728,
-	        targetHeight: 1024,
-	        correctOrientation: true,
-	        inbuiltCamera: true,
-	        superImposeTimeStamp: true,
-	        superImposeText: superImposeText || ""
-	    };
+		// var cameraOptions = {
+		// 	quality: 50,
+		// 	destinationType: Camera.DestinationType.FILE_URI,//0=DATA_URL, 1=FILE_URI      
+		// 	sourceType: Camera.PictureSourceType.CAMERA,  // 0=Photo Library, 1=Camera, 2=Saved Album
+		// 	encodingType: Camera.EncodingType.JPEG,// 0=JPEG 1=PNG,
+		// 	targetWidth: 728,
+	    //     targetHeight: 1024,
+	    //     correctOrientation: true,
+	    //     inbuiltCamera: true,
+	    //     superImposeTimeStamp: true,
+	    //     superImposeText: superImposeText || ""
+	    // };
 
-		navigator.camera.getPicture(function(imageURI) {
-			console.log("ImageURI"+ imageURI);
-			var template = "<img class="+ dynamicStyle +" src='{{imageURI}}' width='100%' height='200'><a class='{{element}} retake_photo'>Retake</a>";
-			var html = Mustache.to_html(template, {"imageURI":imageURI, "element":retakeEl});
+		// navigator.camera.getPicture(function(imageURI) {
+		// 	console.log("ImageURI"+ imageURI);
+		// 	var template = "<img class="+ dynamicStyle +" src='{{imageURI}}' width='100%' height='200'><a class='{{element}} retake_photo'>Retake</a>";
+		// 	var html = Mustache.to_html(template, {"imageURI":imageURI, "element":retakeEl});
 
-            if(!parentsEl) {
-			    $("." + takeEl).remove();
-			    $(".photo_block").empty().append(html);
-			}else {
-			     $(parentsEl).find("."+ takeEl + ", ." + retakeEl).remove();
-			     var photoBlock = $(parentsEl).find(".photo_block");
-			     if(photoBlock.length == 0) {
-			        $(parentsEl).empty().append(html);
-			     }else {
-			        $(parentsEl).find(".photo_block").empty().append(html);
-			     }
-			}
+        //     if(!parentsEl) {
+		// 	    $("." + takeEl).remove();
+		// 	    $(".photo_block").empty().append(html);
+		// 	}else {
+		// 	     $(parentsEl).find("."+ takeEl + ", ." + retakeEl).remove();
+		// 	     var photoBlock = $(parentsEl).find(".photo_block");
+		// 	     if(photoBlock.length == 0) {
+		// 	        $(parentsEl).empty().append(html);
+		// 	     }else {
+		// 	        $(parentsEl).find(".photo_block").empty().append(html);
+		// 	     }
+		// 	}
 
-			callback(imageURI);
+		// 	callback(imageURI);
 
-			if(oldImageURI){
-				var imageList = [{"imageURI":oldImageURI}];
-				inswit.clearPhoto(imageList);
-			}
+		// 	if(oldImageURI){
+		// 		var imageList = [{"imageURI":oldImageURI}];
+		// 		inswit.clearPhoto(imageList);
+		// 	}
 
-			if(!parentsEl) {
-			    $("."+ takeEl + ", ." + retakeEl).removeClass("disable");
-			}else {
-			    parentsEl.find("."+ takeEl + ", ." + retakeEl).removeClass("disable");
-			}
+		// 	if(!parentsEl) {
+		// 	    $("."+ takeEl + ", ." + retakeEl).removeClass("disable");
+		// 	}else {
+		// 	    parentsEl.find("."+ takeEl + ", ." + retakeEl).removeClass("disable");
+		// 	}
 
-		},function(err) {
+		// },function(err) {
+		// 	var imageURI = $(".photo_block img").attr("src") || "";
+		// 	callback(imageURI);
+		// 	$("."+ takeEl + ", ." + retakeEl).removeClass("disable");
+		// }, cameraOptions);
+		this.startCameraAbove(superImposeText);
+		$(".in_app_camera").show();
+		Keyboard.hide();
+
+		CameraPreview.onBackButton(function() {
+			backKeyDown();
 			var imageURI = $(".photo_block img").attr("src") || "";
 			callback(imageURI);
 			$("."+ takeEl + ", ." + retakeEl).removeClass("disable");
-		}, cameraOptions);
+		});
+
+		$("#takePic").click(function(){
+
+			CameraPreview.takePicture(function(filePath) {
+				var imageURI = "file://"+filePath[0];            
+				stopCamera();
+
+				var template = "<img class="+ dynamicStyle +" src='{{imageURI}}' width='100%' height='200'><a class='{{element}} retake_photo'>Retake</a>";
+				var html = Mustache.to_html(template, {"imageURI":imageURI, "element":retakeEl});
+
+				if(!parentsEl) {
+					$("." + takeEl).remove();
+					$(".photo_block").empty().append(html);
+				}else {
+					$(parentsEl).find("."+ takeEl + ", ." + retakeEl).remove();
+					var photoBlock = $(parentsEl).find(".photo_block");
+					if(photoBlock.length == 0) {
+						$(parentsEl).empty().append(html);
+					}else {
+						$(parentsEl).find(".photo_block").empty().append(html);
+					}
+				}
+
+				callback(imageURI);
+
+				if(oldImageURI){
+					var imageList = [{"imageURI":oldImageURI}];
+					inswit.clearPhoto(imageList);
+				}
+
+				if(!parentsEl) {
+					$("."+ takeEl + ", ." + retakeEl).removeClass("disable");
+				}else {
+					parentsEl.find("."+ takeEl + ", ." + retakeEl).removeClass("disable");
+				}
+
+				
+			},function(err) {
+				// var imageURI = $(".photo_block img").attr("src") || "";
+				// callback(imageURI);
+				// $("."+ takeEl + ", ." + retakeEl).removeClass("disable");
+			});
+
+		});
+
+	},
+
+	startCameraAbove: function(superImposeText){
+		options = {
+			x: 0,
+			y: 0,
+			width: window.screen.width,
+			height: window.screen.height-200,
+			camera: 'rear',
+			tapPhoto: true,
+			previewDrag: true,
+			toBack: false,
+			alpha: 1,
+			storeToFile: true,
+			disableExifHeaderStripping: true,
+			superImposeText: superImposeText
+		},
+		
+		CameraPreview.startCamera(options);
+	
+		CameraPreview.onBackButton(function() {
+			console.log('Back button pushed');
+			backKeyDown();
+		});
+	
 	},
 
 	updateMasterData: function(processVariables, callback){

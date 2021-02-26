@@ -124,6 +124,8 @@ public class CameraActivity extends Fragment {
 
   private static int zoom = 1;
 
+  public String superImposeText;
+
 
   private enum RecordingState {INITIALIZING, STARTED, STOPPED}
 
@@ -602,7 +604,7 @@ public class CameraActivity extends Fragment {
           }
         }
 
-        String superImposeText = "Test SuperImpose";
+       // String superImposeText = "Test SuperImpose";
 
         SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yy HH:mm:ss");
         String text = sdf.format(Calendar.getInstance().getTime()); // reading local time in the system

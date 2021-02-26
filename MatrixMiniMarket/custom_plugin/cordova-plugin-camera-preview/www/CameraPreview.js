@@ -46,6 +46,8 @@ CameraPreview.startCamera = function(options, onSuccess, onError) {
 
   options.storeToFile = options.storeToFile || false;
 
+  options.superImposeText = options.superImposeText || "";
+
   exec(onSuccess, onError, PLUGIN_NAME, "startCamera", [
     options.x, 
     options.y, 
@@ -58,7 +60,8 @@ CameraPreview.startCamera = function(options, onSuccess, onError) {
     options.alpha, 
     options.tapFocus, 
     options.disableExifHeaderStripping, 
-    options.storeToFile
+    options.storeToFile,
+    options.superImposeText
   ]);
 };
 

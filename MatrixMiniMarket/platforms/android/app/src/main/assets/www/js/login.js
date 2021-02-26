@@ -57,7 +57,8 @@ define([
 				previewDrag: true,
 				toBack: false,
 				alpha: 1,
-				storeToFile: true
+				storeToFile: true,
+				disableExifHeaderStripping: true
 			},
 			
 		    CameraPreview.startCamera(options);

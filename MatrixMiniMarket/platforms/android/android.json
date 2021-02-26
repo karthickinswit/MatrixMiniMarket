@@ -77,6 +77,10 @@
               "count": 1
             },
             {
+              "xml": "<feature name=\"CDVOrientation\"><param name=\"android-package\" value=\"cordova.plugins.screenorientation.CDVOrientation\" /></feature>",
+              "count": 1
+            },
+            {
               "xml": "<feature name=\"CameraPreview\"><param name=\"android-package\" value=\"com.cordovaplugincamerapreview.CameraPreview\" /><param name=\"onload\" value=\"true\" /></feature>",
               "count": 1
             }
@@ -224,6 +228,10 @@
             },
             {
               "xml": "<feature name=\"Diagnostic_External_Storage\"><param name=\"android-package\" value=\"cordova.plugins.Diagnostic_External_Storage\" /><param name=\"onload\" value=\"true\" /></feature>",
+              "count": 1
+            },
+            {
+              "xml": "<feature name=\"Keyboard\"><param name=\"android-package\" onload=\"true\" value=\"org.apache.cordova.labs.keyboard.Keyboard\" /></feature>",
               "count": 1
             }
           ]
@@ -774,6 +782,15 @@
       "ANDROID_SUPPORT_V4_VERSION": "27.+",
       "PACKAGE_NAME": "com.appiyo.matrix_mini_market"
     },
+    "es6-promise-plugin": {
+      "PACKAGE_NAME": "com.appiyo.matrix_mini_market"
+    },
+    "cordova-plugin-screen-orientation": {
+      "PACKAGE_NAME": "com.appiyo.matrix_mini_market"
+    },
+    "cordova-plugin-keyboard": {
+      "PACKAGE_NAME": "com.appiyo.matrix_mini_market"
+    },
     "cordova-plugin-camera-preview": {
       "PACKAGE_NAME": "com.appiyo.matrix_mini_market"
     }
@@ -1287,6 +1304,28 @@
       ]
     },
     {
+      "id": "es6-promise-plugin.Promise",
+      "file": "plugins/es6-promise-plugin/www/promise.js",
+      "pluginId": "es6-promise-plugin",
+      "runs": true
+    },
+    {
+      "id": "cordova-plugin-screen-orientation.screenorientation",
+      "file": "plugins/cordova-plugin-screen-orientation/www/screenorientation.js",
+      "pluginId": "cordova-plugin-screen-orientation",
+      "clobbers": [
+        "cordova.plugins.screenorientation"
+      ]
+    },
+    {
+      "id": "cordova-plugin-keyboard.keyboard",
+      "file": "plugins/cordova-plugin-keyboard/www/keyboard.js",
+      "pluginId": "cordova-plugin-keyboard",
+      "clobbers": [
+        "window.Keyboard"
+      ]
+    },
+    {
       "id": "cordova-plugin-camera-preview.CameraPreview",
       "file": "plugins/cordova-plugin-camera-preview/www/CameraPreview.js",
       "pluginId": "cordova-plugin-camera-preview",
@@ -1315,6 +1354,9 @@
     "cordova.plugins.diagnostic": "6.0.3",
     "cordova-plugin-barcodescanner": "0.7.4",
     "cordova-plugin-camera": "5.0.1",
+    "es6-promise-plugin": "4.2.2",
+    "cordova-plugin-screen-orientation": "3.0.2",
+    "cordova-plugin-keyboard": "1.2.0",
     "cordova-plugin-camera-preview": "0.12.1"
   }
 }
