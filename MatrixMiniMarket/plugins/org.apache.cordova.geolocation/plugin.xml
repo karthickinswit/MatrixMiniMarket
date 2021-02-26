@@ -41,7 +41,6 @@
         <config-file target="AndroidManifest.xml" parent="/*">
             <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
             <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
-            <uses-feature android:name="android.hardware.location.gps" />
         </config-file>
 
         <source-file src="src/android/GeoBroker.java" target-dir="src/org/apache/cordova/geolocation"/>

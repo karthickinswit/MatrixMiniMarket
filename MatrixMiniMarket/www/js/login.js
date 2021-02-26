@@ -28,7 +28,9 @@ define([
 		},
 
 		events:{
-			"click #login-btn" : "login"
+			"click #login-btn" : "login",
+			"click #openCamera": "openCamera",
+			"click #qrScanner": "openQrScanner",
 		},
 
 		render: function() {
@@ -37,6 +39,55 @@ define([
 			that.$el.html(html);
 
 			return that;
+		},
+
+		openCamera: function() {
+			this.startCameraAbove();
+			$(".in_app_camera").show();
+		},
+
+		startCameraAbove: function(){
+			options = {
+				x: 0,
+				y: 0,
+				width: window.screen.width,
+				height: window.screen.height-200,
+				camera: 'rear',
+				tapPhoto: true,
+				previewDrag: true,
+				toBack: false,
+				alpha: 1,
+				storeToFile: true
+			},
+			
+		    CameraPreview.startCamera(options);
+
+		    CameraPreview.onBackButton(function() {
+				console.log('Back button pushed');
+				backKeyDown();
+			});
+
+		},
+
+		takePicture: function() {
+			console.log("takepicture", takepicture);
+			CameraPreview.takePicture(function(filePath) {
+				console.log("filePath", filePath);
+			});
+		},
+
+		openQrScanner: function(){
+			cordova.plugins.barcodeScanner.scan(
+				function (result) {
+					alert("We got a barcode\n" +
+						  "Result: " + result.text + "\n" +
+						  "Format: " + result.format + "\n" +
+						  "Cancelled: " + result.cancelled);
+				},
+				function (error) {
+					alert("Scanning failed: " + error);
+				}
+			 );		  
 		},
 
 		login: function() {

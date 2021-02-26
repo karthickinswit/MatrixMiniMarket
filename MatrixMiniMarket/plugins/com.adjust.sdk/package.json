@@ -1,28 +1,27 @@
 {
-  "_from": "com.adjust.sdk",
-  "_id": "com.adjust.sdk@4.22.1",
+  "_from": "com.adjust.sdk@^4.22.1",
+  "_id": "com.adjust.sdk@4.23.0",
   "_inBundle": false,
-  "_integrity": "sha512-oJtzzcYB6Tq9sqIz9ogrzUxL2vwry8I6744v/J0NjRU1mkOjE1d03B9IA8LBhV84M9RclQrBPX2hgnNIUexzUQ==",
+  "_integrity": "sha512-FJ6S2p+t5kQu0DR8hHTSECCxPwjZzlJa2mwX/XQqAMiA8BTBIbsdqFmb0345Lkr3/NmgnOa7LbvVq9J9J+87wQ==",
   "_location": "/com.adjust.sdk",
   "_phantomChildren": {},
   "_requested": {
-    "type": "tag",
+    "type": "range",
     "registry": true,
-    "raw": "com.adjust.sdk",
+    "raw": "com.adjust.sdk@^4.22.1",
     "name": "com.adjust.sdk",
     "escapedName": "com.adjust.sdk",
-    "rawSpec": "",
+    "rawSpec": "^4.22.1",
     "saveSpec": null,
-    "fetchSpec": "latest"
+    "fetchSpec": "^4.22.1"
   },
   "_requiredBy": [
-    "#USER",
     "/"
   ],
-  "_resolved": "https://registry.npmjs.org/com.adjust.sdk/-/com.adjust.sdk-4.22.1.tgz",
-  "_shasum": "ae5041fec6cde8136d158b21593b7fa3e0076fc3",
-  "_spec": "com.adjust.sdk",
-  "_where": "/media/christus/9cfe9003-fd7a-4a1b-b8e6-759076d91f2e/matrix/new_version/MatrixMiniMarket",
+  "_resolved": "https://registry.npmjs.org/com.adjust.sdk/-/com.adjust.sdk-4.23.0.tgz",
+  "_shasum": "0448de644a7b5bced2a578f1a93bfafa53ae71bd",
+  "_spec": "com.adjust.sdk@^4.22.1",
+  "_where": "/Users/christusvalerian/Documents/Matrix/MatrixMiniMarket",
   "bundleDependencies": false,
   "cordova_name": "Adjust SDK Cordova Plugin",
   "deprecated": false,
@@ -52,5 +51,5 @@
     "ios",
     "android"
   ],
-  "version": "4.22.1"
+  "version": "4.23.0"
 }

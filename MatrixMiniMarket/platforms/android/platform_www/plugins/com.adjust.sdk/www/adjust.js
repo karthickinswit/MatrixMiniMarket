@@ -143,7 +143,7 @@ var Adjust = {
     },
 
     getSdkPrefix: function () {
-        return 'cordova4.22.1';
+        return 'cordova4.23.0';
     },
 
     addSessionCallbackParameter: function(key, value) {
@@ -172,6 +172,10 @@ var Adjust = {
 
     sendFirstPackages: function() {
         callCordova('sendFirstPackages');
+    },
+
+    requestTrackingAuthorizationWithCompletionHandler: function(callback) {
+        callCordovaCallback('requestTrackingAuthorizationWithCompletionHandler', callback);
     },
 
     setTestOptions: function(testOptions) {

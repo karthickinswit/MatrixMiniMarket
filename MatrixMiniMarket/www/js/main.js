@@ -69,6 +69,15 @@ function onDeviceReady(isDesktop) {
         
         $('body').addClass("android cover");
         select2Intitialize();
+
+        $("#takePic").click(function(){
+            CameraPreview.takePicture(function(filePath) {
+                console.log("filePath", filePath[0]);
+                var image = document.getElementById('capturedImage');
+                image.src = "file://"+filePath[0];            
+                stopCamera();
+            });
+        });
     });
 
     document.addEventListener("backbutton", backKeyDown, false);
@@ -85,6 +94,7 @@ if (!isDesktop()) {
     document.addEventListener("touchstart", function(){}, true);
 
     window.scrollTo(0,1);
+      
 }else {
     //On desktop don't have to wait for anything
     onDeviceReady(true);
@@ -106,6 +116,11 @@ function backKeyDown(e) {
 
     var link = location.hash.split('/');
 
+    var inAppCamera = $(".in_app_camera").is(":visible");
+    if(inAppCamera) {
+        stopCamera();
+        return false;
+    }
 
 
     var length = temp.length;
@@ -135,6 +150,13 @@ function backKeyDown(e) {
     }else{
         history.back();
     }
+}
+
+function stopCamera(){
+    CameraPreview.stopCamera();
+    setTimeout(function(){ 
+        $(".in_app_camera").hide();
+    }, 500);
 }
 
 function select2Intitialize() {

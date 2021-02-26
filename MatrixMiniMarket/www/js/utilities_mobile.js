@@ -761,6 +761,7 @@ var inswit = {
 	    };
 
 		navigator.camera.getPicture(function(imageURI) {
+			console.log("ImageURI"+ imageURI);
 			var template = "<img class="+ dynamicStyle +" src='{{imageURI}}' width='100%' height='200'><a class='{{element}} retake_photo'>Retake</a>";
 			var html = Mustache.to_html(template, {"imageURI":imageURI, "element":retakeEl});
 
