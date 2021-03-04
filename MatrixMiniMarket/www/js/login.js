@@ -58,10 +58,14 @@ define([
 				toBack: false,
 				alpha: 1,
 				storeToFile: true,
-				disableExifHeaderStripping: true
+				disableExifHeaderStripping: false
 			},
 			
-		    CameraPreview.startCamera(options);
+		    CameraPreview.startCamera(options, function(){
+				setTimeout(function(){ 
+					//CameraPreview.setFlashMode(CameraPreview.FLASH_MODE.ON);
+				}, 1000);
+			});
 
 		    CameraPreview.onBackButton(function() {
 				console.log('Back button pushed');

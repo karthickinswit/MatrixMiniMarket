@@ -796,7 +796,7 @@ var inswit = {
 		// 	callback(imageURI);
 		// 	$("."+ takeEl + ", ." + retakeEl).removeClass("disable");
 		// }, cameraOptions);
-		this.startCameraAbove(superImposeText);
+		//this.startCameraAbove(superImposeText);
 		$(".in_app_camera").show();
 		Keyboard.hide();
 
@@ -865,7 +865,7 @@ var inswit = {
 			toBack: false,
 			alpha: 1,
 			storeToFile: true,
-			disableExifHeaderStripping: true,
+			disableExifHeaderStripping: false,
 			superImposeText: superImposeText
 		},
 		

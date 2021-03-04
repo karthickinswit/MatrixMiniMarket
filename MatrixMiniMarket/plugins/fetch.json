@@ -157,8 +157,8 @@
   },
   "cordova-plugin-camera": {
     "source": {
-      "type": "registry",
-      "id": "cordova-plugin-camera@5.0.1"
+      "type": "local",
+      "path": "/Users/christusvalerian/Documents/Matrix/MatrixMiniMarket/node_modules/cordova-plugin-camera"
     },
     "is_top_level": true,
     "variables": {}

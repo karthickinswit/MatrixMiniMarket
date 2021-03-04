@@ -7,57 +7,19 @@
     "files": {}
   },
   "installed_plugins": {
-    "cordova-plugin-whitelist": {
-      "PACKAGE_NAME": "com.appiyo.matrix_mini_market"
-    },
-    "cordova-plugin-device": {
-      "PACKAGE_NAME": "com.appiyo.matrix_mini_market"
-    },
-    "cordova-plugin-dialogs": {
-      "PACKAGE_NAME": "com.appiyo.matrix_mini_market"
-    },
-    "cordova-plugin-inappbrowser": {
-      "PACKAGE_NAME": "com.appiyo.matrix_mini_market"
-    },
-    "cordova-plugin-file": {
-      "PACKAGE_NAME": "com.appiyo.matrix_mini_market"
-    },
-    "cordova-plugin-network-information": {
-      "PACKAGE_NAME": "com.appiyo.matrix_mini_market"
-    },
-    "cordova-plugin-splashscreen": {
-      "PACKAGE_NAME": "com.appiyo.matrix_mini_market"
-    },
-    "cordova-plugin-file-transfer": {
+    "com.adjust.sdk": {
       "PACKAGE_NAME": "com.appiyo.matrix_mini_market"
     },
     "cordova-plugin-advanced-geolocation": {
       "PACKAGE_NAME": "com.appiyo.matrix_mini_market"
     },
-    "cordova-plugin-locationservices": {
-      "PACKAGE_NAME": "com.appiyo.matrix_mini_market"
-    },
-    "com.adjust.sdk": {
+    "cordova-plugin-android-imei": {
       "PACKAGE_NAME": "com.appiyo.matrix_mini_market"
     },
     "cordova-plugin-androidx": {
       "PACKAGE_NAME": "com.appiyo.matrix_mini_market"
     },
     "cordova-plugin-androidx-adapter": {
-      "PACKAGE_NAME": "com.appiyo.matrix_mini_market"
-    },
-    "cordova-plugin-android-imei": {
-      "PACKAGE_NAME": "com.appiyo.matrix_mini_market"
-    },
-    "org.apache.cordova.geolocation": {
-      "PACKAGE_NAME": "com.appiyo.matrix_mini_market"
-    },
-    "cordova-plugin-request-location-accuracy": {
-      "PLAY_SERVICES_LOCATION_VERSION": "16.+",
-      "PACKAGE_NAME": "com.appiyo.matrix_mini_market"
-    },
-    "cordova.plugins.diagnostic": {
-      "ANDROIDX_VERSION": "1.+",
       "PACKAGE_NAME": "com.appiyo.matrix_mini_market"
     },
     "cordova-plugin-barcodescanner": {
@@ -67,10 +29,48 @@
       "ANDROID_SUPPORT_V4_VERSION": "27.+",
       "PACKAGE_NAME": "com.appiyo.matrix_mini_market"
     },
-    "cordova-plugin-screen-orientation": {
+    "cordova-plugin-device": {
+      "PACKAGE_NAME": "com.appiyo.matrix_mini_market"
+    },
+    "cordova-plugin-dialogs": {
+      "PACKAGE_NAME": "com.appiyo.matrix_mini_market"
+    },
+    "cordova-plugin-file": {
+      "PACKAGE_NAME": "com.appiyo.matrix_mini_market"
+    },
+    "cordova-plugin-file-transfer": {
+      "PACKAGE_NAME": "com.appiyo.matrix_mini_market"
+    },
+    "cordova-plugin-inappbrowser": {
       "PACKAGE_NAME": "com.appiyo.matrix_mini_market"
     },
     "cordova-plugin-keyboard": {
+      "PACKAGE_NAME": "com.appiyo.matrix_mini_market"
+    },
+    "cordova-plugin-locationservices": {
+      "PACKAGE_NAME": "com.appiyo.matrix_mini_market"
+    },
+    "cordova-plugin-network-information": {
+      "PACKAGE_NAME": "com.appiyo.matrix_mini_market"
+    },
+    "cordova-plugin-request-location-accuracy": {
+      "PLAY_SERVICES_LOCATION_VERSION": "16.+",
+      "PACKAGE_NAME": "com.appiyo.matrix_mini_market"
+    },
+    "cordova-plugin-screen-orientation": {
+      "PACKAGE_NAME": "com.appiyo.matrix_mini_market"
+    },
+    "cordova-plugin-splashscreen": {
+      "PACKAGE_NAME": "com.appiyo.matrix_mini_market"
+    },
+    "cordova-plugin-whitelist": {
+      "PACKAGE_NAME": "com.appiyo.matrix_mini_market"
+    },
+    "cordova.plugins.diagnostic": {
+      "ANDROIDX_VERSION": "1.+",
+      "PACKAGE_NAME": "com.appiyo.matrix_mini_market"
+    },
+    "org.apache.cordova.geolocation": {
       "PACKAGE_NAME": "com.appiyo.matrix_mini_market"
     },
     "cordova-plugin-camera-preview": {

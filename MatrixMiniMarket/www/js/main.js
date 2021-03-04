@@ -71,14 +71,20 @@ function onDeviceReady(isDesktop) {
         select2Intitialize();
 
         screen.orientation.lock('portrait');
-        // $("#takePic").click(function(){
-        //     CameraPreview.takePicture(function(filePath) {
-        //         console.log("filePath", filePath[0]);
-        //         var image = document.getElementById('capturedImage');
-        //         image.src = "file://"+filePath[0];            
-        //         stopCamera();
-        //     });
-        // });
+        
+        $("#takePic").click(function(){
+            CameraPreview.takePicture(function(filePath) {
+                console.log("filePath", filePath[0]);
+                var image = document.getElementById('capturedImage');
+                 image.src = "file://"+filePath[0];
+                 stopCamera();
+
+            });
+        });
+
+        $("#switch_camera").click(function() {
+            CameraPreview.switchCamera();
+        });
 
     });
 
@@ -107,6 +113,30 @@ function isDesktop() {
 
 function closeDialog(){
     history.back();
+}
+
+function startCameraAbove(){
+    options = {
+        x: 0,
+        y: 0,
+        width: window.screen.width,
+        height: window.screen.height-200,
+        camera: 'rear',
+        tapPhoto: true,
+        previewDrag: true,
+        toBack: false,
+        alpha: 1,
+        storeToFile: true,
+        disableExifHeaderStripping: false
+    },
+    
+    CameraPreview.startCamera(options);
+
+    CameraPreview.onBackButton(function() {
+        console.log('Back button pushed');
+        backKeyDown();
+    });
+
 }
 
 function onResume(){}

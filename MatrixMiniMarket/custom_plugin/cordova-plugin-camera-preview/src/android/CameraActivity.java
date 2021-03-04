@@ -121,6 +121,8 @@ public class CameraActivity extends Fragment {
   public int height;
   public int x;
   public int y;
+  private int rotationDegrees = 0;
+
 
   private static int zoom = 1;
 
@@ -143,6 +145,32 @@ public class CameraActivity extends Fragment {
   @Override
   public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
     appResourcesPackage = getActivity().getPackageName();
+
+    SimpleOrientationListener mOrientationListener = new SimpleOrientationListener(getActivity()) {
+
+      @Override
+      public void onSimpleOrientationChanged(int orientation) {
+
+        if (orientation == SimpleOrientationListener.ORIENTATION_LANDSCAPE_RIGHT) {
+          Log.d(TAG, "ORIENTATION_LANDSCAPE_RIGHT");
+          rotationDegrees = 180;
+        } else if (orientation == SimpleOrientationListener.ORIENTATION_LANDSCAPE_LEFT) {
+          Log.d(TAG, "ORIENTATION_LANDSCAPE_LEFT");
+          rotationDegrees = 0;
+        }
+        //Log.d(TAG, "ORIENTATION_LANDSCAPE: "+ rotation);
+        else if (orientation == SimpleOrientationListener.ORIENTATION_PORTRAIT) {
+          Log.d(TAG, "ORIENTATION_PORTRAIT");
+          rotationDegrees = 90;
+        } else {
+          Log.d(TAG, "ORIENTATION_PORTRAIT_UPSIDE_DOWN");
+          rotationDegrees = 270;
+        }
+
+
+      }
+    };
+    mOrientationListener.enable();
 
     // Inflate the layout for this fragment
     view = inflater.inflate(getResources().getIdentifier("camera_activity", "layout", appResourcesPackage), container, false);
@@ -582,15 +610,45 @@ public class CameraActivity extends Fragment {
           Matrix matrix = new Matrix();
           if (cameraCurrentlyLocked == Camera.CameraInfo.CAMERA_FACING_FRONT) {
             matrix.preScale(1.0f, -1.0f);
+            if (rotationDegrees == 0)
+              rotationDegrees = 180;
+            else if (rotationDegrees == 90)
+              rotationDegrees = -90;
+            else if (rotationDegrees == 180)
+              rotationDegrees = 0;
+            else if (rotationDegrees == 270)
+              rotationDegrees = 90;
+            matrix.postRotate(rotationDegrees);
+            //Toast.makeText(getActivity().getApplicationContext(), rotationDegrees+"", Toast.LENGTH_LONG).show();
+          }else {
+            matrix.postRotate(rotationDegrees);
           }
+//          int mOrientationHint = calculateOrientationHint();
+//          ExifInterface exifInterface = new ExifInterface(new ByteArrayInputStream(data));
+//          int rotation = exifInterface.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL);
+//          int rotationInDegrees = exifToDegrees(mOrientationHint);
+//
+//          if (mOrientationHint != 0f) {
+//            matrix.setRotate(-mOrientationHint);
+//          }
 
-          ExifInterface exifInterface = new ExifInterface(new ByteArrayInputStream(data));
-          int rotation = exifInterface.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL);
-          int rotationInDegrees = exifToDegrees(rotation);
+//          if (cameraCurrentlyLocked == Camera.CameraInfo.CAMERA_FACING_FRONT) {
+//            if (rotationDegrees == 0)
+//              rotationDegrees = 180;
+//            else if (rotationDegrees == 180)
+//              rotationDegrees = 0;
+//          }
+          // if (rotationDegrees == 0)
+          //     rotationDegrees = -90;
+          // else if (rotationDegrees == 90)
+          //     rotationDegrees = 0;
+          // else if (rotationDegrees == 180)
+          //   rotationDegrees = 90;
+          // else if (rotationDegrees == 270)
+          //   rotationDegrees = 180;
+          //   System.out.println("rotation******"+ rotationDegrees);
 
-          if (rotation != 0f) {
-            matrix.preRotate(rotationInDegrees);
-          }
+          
 
           // Check if matrix has changed. In that case, apply matrix and override data
           if (!matrix.isIdentity()) {
@@ -613,11 +671,16 @@ public class CameraActivity extends Fragment {
           text = text + " - " + superImposeText;
         }
 
+
         Bitmap bmp = BitmapFactory.decodeByteArray(data, 0, data.length).copy(Bitmap.Config.ARGB_8888, true); //myArray is the byteArray containing the image. Use copy() to create a mutable bitmap. Feel free to change the config-type. Consider doing this in two steps so you can recycle() the immutable bitmap.
+
+
+    //    bmp = rotateBitmap(bmp, mPreview.getDisplayOrientation(), cameraCurrentlyLocked == Camera.CameraInfo.CAMERA_FACING_FRONT);
+
 
         Canvas cs = new Canvas(bmp);
         Paint tPaint = new Paint();
-        tPaint.setTextSize(20);
+        tPaint.setTextSize(25);
         tPaint.setColor(Color.WHITE);
         tPaint.setStyle(Paint.Style.FILL);
 
@@ -660,6 +723,15 @@ public class CameraActivity extends Fragment {
       }
     }
   };
+
+  public static Bitmap rotateBitmap(Bitmap source, float angle, boolean mirror) {
+    Matrix matrix = new Matrix();
+    if (mirror) {
+      matrix.preScale(-1.0f, 1.0f);
+    }
+    matrix.postRotate(angle);
+    return Bitmap.createBitmap(source, 0, 0, source.getWidth(), source.getHeight(), matrix, true);
+  }
 
   private Camera.Size getOptimalPictureSize(final int width, final int height, final Camera.Size previewSize, final List<Camera.Size> supportedSizes){
     /*
@@ -827,7 +899,7 @@ public class CameraActivity extends Fragment {
             params.setJpegQuality(quality);
           }
 
-          params.setRotation(mPreview.getDisplayOrientation());
+          //params.setRotation(mPreview.getDisplayOrientation());
 
           mCamera.setParameters(params);
           mCamera.takePicture(shutterCallback, null, jpegPictureCallback);

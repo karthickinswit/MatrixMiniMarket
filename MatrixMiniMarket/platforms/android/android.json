@@ -5,120 +5,8 @@
   },
   "config_munge": {
     "files": {
-      "res/xml/config.xml": {
-        "parents": {
-          "/*": [
-            {
-              "xml": "<feature name=\"Whitelist\"><param name=\"android-package\" value=\"org.apache.cordova.whitelist.WhitelistPlugin\" /><param name=\"onload\" value=\"true\" /></feature>",
-              "count": 1
-            },
-            {
-              "xml": "<feature name=\"Device\"><param name=\"android-package\" value=\"org.apache.cordova.device.Device\" /></feature>",
-              "count": 1
-            },
-            {
-              "xml": "<feature name=\"Notification\"><param name=\"android-package\" value=\"org.apache.cordova.dialogs.Notification\" /></feature>",
-              "count": 1
-            },
-            {
-              "xml": "<feature name=\"InAppBrowser\"><param name=\"android-package\" value=\"org.apache.cordova.inappbrowser.InAppBrowser\" /></feature>",
-              "count": 1
-            },
-            {
-              "xml": "<feature name=\"File\"><param name=\"android-package\" value=\"org.apache.cordova.file.FileUtils\" /><param name=\"onload\" value=\"true\" /></feature>",
-              "count": 1
-            },
-            {
-              "xml": "<allow-navigation href=\"cdvfile:*\" />",
-              "count": 1
-            },
-            {
-              "xml": "<feature name=\"NetworkStatus\"><param name=\"android-package\" value=\"org.apache.cordova.networkinformation.NetworkManager\" /></feature>",
-              "count": 1
-            },
-            {
-              "xml": "<feature name=\"SplashScreen\"><param name=\"android-package\" value=\"org.apache.cordova.splashscreen.SplashScreen\" /><param name=\"onload\" value=\"true\" /></feature>",
-              "count": 1
-            },
-            {
-              "xml": "<feature name=\"FileTransfer\"><param name=\"android-package\" value=\"org.apache.cordova.filetransfer.FileTransfer\" /></feature>",
-              "count": 1
-            },
-            {
-              "xml": "<feature name=\"AdvancedGeolocation\"><param name=\"android-package\" value=\"com.esri.cordova.geolocation.AdvancedGeolocation\" /></feature>",
-              "count": 1
-            },
-            {
-              "xml": "<feature name=\"LocationServices\"><param name=\"android-package\" value=\"fr.louisbl.cordova.locationservices.CordovaLocationServices\" /></feature>",
-              "count": 1
-            },
-            {
-              "xml": "<feature name=\"Adjust\"><param name=\"android-package\" value=\"com.adjust.sdk.AdjustCordova\" /><param name=\"onload\" value=\"true\" /></feature>",
-              "count": 1
-            },
-            {
-              "xml": "<preference name=\"android-minSdkVersion\" value=\"23\" />",
-              "count": 1
-            },
-            {
-              "xml": "<feature name=\"ImeiPlugin\"><param name=\"android-package\" value=\"dk.kapetanovic.imei.ImeiPlugin\" /><param name=\"onload\" value=\"true\" /></feature>",
-              "count": 1
-            },
-            {
-              "xml": "<feature name=\"Geolocation\"><param name=\"android-package\" value=\"org.apache.cordova.geolocation.GeoBroker\" /></feature>",
-              "count": 1
-            },
-            {
-              "xml": "<feature name=\"BarcodeScanner\"><param name=\"android-package\" value=\"com.phonegap.plugins.barcodescanner.BarcodeScanner\" /></feature>",
-              "count": 1
-            },
-            {
-              "xml": "<feature name=\"Camera\"><param name=\"android-package\" value=\"org.apache.cordova.camera.CameraLauncher\" /></feature>",
-              "count": 1
-            },
-            {
-              "xml": "<feature name=\"CDVOrientation\"><param name=\"android-package\" value=\"cordova.plugins.screenorientation.CDVOrientation\" /></feature>",
-              "count": 1
-            },
-            {
-              "xml": "<feature name=\"CameraPreview\"><param name=\"android-package\" value=\"com.cordovaplugincamerapreview.CameraPreview\" /><param name=\"onload\" value=\"true\" /></feature>",
-              "count": 1
-            }
-          ]
-        }
-      },
       "AndroidManifest.xml": {
         "parents": {
-          "/*": [
-            {
-              "xml": "<uses-permission android:name=\"android.permission.WRITE_EXTERNAL_STORAGE\" />",
-              "count": 3
-            },
-            {
-              "xml": "<uses-permission android:name=\"android.permission.ACCESS_NETWORK_STATE\" />",
-              "count": 2
-            },
-            {
-              "xml": "<uses-permission android:name=\"android.permission.INTERNET\" />",
-              "count": 2
-            },
-            {
-              "xml": "<uses-permission android:name=\"android.permission.ACCESS_WIFI_STATE\" />",
-              "count": 1
-            },
-            {
-              "xml": "<uses-permission android:name=\"android.permission.ACCESS_COARSE_LOCATION\" />",
-              "count": 3
-            },
-            {
-              "xml": "<uses-permission android:name=\"android.permission.ACCESS_FINE_LOCATION\" />",
-              "count": 3
-            },
-            {
-              "xml": "<uses-permission android:name=\"android.permission.BLUETOOTH\" />",
-              "count": 1
-            }
-          ],
           "/manifest": [
             {
               "xml": "<uses-permission android:name=\"android.permission.INTERNET\" />",
@@ -137,10 +25,6 @@
               "count": 1
             },
             {
-              "xml": "<uses-feature android:name=\"android.hardware.camera\" android:required=\"false\" />",
-              "count": 1
-            },
-            {
               "xml": "<uses-permission android:name=\"android.permission.CAMERA\" />",
               "count": 2
             },
@@ -150,6 +34,10 @@
             },
             {
               "xml": "<uses-permission android:name=\"android.permission.WRITE_SETTINGS\" />",
+              "count": 1
+            },
+            {
+              "xml": "<uses-feature android:name=\"android.hardware.camera\" android:required=\"false\" />",
               "count": 1
             },
             {
@@ -183,6 +71,36 @@
               "count": 1
             }
           ],
+          "/*": [
+            {
+              "xml": "<uses-permission android:name=\"android.permission.INTERNET\" />",
+              "count": 2
+            },
+            {
+              "xml": "<uses-permission android:name=\"android.permission.ACCESS_WIFI_STATE\" />",
+              "count": 1
+            },
+            {
+              "xml": "<uses-permission android:name=\"android.permission.ACCESS_NETWORK_STATE\" />",
+              "count": 2
+            },
+            {
+              "xml": "<uses-permission android:name=\"android.permission.ACCESS_COARSE_LOCATION\" />",
+              "count": 3
+            },
+            {
+              "xml": "<uses-permission android:name=\"android.permission.ACCESS_FINE_LOCATION\" />",
+              "count": 3
+            },
+            {
+              "xml": "<uses-permission android:name=\"android.permission.WRITE_EXTERNAL_STORAGE\" />",
+              "count": 3
+            },
+            {
+              "xml": "<uses-permission android:name=\"android.permission.BLUETOOTH\" />",
+              "count": 1
+            }
+          ],
           "application": [
             {
               "xml": "<provider android:authorities=\"${applicationId}.cordova.plugin.camera.provider\" android:exported=\"false\" android:grantUriPermissions=\"true\" android:name=\"org.apache.cordova.camera.FileProvider\"><meta-data android:name=\"android.support.FILE_PROVIDER_PATHS\" android:resource=\"@xml/camera_provider_paths\" /></provider>",
@@ -191,47 +109,83 @@
           ]
         }
       },
-      "config.xml": {
+      "res/xml/config.xml": {
         "parents": {
           "/*": [
             {
-              "xml": "<feature name=\"RequestLocationAccuracy\"><param name=\"android-package\" value=\"cordova.plugin.RequestLocationAccuracy\" /></feature>",
+              "xml": "<feature name=\"Adjust\"><param name=\"android-package\" value=\"com.adjust.sdk.AdjustCordova\" /><param name=\"onload\" value=\"true\" /></feature>",
               "count": 1
             },
             {
-              "xml": "<feature name=\"Diagnostic\"><param name=\"android-package\" value=\"cordova.plugins.Diagnostic\" /><param name=\"onload\" value=\"true\" /></feature>",
+              "xml": "<feature name=\"AdvancedGeolocation\"><param name=\"android-package\" value=\"com.esri.cordova.geolocation.AdvancedGeolocation\" /></feature>",
               "count": 1
             },
             {
-              "xml": "<feature name=\"Diagnostic_Location\"><param name=\"android-package\" value=\"cordova.plugins.Diagnostic_Location\" /><param name=\"onload\" value=\"true\" /></feature>",
+              "xml": "<preference name=\"android-minSdkVersion\" value=\"23\" />",
               "count": 1
             },
             {
-              "xml": "<feature name=\"Diagnostic_Bluetooth\"><param name=\"android-package\" value=\"cordova.plugins.Diagnostic_Bluetooth\" /><param name=\"onload\" value=\"true\" /></feature>",
+              "xml": "<feature name=\"ImeiPlugin\"><param name=\"android-package\" value=\"dk.kapetanovic.imei.ImeiPlugin\" /><param name=\"onload\" value=\"true\" /></feature>",
               "count": 1
             },
             {
-              "xml": "<feature name=\"Diagnostic_Wifi\"><param name=\"android-package\" value=\"cordova.plugins.Diagnostic_Wifi\" /><param name=\"onload\" value=\"true\" /></feature>",
+              "xml": "<feature name=\"BarcodeScanner\"><param name=\"android-package\" value=\"com.phonegap.plugins.barcodescanner.BarcodeScanner\" /></feature>",
               "count": 1
             },
             {
-              "xml": "<feature name=\"Diagnostic_Camera\"><param name=\"android-package\" value=\"cordova.plugins.Diagnostic_Camera\" /><param name=\"onload\" value=\"true\" /></feature>",
+              "xml": "<feature name=\"Camera\"><param name=\"android-package\" value=\"org.apache.cordova.camera.CameraLauncher\" /></feature>",
               "count": 1
             },
             {
-              "xml": "<feature name=\"Diagnostic_Notifications\"><param name=\"android-package\" value=\"cordova.plugins.Diagnostic_Notifications\" /><param name=\"onload\" value=\"true\" /></feature>",
+              "xml": "<feature name=\"Device\"><param name=\"android-package\" value=\"org.apache.cordova.device.Device\" /></feature>",
               "count": 1
             },
             {
-              "xml": "<feature name=\"Diagnostic_NFC\"><param name=\"android-package\" value=\"cordova.plugins.Diagnostic_NFC\" /><param name=\"onload\" value=\"true\" /></feature>",
+              "xml": "<feature name=\"Notification\"><param name=\"android-package\" value=\"org.apache.cordova.dialogs.Notification\" /></feature>",
               "count": 1
             },
             {
-              "xml": "<feature name=\"Diagnostic_External_Storage\"><param name=\"android-package\" value=\"cordova.plugins.Diagnostic_External_Storage\" /><param name=\"onload\" value=\"true\" /></feature>",
+              "xml": "<feature name=\"File\"><param name=\"android-package\" value=\"org.apache.cordova.file.FileUtils\" /><param name=\"onload\" value=\"true\" /></feature>",
               "count": 1
             },
             {
-              "xml": "<feature name=\"Keyboard\"><param name=\"android-package\" onload=\"true\" value=\"org.apache.cordova.labs.keyboard.Keyboard\" /></feature>",
+              "xml": "<allow-navigation href=\"cdvfile:*\" />",
+              "count": 1
+            },
+            {
+              "xml": "<feature name=\"FileTransfer\"><param name=\"android-package\" value=\"org.apache.cordova.filetransfer.FileTransfer\" /></feature>",
+              "count": 1
+            },
+            {
+              "xml": "<feature name=\"InAppBrowser\"><param name=\"android-package\" value=\"org.apache.cordova.inappbrowser.InAppBrowser\" /></feature>",
+              "count": 1
+            },
+            {
+              "xml": "<feature name=\"LocationServices\"><param name=\"android-package\" value=\"fr.louisbl.cordova.locationservices.CordovaLocationServices\" /></feature>",
+              "count": 1
+            },
+            {
+              "xml": "<feature name=\"NetworkStatus\"><param name=\"android-package\" value=\"org.apache.cordova.networkinformation.NetworkManager\" /></feature>",
+              "count": 1
+            },
+            {
+              "xml": "<feature name=\"CDVOrientation\"><param name=\"android-package\" value=\"cordova.plugins.screenorientation.CDVOrientation\" /></feature>",
+              "count": 1
+            },
+            {
+              "xml": "<feature name=\"SplashScreen\"><param name=\"android-package\" value=\"org.apache.cordova.splashscreen.SplashScreen\" /><param name=\"onload\" value=\"true\" /></feature>",
+              "count": 1
+            },
+            {
+              "xml": "<feature name=\"Whitelist\"><param name=\"android-package\" value=\"org.apache.cordova.whitelist.WhitelistPlugin\" /><param name=\"onload\" value=\"true\" /></feature>",
+              "count": 1
+            },
+            {
+              "xml": "<feature name=\"Geolocation\"><param name=\"android-package\" value=\"org.apache.cordova.geolocation.GeoBroker\" /></feature>",
+              "count": 1
+            },
+            {
+              "xml": "<feature name=\"CameraPreview\"><param name=\"android-package\" value=\"com.cordovaplugincamerapreview.CameraPreview\" /><param name=\"onload\" value=\"true\" /></feature>",
               "count": 1
             }
           ]
@@ -718,61 +672,69 @@
             }
           ]
         }
+      },
+      "config.xml": {
+        "parents": {
+          "/*": [
+            {
+              "xml": "<feature name=\"Keyboard\"><param name=\"android-package\" onload=\"true\" value=\"org.apache.cordova.labs.keyboard.Keyboard\" /></feature>",
+              "count": 1
+            },
+            {
+              "xml": "<feature name=\"RequestLocationAccuracy\"><param name=\"android-package\" value=\"cordova.plugin.RequestLocationAccuracy\" /></feature>",
+              "count": 1
+            },
+            {
+              "xml": "<feature name=\"Diagnostic\"><param name=\"android-package\" value=\"cordova.plugins.Diagnostic\" /><param name=\"onload\" value=\"true\" /></feature>",
+              "count": 1
+            },
+            {
+              "xml": "<feature name=\"Diagnostic_Location\"><param name=\"android-package\" value=\"cordova.plugins.Diagnostic_Location\" /><param name=\"onload\" value=\"true\" /></feature>",
+              "count": 1
+            },
+            {
+              "xml": "<feature name=\"Diagnostic_Bluetooth\"><param name=\"android-package\" value=\"cordova.plugins.Diagnostic_Bluetooth\" /><param name=\"onload\" value=\"true\" /></feature>",
+              "count": 1
+            },
+            {
+              "xml": "<feature name=\"Diagnostic_Wifi\"><param name=\"android-package\" value=\"cordova.plugins.Diagnostic_Wifi\" /><param name=\"onload\" value=\"true\" /></feature>",
+              "count": 1
+            },
+            {
+              "xml": "<feature name=\"Diagnostic_Camera\"><param name=\"android-package\" value=\"cordova.plugins.Diagnostic_Camera\" /><param name=\"onload\" value=\"true\" /></feature>",
+              "count": 1
+            },
+            {
+              "xml": "<feature name=\"Diagnostic_Notifications\"><param name=\"android-package\" value=\"cordova.plugins.Diagnostic_Notifications\" /><param name=\"onload\" value=\"true\" /></feature>",
+              "count": 1
+            },
+            {
+              "xml": "<feature name=\"Diagnostic_NFC\"><param name=\"android-package\" value=\"cordova.plugins.Diagnostic_NFC\" /><param name=\"onload\" value=\"true\" /></feature>",
+              "count": 1
+            },
+            {
+              "xml": "<feature name=\"Diagnostic_External_Storage\"><param name=\"android-package\" value=\"cordova.plugins.Diagnostic_External_Storage\" /><param name=\"onload\" value=\"true\" /></feature>",
+              "count": 1
+            }
+          ]
+        }
       }
     }
   },
   "installed_plugins": {
-    "cordova-plugin-whitelist": {
-      "PACKAGE_NAME": "com.appiyo.matrix_mini_market"
-    },
-    "cordova-plugin-device": {
-      "PACKAGE_NAME": "com.appiyo.matrix_mini_market"
-    },
-    "cordova-plugin-dialogs": {
-      "PACKAGE_NAME": "com.appiyo.matrix_mini_market"
-    },
-    "cordova-plugin-inappbrowser": {
-      "PACKAGE_NAME": "com.appiyo.matrix_mini_market"
-    },
-    "cordova-plugin-file": {
-      "PACKAGE_NAME": "com.appiyo.matrix_mini_market"
-    },
-    "cordova-plugin-network-information": {
-      "PACKAGE_NAME": "com.appiyo.matrix_mini_market"
-    },
-    "cordova-plugin-splashscreen": {
-      "PACKAGE_NAME": "com.appiyo.matrix_mini_market"
-    },
-    "cordova-plugin-file-transfer": {
+    "com.adjust.sdk": {
       "PACKAGE_NAME": "com.appiyo.matrix_mini_market"
     },
     "cordova-plugin-advanced-geolocation": {
       "PACKAGE_NAME": "com.appiyo.matrix_mini_market"
     },
-    "cordova-plugin-locationservices": {
-      "PACKAGE_NAME": "com.appiyo.matrix_mini_market"
-    },
-    "com.adjust.sdk": {
+    "cordova-plugin-android-imei": {
       "PACKAGE_NAME": "com.appiyo.matrix_mini_market"
     },
     "cordova-plugin-androidx": {
       "PACKAGE_NAME": "com.appiyo.matrix_mini_market"
     },
     "cordova-plugin-androidx-adapter": {
-      "PACKAGE_NAME": "com.appiyo.matrix_mini_market"
-    },
-    "cordova-plugin-android-imei": {
-      "PACKAGE_NAME": "com.appiyo.matrix_mini_market"
-    },
-    "org.apache.cordova.geolocation": {
-      "PACKAGE_NAME": "com.appiyo.matrix_mini_market"
-    },
-    "cordova-plugin-request-location-accuracy": {
-      "PLAY_SERVICES_LOCATION_VERSION": "16.+",
-      "PACKAGE_NAME": "com.appiyo.matrix_mini_market"
-    },
-    "cordova.plugins.diagnostic": {
-      "ANDROIDX_VERSION": "1.+",
       "PACKAGE_NAME": "com.appiyo.matrix_mini_market"
     },
     "cordova-plugin-barcodescanner": {
@@ -782,13 +744,51 @@
       "ANDROID_SUPPORT_V4_VERSION": "27.+",
       "PACKAGE_NAME": "com.appiyo.matrix_mini_market"
     },
+    "cordova-plugin-device": {
+      "PACKAGE_NAME": "com.appiyo.matrix_mini_market"
+    },
+    "cordova-plugin-dialogs": {
+      "PACKAGE_NAME": "com.appiyo.matrix_mini_market"
+    },
+    "cordova-plugin-file": {
+      "PACKAGE_NAME": "com.appiyo.matrix_mini_market"
+    },
+    "cordova-plugin-file-transfer": {
+      "PACKAGE_NAME": "com.appiyo.matrix_mini_market"
+    },
+    "cordova-plugin-inappbrowser": {
+      "PACKAGE_NAME": "com.appiyo.matrix_mini_market"
+    },
+    "cordova-plugin-keyboard": {
+      "PACKAGE_NAME": "com.appiyo.matrix_mini_market"
+    },
+    "cordova-plugin-locationservices": {
+      "PACKAGE_NAME": "com.appiyo.matrix_mini_market"
+    },
+    "cordova-plugin-network-information": {
+      "PACKAGE_NAME": "com.appiyo.matrix_mini_market"
+    },
+    "cordova-plugin-request-location-accuracy": {
+      "PLAY_SERVICES_LOCATION_VERSION": "16.+",
+      "PACKAGE_NAME": "com.appiyo.matrix_mini_market"
+    },
     "es6-promise-plugin": {
       "PACKAGE_NAME": "com.appiyo.matrix_mini_market"
     },
     "cordova-plugin-screen-orientation": {
       "PACKAGE_NAME": "com.appiyo.matrix_mini_market"
     },
-    "cordova-plugin-keyboard": {
+    "cordova-plugin-splashscreen": {
+      "PACKAGE_NAME": "com.appiyo.matrix_mini_market"
+    },
+    "cordova-plugin-whitelist": {
+      "PACKAGE_NAME": "com.appiyo.matrix_mini_market"
+    },
+    "cordova.plugins.diagnostic": {
+      "ANDROIDX_VERSION": "1.+",
+      "PACKAGE_NAME": "com.appiyo.matrix_mini_market"
+    },
+    "org.apache.cordova.geolocation": {
       "PACKAGE_NAME": "com.appiyo.matrix_mini_market"
     },
     "cordova-plugin-camera-preview": {
@@ -797,6 +797,102 @@
   },
   "dependent_plugins": {},
   "modules": [
+    {
+      "id": "com.adjust.sdk.Adjust",
+      "file": "plugins/com.adjust.sdk/www/adjust.js",
+      "pluginId": "com.adjust.sdk",
+      "clobbers": [
+        "Adjust"
+      ]
+    },
+    {
+      "id": "com.adjust.sdk.AdjustConfig",
+      "file": "plugins/com.adjust.sdk/www/adjust_config.js",
+      "pluginId": "com.adjust.sdk",
+      "clobbers": [
+        "AdjustConfig"
+      ]
+    },
+    {
+      "id": "com.adjust.sdk.AdjustEvent",
+      "file": "plugins/com.adjust.sdk/www/adjust_event.js",
+      "pluginId": "com.adjust.sdk",
+      "clobbers": [
+        "AdjustEvent"
+      ]
+    },
+    {
+      "id": "com.adjust.sdk.AdjustAppStoreSubscription",
+      "file": "plugins/com.adjust.sdk/www/adjust_app_store_subscription.js",
+      "pluginId": "com.adjust.sdk",
+      "clobbers": [
+        "AdjustAppStoreSubscription"
+      ]
+    },
+    {
+      "id": "com.adjust.sdk.AdjustPlayStoreSubscription",
+      "file": "plugins/com.adjust.sdk/www/adjust_play_store_subscription.js",
+      "pluginId": "com.adjust.sdk",
+      "clobbers": [
+        "AdjustPlayStoreSubscription"
+      ]
+    },
+    {
+      "id": "cordova-plugin-advanced-geolocation.AdvancedGeolocation",
+      "file": "plugins/cordova-plugin-advanced-geolocation/www/AdvancedGeolocation.js",
+      "pluginId": "cordova-plugin-advanced-geolocation",
+      "clobbers": [
+        "AdvancedGeolocation"
+      ]
+    },
+    {
+      "id": "cordova-plugin-android-imei.IMEI",
+      "file": "plugins/cordova-plugin-android-imei/www/index.js",
+      "pluginId": "cordova-plugin-android-imei",
+      "clobbers": [
+        "cordova.plugins.IMEI"
+      ]
+    },
+    {
+      "id": "cordova-plugin-barcodescanner.BarcodeScanner",
+      "file": "plugins/cordova-plugin-barcodescanner/www/barcodescanner.js",
+      "pluginId": "cordova-plugin-barcodescanner",
+      "clobbers": [
+        "cordova.plugins.barcodeScanner"
+      ]
+    },
+    {
+      "id": "cordova-plugin-camera.Camera",
+      "file": "plugins/cordova-plugin-camera/www/CameraConstants.js",
+      "pluginId": "cordova-plugin-camera",
+      "clobbers": [
+        "Camera"
+      ]
+    },
+    {
+      "id": "cordova-plugin-camera.CameraPopoverOptions",
+      "file": "plugins/cordova-plugin-camera/www/CameraPopoverOptions.js",
+      "pluginId": "cordova-plugin-camera",
+      "clobbers": [
+        "CameraPopoverOptions"
+      ]
+    },
+    {
+      "id": "cordova-plugin-camera.camera",
+      "file": "plugins/cordova-plugin-camera/www/Camera.js",
+      "pluginId": "cordova-plugin-camera",
+      "clobbers": [
+        "navigator.camera"
+      ]
+    },
+    {
+      "id": "cordova-plugin-camera.CameraPopoverHandle",
+      "file": "plugins/cordova-plugin-camera/www/CameraPopoverHandle.js",
+      "pluginId": "cordova-plugin-camera",
+      "clobbers": [
+        "CameraPopoverHandle"
+      ]
+    },
     {
       "id": "cordova-plugin-device.device",
       "file": "plugins/cordova-plugin-device/www/device.js",
@@ -819,14 +915,6 @@
       "pluginId": "cordova-plugin-dialogs",
       "merges": [
         "navigator.notification"
-      ]
-    },
-    {
-      "id": "cordova-plugin-inappbrowser.inappbrowser",
-      "file": "plugins/cordova-plugin-inappbrowser/www/inappbrowser.js",
-      "pluginId": "cordova-plugin-inappbrowser",
-      "clobbers": [
-        "cordova.InAppBrowser.open"
       ]
     },
     {
@@ -1003,31 +1091,6 @@
       "runs": true
     },
     {
-      "id": "cordova-plugin-network-information.network",
-      "file": "plugins/cordova-plugin-network-information/www/network.js",
-      "pluginId": "cordova-plugin-network-information",
-      "clobbers": [
-        "navigator.connection",
-        "navigator.network.connection"
-      ]
-    },
-    {
-      "id": "cordova-plugin-network-information.Connection",
-      "file": "plugins/cordova-plugin-network-information/www/Connection.js",
-      "pluginId": "cordova-plugin-network-information",
-      "clobbers": [
-        "Connection"
-      ]
-    },
-    {
-      "id": "cordova-plugin-splashscreen.SplashScreen",
-      "file": "plugins/cordova-plugin-splashscreen/www/splashscreen.js",
-      "pluginId": "cordova-plugin-splashscreen",
-      "clobbers": [
-        "navigator.splashscreen"
-      ]
-    },
-    {
       "id": "cordova-plugin-file-transfer.FileTransferError",
       "file": "plugins/cordova-plugin-file-transfer/www/FileTransferError.js",
       "pluginId": "cordova-plugin-file-transfer",
@@ -1044,11 +1107,19 @@
       ]
     },
     {
-      "id": "cordova-plugin-advanced-geolocation.AdvancedGeolocation",
-      "file": "plugins/cordova-plugin-advanced-geolocation/www/AdvancedGeolocation.js",
-      "pluginId": "cordova-plugin-advanced-geolocation",
+      "id": "cordova-plugin-inappbrowser.inappbrowser",
+      "file": "plugins/cordova-plugin-inappbrowser/www/inappbrowser.js",
+      "pluginId": "cordova-plugin-inappbrowser",
       "clobbers": [
-        "AdvancedGeolocation"
+        "cordova.InAppBrowser.open"
+      ]
+    },
+    {
+      "id": "cordova-plugin-keyboard.keyboard",
+      "file": "plugins/cordova-plugin-keyboard/www/keyboard.js",
+      "pluginId": "cordova-plugin-keyboard",
+      "clobbers": [
+        "window.Keyboard"
       ]
     },
     {
@@ -1088,83 +1159,20 @@
       ]
     },
     {
-      "id": "com.adjust.sdk.Adjust",
-      "file": "plugins/com.adjust.sdk/www/adjust.js",
-      "pluginId": "com.adjust.sdk",
+      "id": "cordova-plugin-network-information.network",
+      "file": "plugins/cordova-plugin-network-information/www/network.js",
+      "pluginId": "cordova-plugin-network-information",
       "clobbers": [
-        "Adjust"
+        "navigator.connection",
+        "navigator.network.connection"
       ]
     },
     {
-      "id": "com.adjust.sdk.AdjustConfig",
-      "file": "plugins/com.adjust.sdk/www/adjust_config.js",
-      "pluginId": "com.adjust.sdk",
+      "id": "cordova-plugin-network-information.Connection",
+      "file": "plugins/cordova-plugin-network-information/www/Connection.js",
+      "pluginId": "cordova-plugin-network-information",
       "clobbers": [
-        "AdjustConfig"
-      ]
-    },
-    {
-      "id": "com.adjust.sdk.AdjustEvent",
-      "file": "plugins/com.adjust.sdk/www/adjust_event.js",
-      "pluginId": "com.adjust.sdk",
-      "clobbers": [
-        "AdjustEvent"
-      ]
-    },
-    {
-      "id": "com.adjust.sdk.AdjustAppStoreSubscription",
-      "file": "plugins/com.adjust.sdk/www/adjust_app_store_subscription.js",
-      "pluginId": "com.adjust.sdk",
-      "clobbers": [
-        "AdjustAppStoreSubscription"
-      ]
-    },
-    {
-      "id": "com.adjust.sdk.AdjustPlayStoreSubscription",
-      "file": "plugins/com.adjust.sdk/www/adjust_play_store_subscription.js",
-      "pluginId": "com.adjust.sdk",
-      "clobbers": [
-        "AdjustPlayStoreSubscription"
-      ]
-    },
-    {
-      "id": "cordova-plugin-android-imei.IMEI",
-      "file": "plugins/cordova-plugin-android-imei/www/index.js",
-      "pluginId": "cordova-plugin-android-imei",
-      "clobbers": [
-        "cordova.plugins.IMEI"
-      ]
-    },
-    {
-      "id": "org.apache.cordova.geolocation.Coordinates",
-      "file": "plugins/org.apache.cordova.geolocation/www/Coordinates.js",
-      "pluginId": "org.apache.cordova.geolocation",
-      "clobbers": [
-        "Coordinates"
-      ]
-    },
-    {
-      "id": "org.apache.cordova.geolocation.PositionError",
-      "file": "plugins/org.apache.cordova.geolocation/www/PositionError.js",
-      "pluginId": "org.apache.cordova.geolocation",
-      "clobbers": [
-        "PositionError"
-      ]
-    },
-    {
-      "id": "org.apache.cordova.geolocation.Position",
-      "file": "plugins/org.apache.cordova.geolocation/www/Position.js",
-      "pluginId": "org.apache.cordova.geolocation",
-      "clobbers": [
-        "Position"
-      ]
-    },
-    {
-      "id": "org.apache.cordova.geolocation.geolocation",
-      "file": "plugins/org.apache.cordova.geolocation/www/geolocation.js",
-      "pluginId": "org.apache.cordova.geolocation",
-      "clobbers": [
-        "navigator.geolocation"
+        "Connection"
       ]
     },
     {
@@ -1173,6 +1181,28 @@
       "pluginId": "cordova-plugin-request-location-accuracy",
       "clobbers": [
         "cordova.plugins.locationAccuracy"
+      ]
+    },
+    {
+      "id": "es6-promise-plugin.Promise",
+      "file": "plugins/es6-promise-plugin/www/promise.js",
+      "pluginId": "es6-promise-plugin",
+      "runs": true
+    },
+    {
+      "id": "cordova-plugin-screen-orientation.screenorientation",
+      "file": "plugins/cordova-plugin-screen-orientation/www/screenorientation.js",
+      "pluginId": "cordova-plugin-screen-orientation",
+      "clobbers": [
+        "cordova.plugins.screenorientation"
+      ]
+    },
+    {
+      "id": "cordova-plugin-splashscreen.SplashScreen",
+      "file": "plugins/cordova-plugin-splashscreen/www/splashscreen.js",
+      "pluginId": "cordova-plugin-splashscreen",
+      "clobbers": [
+        "navigator.splashscreen"
       ]
     },
     {
@@ -1264,65 +1294,35 @@
       ]
     },
     {
-      "id": "cordova-plugin-barcodescanner.BarcodeScanner",
-      "file": "plugins/cordova-plugin-barcodescanner/www/barcodescanner.js",
-      "pluginId": "cordova-plugin-barcodescanner",
+      "id": "org.apache.cordova.geolocation.Coordinates",
+      "file": "plugins/org.apache.cordova.geolocation/www/Coordinates.js",
+      "pluginId": "org.apache.cordova.geolocation",
       "clobbers": [
-        "cordova.plugins.barcodeScanner"
+        "Coordinates"
       ]
     },
     {
-      "id": "cordova-plugin-camera.Camera",
-      "file": "plugins/cordova-plugin-camera/www/CameraConstants.js",
-      "pluginId": "cordova-plugin-camera",
+      "id": "org.apache.cordova.geolocation.PositionError",
+      "file": "plugins/org.apache.cordova.geolocation/www/PositionError.js",
+      "pluginId": "org.apache.cordova.geolocation",
       "clobbers": [
-        "Camera"
+        "PositionError"
       ]
     },
     {
-      "id": "cordova-plugin-camera.CameraPopoverOptions",
-      "file": "plugins/cordova-plugin-camera/www/CameraPopoverOptions.js",
-      "pluginId": "cordova-plugin-camera",
+      "id": "org.apache.cordova.geolocation.Position",
+      "file": "plugins/org.apache.cordova.geolocation/www/Position.js",
+      "pluginId": "org.apache.cordova.geolocation",
       "clobbers": [
-        "CameraPopoverOptions"
+        "Position"
       ]
     },
     {
-      "id": "cordova-plugin-camera.camera",
-      "file": "plugins/cordova-plugin-camera/www/Camera.js",
-      "pluginId": "cordova-plugin-camera",
+      "id": "org.apache.cordova.geolocation.geolocation",
+      "file": "plugins/org.apache.cordova.geolocation/www/geolocation.js",
+      "pluginId": "org.apache.cordova.geolocation",
       "clobbers": [
-        "navigator.camera"
-      ]
-    },
-    {
-      "id": "cordova-plugin-camera.CameraPopoverHandle",
-      "file": "plugins/cordova-plugin-camera/www/CameraPopoverHandle.js",
-      "pluginId": "cordova-plugin-camera",
-      "clobbers": [
-        "CameraPopoverHandle"
-      ]
-    },
-    {
-      "id": "es6-promise-plugin.Promise",
-      "file": "plugins/es6-promise-plugin/www/promise.js",
-      "pluginId": "es6-promise-plugin",
-      "runs": true
-    },
-    {
-      "id": "cordova-plugin-screen-orientation.screenorientation",
-      "file": "plugins/cordova-plugin-screen-orientation/www/screenorientation.js",
-      "pluginId": "cordova-plugin-screen-orientation",
-      "clobbers": [
-        "cordova.plugins.screenorientation"
-      ]
-    },
-    {
-      "id": "cordova-plugin-keyboard.keyboard",
-      "file": "plugins/cordova-plugin-keyboard/www/keyboard.js",
-      "pluginId": "cordova-plugin-keyboard",
-      "clobbers": [
-        "window.Keyboard"
+        "navigator.geolocation"
       ]
     },
     {
@@ -1335,28 +1335,28 @@
     }
   ],
   "plugin_metadata": {
-    "cordova-plugin-whitelist": "1.3.4",
-    "cordova-plugin-device": "2.0.3",
-    "cordova-plugin-dialogs": "2.0.2",
-    "cordova-plugin-inappbrowser": "4.1.0",
-    "cordova-plugin-file": "6.0.2",
-    "cordova-plugin-network-information": "2.0.2",
-    "cordova-plugin-splashscreen": "6.0.0",
-    "cordova-plugin-file-transfer": "1.7.1",
-    "cordova-plugin-advanced-geolocation": "1.1.0",
-    "cordova-plugin-locationservices": "2.1.0",
     "com.adjust.sdk": "4.23.0",
+    "cordova-plugin-advanced-geolocation": "1.1.0",
+    "cordova-plugin-android-imei": "1.0.0",
     "cordova-plugin-androidx": "2.0.0",
     "cordova-plugin-androidx-adapter": "1.1.3",
-    "cordova-plugin-android-imei": "1.0.0",
-    "org.apache.cordova.geolocation": "0.3.6",
-    "cordova-plugin-request-location-accuracy": "2.3.0",
-    "cordova.plugins.diagnostic": "6.0.3",
     "cordova-plugin-barcodescanner": "0.7.4",
     "cordova-plugin-camera": "5.0.1",
+    "cordova-plugin-device": "2.0.3",
+    "cordova-plugin-dialogs": "2.0.2",
+    "cordova-plugin-file": "6.0.2",
+    "cordova-plugin-file-transfer": "1.7.1",
+    "cordova-plugin-inappbrowser": "4.1.0",
+    "cordova-plugin-keyboard": "1.2.0",
+    "cordova-plugin-locationservices": "2.1.0",
+    "cordova-plugin-network-information": "2.0.2",
+    "cordova-plugin-request-location-accuracy": "2.3.0",
     "es6-promise-plugin": "4.2.2",
     "cordova-plugin-screen-orientation": "3.0.2",
-    "cordova-plugin-keyboard": "1.2.0",
+    "cordova-plugin-splashscreen": "6.0.0",
+    "cordova-plugin-whitelist": "1.3.4",
+    "cordova.plugins.diagnostic": "6.0.3",
+    "org.apache.cordova.geolocation": "0.3.6",
     "cordova-plugin-camera-preview": "0.12.1"
   }
 }
