@@ -75,7 +75,7 @@
            </span>
         </span>
 
-        <img id="capturedImage" width="95%" height="200px" style="margin-left:2.5%">
+        <!-- <img id="capturedImage" width="95%" height="200px" style="margin-left:2.5%"> -->
 
         <div id="content" class="cover content animate"></div>
 
@@ -92,18 +92,18 @@
             <button class="btn-style"  id="switch_camera" (click)="switchCameraButton()" ><img src="images/switch_camera_128.png" style="width: 30px;height: 30px;"> </button>
             <div class="black_color"> Tap for photo</div>
           </div>
-          <div id="previewblock" class="previewblock" >
+          <!-- <div id="previewblock" class="previewblock" >
             <button class="btn-style btn-crop" (click)="confirmPreview()"><img class="btn_icon_camera" src="images/confirm_photo_52.png" />Confirm</button>
             <button class="btn-style btn-crop" (click)="deletePreview()"><img  class="btn_icon_camera" src="images/delete_photo_52.png"/>Retry</button>
             <button class="btn-style btn-crop" (click)="rotateBase64Img()"><img src="images/rotate.png" class="btn_icon_camera"/>Rotate</button>
-        </div>
-          <div id="cropblock" class="previewblock" *ngIf="showCropview">
+        </div> -->
+          <!-- <div id="cropblock" class="previewblock" *ngIf="showCropview">
             <button class="btn-style btn-crop" (click)="confirmCrop()"><img src="images/crop_photo_52.png" class="btn_icon_camera"/>Crop</button>
             <button class="btn-style btn-crop" (click)="retrySnap()"><img src="images/retry_photo_52.png" class="btn_icon_camera"/>Retry</button>
             <button class="btn-style btn-crop" (click)="rotateBase64Img()"><img src="images/rotate.png" class="btn_icon_camera"/>Rotate</button>
-          </div>
+          </div> -->
           
-          <image-cropper
+          <!-- <image-cropper
               [imageBase64]="imageBase64"
               [maintainAspectRatio]="false"
               format="png"
@@ -111,7 +111,7 @@
               (imageLoaded)="imageLoaded()"
               (cropperReady)="cropperReady()"
               (loadImageFailed)="loadImageFailed()"
-          ></image-cropper>
+          ></image-cropper> -->
           
           </div>
         <canvas id = 'canvas'></canvas>
