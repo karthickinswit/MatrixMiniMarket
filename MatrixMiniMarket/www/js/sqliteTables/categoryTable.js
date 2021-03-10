@@ -176,14 +176,17 @@ function isAuditCompleted(db, auditId, categoryId, channelId, success, error){
     var cnNormCount = 0;
     var sgfNormCount = 0;
     var sgfCount = 0;
-    var query1 = "select count(norm_id) as normCompCount from mxpg_comp_products where store_id ="+ auditId;
+    var query1 = "select count(norm_id) as normCompCount from mxpg_comp_products where store_id ="+ auditId +" and category_id not in (select category_id from mxpg_category where category_name like '%promo%')";
+
+//    var query1 = "select count(norm_id) as normCompCount from mxpg_comp_products where store_id ="+ auditId;
     db.transaction(function(tx){
         tx.executeSql(query1, [], function(tx, response){
             var rows = response.rows;
             var len = response.rows.length;
             compNormCount = response.rows.item(0).normCompCount;
+            var query2 = "select count(norm_id) as normPncount  from mxpg_pn_map where channel_id = "+ channelId + " and category_id not in (select category_id from mxpg_category where category_name like '%promo%')";
 
-            var query2 = "select count(norm_id) as normPncount  from mxpg_pn_map where channel_id = "+ channelId;
+            //var query2 = "select count(norm_id) as normPncount  from mxpg_pn_map where channel_id = "+ channelId;
             db.transaction(function(tx){
                 tx.executeSql(query2, [], function(tx, response){
                     var rows = response.rows;

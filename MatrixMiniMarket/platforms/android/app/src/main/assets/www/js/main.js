@@ -41,6 +41,8 @@ var platform;
 
 function onDeviceReady(isDesktop) {
     platform = cordova.platformId;
+
+    var frontCamera = false;
     require(["router", "jquery.loadmask"], function(Router) {
         try{
 
@@ -72,19 +74,53 @@ function onDeviceReady(isDesktop) {
 
         screen.orientation.lock('portrait');
         
-        $("#takePic").click(function(){
-            CameraPreview.takePicture(function(filePath) {
-                console.log("filePath", filePath[0]);
-                var image = document.getElementById('capturedImage');
-                 image.src = "file://"+filePath[0];
-                 stopCamera();
-
-            });
-        });
+        // $("#takePic").click(function(){
+        //     inswit.showLoaderEl("Processing your image...");
+        //     CameraPreview.takePicture(function(filePath) {
+        //         inswit.hideLoaderEl();
+        //         stopCamera();
+        //         console.log("filePath", filePath[0]);
+        //         var image = document.getElementById('capturedImage');
+        //          image.src = "file://"+filePath[0];
+        //     }, function() {
+        //         inswit.hideLoaderEl();
+        //     });
+        // });
 
         $("#switch_camera").click(function() {
-            CameraPreview.switchCamera();
+            $("#camerablock").hide();
+            CameraPreview.switchCamera(function() {
+                $("#camerablock").show();
+            }, function() {
+                $("#camerablock").show();
+            });
+        //     var direction;
+        //     if(!frontCamera){
+        //         frontCamera = true;
+        //         direction = CameraPreview.CAMERA_DIRECTION.FRONT;
+        //     }else {
+        //         frontCamera = false;
+        //         direction = CameraPreview.CAMERA_DIRECTION.BACK;
+        //     }
+        //     $(".in_app_camera").show();
+        //     CameraPreview.stopCamera();
+        //     var options = {
+        //         x: 0,
+        //         y: 0,
+        //         width: window.screen.width,
+        //         height: window.screen.height-200,
+        //         camera: direction,
+        //         tapPhoto: true,
+        //         previewDrag: true,
+        //         toBack: false,
+        //         alpha: 1,
+        //         storeToFile: true,
+        //         disableExifHeaderStripping: false,
+        //         superImposeText: window.superImposeText
+        //     }
+        //     CameraPreview.startCamera(options);
         });
+        
 
     });
 
@@ -121,7 +157,7 @@ function startCameraAbove(){
         y: 0,
         width: window.screen.width,
         height: window.screen.height-200,
-        camera: 'rear',
+        camera: CameraPreview.CAMERA_DIRECTION.BACK,
         tapPhoto: true,
         previewDrag: true,
         toBack: false,
@@ -132,10 +168,10 @@ function startCameraAbove(){
     
     CameraPreview.startCamera(options);
 
-    CameraPreview.onBackButton(function() {
-        console.log('Back button pushed');
-        backKeyDown();
-    });
+    // CameraPreview.onBackButton(function() {
+    //     console.log('Back button pushed');
+    //     backKeyDown();
+    // });
 
 }
 
@@ -187,7 +223,7 @@ function stopCamera(){
     CameraPreview.stopCamera();
     setTimeout(function(){ 
         $(".in_app_camera").hide();
-    }, 500);
+    }, 10);
 }
 
 function select2Intitialize() {

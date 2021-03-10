@@ -796,20 +796,16 @@ var inswit = {
 		// 	callback(imageURI);
 		// 	$("."+ takeEl + ", ." + retakeEl).removeClass("disable");
 		// }, cameraOptions);
-		this.startCameraAbove(superImposeText);
-		$(".in_app_camera").show();
+		this.startCameraAbove(superImposeText, takeEl, retakeEl, parentsEl);
+		$("#camerablock").show();
+		window.superImposeText = superImposeText;
 		Keyboard.hide();
 
-		CameraPreview.onBackButton(function() {
-			backKeyDown();
-			var imageURI = $(".photo_block img").attr("src") || "";
-			callback(imageURI);
-			$("."+ takeEl + ", ." + retakeEl).removeClass("disable");
-		});
-
 		$("#takePic").click(function(){
-
+			//inswit.showLoaderEl("Processing your image...");
+			$("#camerablock").hide();
 			CameraPreview.takePicture(function(filePath) {
+				//inswit.hideLoaderEl();
 				var imageURI = "file://"+filePath[0];            
 				stopCamera();
 
@@ -844,22 +840,25 @@ var inswit = {
 
 				
 			},function(err) {
-				// var imageURI = $(".photo_block img").attr("src") || "";
-				// callback(imageURI);
-				// $("."+ takeEl + ", ." + retakeEl).removeClass("disable");
+				if(!parentsEl) {
+					$("."+ takeEl + ", ." + retakeEl).removeClass("disable");
+				}else {
+					parentsEl.find("."+ takeEl + ", ." + retakeEl).removeClass("disable");
+				}	
+				inswit.hideLoaderEl();
 			});
 
 		});
 
 	},
 
-	startCameraAbove: function(superImposeText){
+	startCameraAbove: function(superImposeText, takeEl, retakeEl, parentsEl){
 		options = {
 			x: 0,
 			y: 0,
 			width: window.screen.width,
 			height: window.screen.height-200,
-			camera: 'rear',
+			camera: CameraPreview.CAMERA_DIRECTION.BACK,
 			tapPhoto: true,
 			previewDrag: true,
 			toBack: false,
@@ -868,12 +867,28 @@ var inswit = {
 			disableExifHeaderStripping: false,
 			superImposeText: superImposeText
 		},
-		
-		CameraPreview.startCamera(options);
+		CameraPreview.startCamera(options, function(){
+			$(".in_app_camera").show();
+		}, function() {
+			alert("Please try after sometime");
+			if(!parentsEl) {
+				$("."+ takeEl + ", ." + retakeEl).removeClass("disable");
+			}else {
+				parentsEl.find("."+ takeEl + ", ." + retakeEl).removeClass("disable");
+			}		
+		});
 	
 		CameraPreview.onBackButton(function() {
 			console.log('Back button pushed');
-			backKeyDown();
+			if(!parentsEl) {
+				$("."+ takeEl + ", ." + retakeEl).removeClass("disable");
+			}else {
+				parentsEl.find("."+ takeEl + ", ." + retakeEl).removeClass("disable");
+			}
+			inswit.hideLoaderEl();
+			setTimeout(function() {
+				backKeyDown();
+			}, 100)			
 		});
 	
 	},

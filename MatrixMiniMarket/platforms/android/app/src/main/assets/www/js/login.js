@@ -67,10 +67,10 @@ define([
 				}, 1000);
 			});
 
-		    CameraPreview.onBackButton(function() {
-				console.log('Back button pushed');
-				backKeyDown();
-			});
+		    // CameraPreview.onBackButton(function() {
+			// 	console.log('Back button pushed');
+			// 	backKeyDown();
+			// });
 
 		},
 

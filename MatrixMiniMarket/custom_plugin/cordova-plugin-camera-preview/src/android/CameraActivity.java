@@ -680,10 +680,13 @@ public class CameraActivity extends Fragment {
 
         Canvas cs = new Canvas(bmp);
         Paint tPaint = new Paint();
-        tPaint.setTextSize(25);
         tPaint.setColor(Color.WHITE);
         tPaint.setStyle(Paint.Style.FILL);
 
+        float size = setTextSizeForWidth(tPaint, 400, text);
+        System.out.println(size);
+        tPaint.setTextSize(size);
+       // tpaint.textScaleX(2.0);
         float height = tPaint.measureText("yY");
         cs.drawText(text, 20f, bmp.getHeight() - (height+5f), tPaint);
 
@@ -719,10 +722,35 @@ public class CameraActivity extends Fragment {
         Log.d(TAG, "CameraPreview onPictureTaken general exception");
       } finally {
         canTakePicture = true;
-        mCamera.startPreview();
+        try{
+          mCamera.startPreview();
+        }catch(Exception e){
+        }
       }
     }
   };
+
+   private static float setTextSizeForWidth(Paint paint, float desiredWidth,
+                                          String text) {
+
+    // Pick a reasonably large value for the test. Larger values produce
+    // more accurate results, but may cause problems with hardware
+    // acceleration. But there are workarounds for that, too; refer to
+    // http://stackoverflow.com/questions/6253528/font-size-too-large-to-fit-in-cache
+    final float testTextSize = 48f;
+
+    // Get the bounds of the text, using our testTextSize.
+    paint.setTextSize(testTextSize);
+    Rect bounds = new Rect();
+    paint.getTextBounds(text, 0, text.length(), bounds);
+
+    // Calculate the desired size as a proportion of our testTextSize.
+    float desiredTextSize = testTextSize * desiredWidth / bounds.width();
+
+    // Set the paint for that size.
+    return desiredTextSize;
+  }
+
 
   public static Bitmap rotateBitmap(Bitmap source, float angle, boolean mirror) {
     Matrix matrix = new Matrix();
@@ -885,24 +913,27 @@ public class CameraActivity extends Fragment {
       canTakePicture = false;
 
       new Thread() {
-        public void run() {
-          Camera.Parameters params = mCamera.getParameters();
+        public void run() {          
+          try {
+            Camera.Parameters params = mCamera.getParameters();
 
-          Camera.Size size = getOptimalPictureSize(width, height, params.getPreviewSize(), params.getSupportedPictureSizes());
-          params.setPictureSize(size.width, size.height);
-          currentQuality = quality;
+            Camera.Size size = getOptimalPictureSize(width, height, params.getPreviewSize(), params.getSupportedPictureSizes());
+            params.setPictureSize(size.width, size.height);
+            currentQuality = quality;
 
-          if(cameraCurrentlyLocked == Camera.CameraInfo.CAMERA_FACING_FRONT && !storeToFile) {
-            // The image will be recompressed in the callback
-            params.setJpegQuality(99);
-          } else {
-            params.setJpegQuality(quality);
+            if(cameraCurrentlyLocked == Camera.CameraInfo.CAMERA_FACING_FRONT && !storeToFile) {
+              // The image will be recompressed in the callback
+              params.setJpegQuality(99);
+            } else {
+              params.setJpegQuality(quality);
+            }
+
+            //params.setRotation(mPreview.getDisplayOrientation());
+
+            mCamera.setParameters(params);
+            mCamera.takePicture(shutterCallback, null, jpegPictureCallback);
+          }catch (Exception e) {
           }
-
-          //params.setRotation(mPreview.getDisplayOrientation());
-
-          mCamera.setParameters(params);
-          mCamera.takePicture(shutterCallback, null, jpegPictureCallback);
         }
       }.start();
     } else {

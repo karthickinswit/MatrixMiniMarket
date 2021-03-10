@@ -22,9 +22,6 @@
     "cordova-plugin-androidx-adapter": {
       "PACKAGE_NAME": "com.appiyo.matrix_mini_market"
     },
-    "cordova-plugin-barcodescanner": {
-      "PACKAGE_NAME": "com.appiyo.matrix_mini_market"
-    },
     "cordova-plugin-camera": {
       "ANDROID_SUPPORT_V4_VERSION": "27.+",
       "PACKAGE_NAME": "com.appiyo.matrix_mini_market"
@@ -74,6 +71,10 @@
       "PACKAGE_NAME": "com.appiyo.matrix_mini_market"
     },
     "cordova-plugin-camera-preview": {
+      "PACKAGE_NAME": "com.appiyo.matrix_mini_market"
+    },
+    "phonegap-plugin-barcodescanner": {
+      "ANDROID_SUPPORT_V4_VERSION": "27.+",
       "PACKAGE_NAME": "com.appiyo.matrix_mini_market"
     }
   },

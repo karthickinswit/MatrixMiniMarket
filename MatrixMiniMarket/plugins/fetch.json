@@ -139,14 +139,6 @@
       "ANDROIDX_VERSION": "1.+"
     }
   },
-  "cordova-plugin-barcodescanner": {
-    "source": {
-      "type": "registry",
-      "id": "cordova-plugin-barcodescanner"
-    },
-    "is_top_level": true,
-    "variables": {}
-  },
   "cordova-plugin-compat": {
     "source": {
       "type": "registry",
@@ -191,6 +183,14 @@
     "source": {
       "type": "local",
       "path": "/Users/christusvalerian/Documents/Matrix/MatrixMiniMarket/node_modules/cordova-plugin-camera-preview"
+    },
+    "is_top_level": true,
+    "variables": {}
+  },
+  "phonegap-plugin-barcodescanner": {
+    "source": {
+      "type": "registry",
+      "id": "phonegap-plugin-barcodescanner@8.1.0"
     },
     "is_top_level": true,
     "variables": {}

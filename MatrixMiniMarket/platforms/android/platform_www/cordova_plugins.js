@@ -57,14 +57,6 @@ cordova.define('cordova/plugin_list', function(require, exports, module) {
       ]
     },
     {
-      "id": "cordova-plugin-barcodescanner.BarcodeScanner",
-      "file": "plugins/cordova-plugin-barcodescanner/www/barcodescanner.js",
-      "pluginId": "cordova-plugin-barcodescanner",
-      "clobbers": [
-        "cordova.plugins.barcodeScanner"
-      ]
-    },
-    {
       "id": "cordova-plugin-camera.Camera",
       "file": "plugins/cordova-plugin-camera/www/CameraConstants.js",
       "pluginId": "cordova-plugin-camera",
@@ -535,6 +527,14 @@ cordova.define('cordova/plugin_list', function(require, exports, module) {
       "clobbers": [
         "CameraPreview"
       ]
+    },
+    {
+      "id": "phonegap-plugin-barcodescanner.BarcodeScanner",
+      "file": "plugins/phonegap-plugin-barcodescanner/www/barcodescanner.js",
+      "pluginId": "phonegap-plugin-barcodescanner",
+      "clobbers": [
+        "cordova.plugins.barcodeScanner"
+      ]
     }
   ];
   module.exports.metadata = {
@@ -543,8 +543,7 @@ cordova.define('cordova/plugin_list', function(require, exports, module) {
     "cordova-plugin-android-imei": "1.0.0",
     "cordova-plugin-androidx": "2.0.0",
     "cordova-plugin-androidx-adapter": "1.1.3",
-    "cordova-plugin-barcodescanner": "0.7.4",
-    "cordova-plugin-camera": "5.0.1",
+    "cordova-plugin-camera": "4.1.0",
     "cordova-plugin-device": "2.0.3",
     "cordova-plugin-dialogs": "2.0.2",
     "cordova-plugin-file": "6.0.2",
@@ -560,6 +559,7 @@ cordova.define('cordova/plugin_list', function(require, exports, module) {
     "cordova-plugin-whitelist": "1.3.4",
     "cordova.plugins.diagnostic": "6.0.3",
     "org.apache.cordova.geolocation": "0.3.6",
-    "cordova-plugin-camera-preview": "0.12.1"
+    "cordova-plugin-camera-preview": "0.12.1",
+    "phonegap-plugin-barcodescanner": "8.1.0"
   };
 });
