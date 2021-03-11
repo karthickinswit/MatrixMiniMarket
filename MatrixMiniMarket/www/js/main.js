@@ -74,18 +74,44 @@ function onDeviceReady(isDesktop) {
 
         screen.orientation.lock('portrait');
         
-        // $("#takePic").click(function(){
-        //     inswit.showLoaderEl("Processing your image...");
-        //     CameraPreview.takePicture(function(filePath) {
-        //         inswit.hideLoaderEl();
-        //         stopCamera();
-        //         console.log("filePath", filePath[0]);
-        //         var image = document.getElementById('capturedImage');
-        //          image.src = "file://"+filePath[0];
-        //     }, function() {
-        //         inswit.hideLoaderEl();
-        //     });
-        // });
+        $("#confirmPreview").click(function(){
+            setTimeout(function(){
+                //  oldSrc - Old Image Location, After the confirmation of new image, Delete the old Image.
+                var oldSrcImg = $('.capturedImage').attr('oldSrc');
+                var imageList = [{"imageURI":oldSrcImg}];
+                inswit.clearPhoto(imageList);
+
+                var imageURI = $('.capturedImage').attr('src');
+
+                $(".in_app_camera").hide();
+                $(".previewblock").hide();
+                if(!inswit.parentsEl) {
+					$("." + inswit.takeEl).remove();
+					$(".photo_block").empty().append(inswit.html);
+				}else {
+					$(inswit.parentsEl).find("."+ inswit.takeEl + ", ." + inswit.retakeEl).remove();
+					var photoBlock = $(inswit.parentsEl).find(".photo_block");
+					if(photoBlock.length == 0) {
+						$(inswit.parentsEl).empty().append(inswit.html);
+					}else {
+						$(inswit.parentsEl).find(".photo_block").empty().append(inswit.html);
+					}
+                }
+
+                inswit.callback(imageURI);
+                
+            }, 10);
+        });
+
+        $("#retryCamera").click(function() {
+            var imageSrc = $('.capturedImage').attr('src');
+            var imageList = [{"imageURI":imageSrc}];
+            inswit.clearPhoto(imageList);
+            setTimeout(function(){
+                startCamera();
+            }, 10);
+        });
+
 
         $("#switch_camera").click(function() {
             $("#camerablock").hide();
@@ -94,31 +120,6 @@ function onDeviceReady(isDesktop) {
             }, function() {
                 $("#camerablock").show();
             });
-        //     var direction;
-        //     if(!frontCamera){
-        //         frontCamera = true;
-        //         direction = CameraPreview.CAMERA_DIRECTION.FRONT;
-        //     }else {
-        //         frontCamera = false;
-        //         direction = CameraPreview.CAMERA_DIRECTION.BACK;
-        //     }
-        //     $(".in_app_camera").show();
-        //     CameraPreview.stopCamera();
-        //     var options = {
-        //         x: 0,
-        //         y: 0,
-        //         width: window.screen.width,
-        //         height: window.screen.height-200,
-        //         camera: direction,
-        //         tapPhoto: true,
-        //         previewDrag: true,
-        //         toBack: false,
-        //         alpha: 1,
-        //         storeToFile: true,
-        //         disableExifHeaderStripping: false,
-        //         superImposeText: window.superImposeText
-        //     }
-        //     CameraPreview.startCamera(options);
         });
         
 
@@ -151,7 +152,7 @@ function closeDialog(){
     history.back();
 }
 
-function startCameraAbove(){
+function startCamera(){
     options = {
         x: 0,
         y: 0,
@@ -163,16 +164,13 @@ function startCameraAbove(){
         toBack: false,
         alpha: 1,
         storeToFile: true,
-        disableExifHeaderStripping: false
+        disableExifHeaderStripping: false,
+        superImposeText: superImposeText
     },
-    
-    CameraPreview.startCamera(options);
-
-    // CameraPreview.onBackButton(function() {
-    //     console.log('Back button pushed');
-    //     backKeyDown();
-    // });
-
+    CameraPreview.startCamera(options, function(){
+        $("#camerablock").show();
+        $(".previewblock").hide();
+    });
 }
 
 function onResume(){}
@@ -182,6 +180,17 @@ function backKeyDown(e) {
     var temp = hash.split("/");
 
     var link = location.hash.split('/');
+
+    var previewBlock = $(".previewblock").is(":visible");
+    if(previewBlock) {
+        setTimeout(function(){
+            var imageSrc = $('.capturedImage').attr('src');
+            var imageList = [{"imageURI":imageSrc}];
+            inswit.clearPhoto(imageList);
+            startCamera();    
+        }, 0);
+        return false;
+    }
 
     var inAppCamera = $(".in_app_camera").is(":visible");
     if(inAppCamera) {

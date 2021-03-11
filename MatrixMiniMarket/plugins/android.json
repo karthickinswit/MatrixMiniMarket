@@ -70,11 +70,11 @@
     "org.apache.cordova.geolocation": {
       "PACKAGE_NAME": "com.appiyo.matrix_mini_market"
     },
-    "cordova-plugin-camera-preview": {
-      "PACKAGE_NAME": "com.appiyo.matrix_mini_market"
-    },
     "phonegap-plugin-barcodescanner": {
       "ANDROID_SUPPORT_V4_VERSION": "27.+",
+      "PACKAGE_NAME": "com.appiyo.matrix_mini_market"
+    },
+    "cordova-plugin-camera-preview": {
       "PACKAGE_NAME": "com.appiyo.matrix_mini_market"
     }
   },

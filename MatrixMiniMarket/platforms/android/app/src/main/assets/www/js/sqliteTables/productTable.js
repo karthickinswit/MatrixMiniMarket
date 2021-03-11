@@ -162,7 +162,7 @@ function selectProduct(db, productId, channelId, fn) {
 
 
 function getStoreImage(db, storeId, fn) {
-    var query = "select store_image from mxpg_comp_audits where store_id=? and comp_audit=? "
+    var query = "select store_image, selfie_image from mxpg_comp_audits where store_id=? and comp_audit=? "
     db.transaction(function(tx){
         tx.executeSql(query , [storeId, false], function(tx, response) {
             var length = response.rows.length;

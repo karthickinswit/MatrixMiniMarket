@@ -75,28 +75,23 @@
            </span>
         </span>
 
-        <!-- <img id="capturedImage" width="95%" height="200px" style="margin-left:2.5%"> -->
 
         <div id="content" class="cover content animate"></div>
 
         <div class="controls in_app_camera">
             <!--<div class="close_camera_preview" id="close" (click)="close()">X</div>-->
-            <div class="pictures">
-                <img id="originalPicture"/>
-                <!-- <img class="croppedPicture" [src]="croppedImage"/> -->
-            </div>
                   
-          <div id="camerablock" class="camerablock text-center" *ngIf="showCameraPreview">
+          <div id="camerablock" class="camerablock text-center">
             <!-- <button class="btn-style"  id="start_flash" (click)="switchCameraButton()" ><img src="images/switch_camera_128.png" style="width: 30px;height: 30px;"> </button> -->
             <button class="btn-camera" id="takePic"> <img src="images/take_picture_164.png" style="width: 40px;height: 40px;margin-left: 65px;"></button>
             <button class="btn-style"  id="switch_camera" (click)="switchCameraButton()" ><img src="images/switch_camera_128.png" style="width: 30px;height: 30px;"> </button>
             <div class="black_color"> Tap for photo</div>
           </div>
-          <!-- <div id="previewblock" class="previewblock" >
-            <button class="btn-style btn-crop" (click)="confirmPreview()"><img class="btn_icon_camera" src="images/confirm_photo_52.png" />Confirm</button>
-            <button class="btn-style btn-crop" (click)="deletePreview()"><img  class="btn_icon_camera" src="images/delete_photo_52.png"/>Retry</button>
-            <button class="btn-style btn-crop" (click)="rotateBase64Img()"><img src="images/rotate.png" class="btn_icon_camera"/>Rotate</button>
-        </div> -->
+          <img id="capturedImage"  class="capturedImage" width="95%" height="200px" style="margin-left:2.5%; display: none;">
+          <div id="previewblock" class="previewblock" >
+            <button class="btn-style btn-crop" id="retryCamera"><img  class="btn_icon_camera" src="images/delete_photo_52.png"/>Retry</button>
+            <button class="btn-style btn-crop" id="confirmPreview"><img class="btn_icon_camera" src="images/confirm_photo_52.png" />Confirm</button>
+          </div> 
           <!-- <div id="cropblock" class="previewblock" *ngIf="showCropview">
             <button class="btn-style btn-crop" (click)="confirmCrop()"><img src="images/crop_photo_52.png" class="btn_icon_camera"/>Crop</button>
             <button class="btn-style btn-crop" (click)="retrySnap()"><img src="images/retry_photo_52.png" class="btn_icon_camera"/>Retry</button>

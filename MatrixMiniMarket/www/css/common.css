@@ -491,6 +491,8 @@ table.table-bordered > tbody > tr > td{
   vertical-align: -5px;
 }
 
+.in_app_camera img[src=""] { display: none; }
+
 html, body, .ion-app, .ion-content {
   background-color: transparent;
 }

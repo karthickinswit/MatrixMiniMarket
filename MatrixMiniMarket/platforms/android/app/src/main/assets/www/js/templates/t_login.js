@@ -14,8 +14,8 @@ define([],function(){
         </div>\
         <div class="forgot_password"><a href="#forgotpassword">Forgot Password</a></div>\
         <div class="forgot_password" ><a href="#register">Register</a></div>\
-        <div class="forgot_password" id="openCamera">Open Camera</div>\
-        <div class="forgot_password" id="qrScanner">Open QR scanner</div>\
+        <!-- <div class="forgot_password" id="openCamera">Open Camera</div>\
+        <div class="forgot_password" id="qrScanner">Open QR scanner</div> -->\
       </div>\
     </div>\
 </div>';

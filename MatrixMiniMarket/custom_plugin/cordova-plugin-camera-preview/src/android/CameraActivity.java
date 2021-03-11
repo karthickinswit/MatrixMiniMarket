@@ -680,16 +680,15 @@ public class CameraActivity extends Fragment {
 
         Canvas cs = new Canvas(bmp);
         Paint tPaint = new Paint();
+
+//        float size = setTextSizeForWidth(tPaint, 450, text);
+//        System.out.println(size);
+//        tPaint.setTextSize(size);
+        tPaint.setTextSize(14 * getResources().getDisplayMetrics().density);
         tPaint.setColor(Color.WHITE);
         tPaint.setStyle(Paint.Style.FILL);
-
-        float size = setTextSizeForWidth(tPaint, 400, text);
-        System.out.println(size);
-        tPaint.setTextSize(size);
-       // tpaint.textScaleX(2.0);
         float height = tPaint.measureText("yY");
         cs.drawText(text, 20f, bmp.getHeight() - (height+5f), tPaint);
-
 
 
         if (!storeToFile) {
@@ -737,7 +736,7 @@ public class CameraActivity extends Fragment {
     // more accurate results, but may cause problems with hardware
     // acceleration. But there are workarounds for that, too; refer to
     // http://stackoverflow.com/questions/6253528/font-size-too-large-to-fit-in-cache
-    final float testTextSize = 48f;
+    final float testTextSize = 55f;
 
     // Get the bounds of the text, using our testTextSize.
     paint.setTextSize(testTextSize);

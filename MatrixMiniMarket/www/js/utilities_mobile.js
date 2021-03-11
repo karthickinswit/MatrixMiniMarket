@@ -733,12 +733,16 @@ var inswit = {
 
             singlePhoto = (parentsEl.hasClass("single_photo") == true) ? true:false;
 
-            if(!singlePhoto) {
-                dynamicStyle = "gillette_photo_block";
-            }
-
             parentsEl.find("."+ takeEl + ", ." + retakeEl).addClass("disable");
-            oldImageURI = parentsEl.find(".photo_block img").attr("src") || "";
+			oldImageURI = parentsEl.find(".photo_block img").attr("src") || "";
+			
+			// oldImageURI - Already existing image
+			if(!singlePhoto) {
+				dynamicStyle = "gillette_photo_block";
+				oldImageURI = parentsEl.find("img").attr("src");
+            }else {
+				oldImageURI = parentsEl.find("img").attr("src");
+			}
 
         }
 
@@ -796,42 +800,43 @@ var inswit = {
 		// 	callback(imageURI);
 		// 	$("."+ takeEl + ", ." + retakeEl).removeClass("disable");
 		// }, cameraOptions);
+
+		//	Hide the Keyboard before opening the camera
+		Keyboard.hide();
+
+		//	Start the Camera
 		this.startCameraAbove(superImposeText, takeEl, retakeEl, parentsEl);
 		$("#camerablock").show();
 		window.superImposeText = superImposeText;
-		Keyboard.hide();
 
 		$("#takePic").click(function(){
-			//inswit.showLoaderEl("Processing your image...");
 			$("#camerablock").hide();
+			var image = $('.capturedImage');
+			image.attr("src", "");
 			CameraPreview.takePicture(function(filePath) {
-				//inswit.hideLoaderEl();
 				var imageURI = "file://"+filePath[0];            
-				stopCamera();
+				CameraPreview.stopCamera();
+				
+				//Set the captured image inside the confirm block.
+				$(".previewblock").show();
+				console.log("filePath", filePath[0]);
+                var image = $('.capturedImage');
+				image.attr("src", imageURI);
+				image.attr("oldSrc", oldImageURI);
+				var height = window.screen.height-200;
+				$(".capturedImage").css('height', height + "px").show();
+
 
 				var template = "<img class="+ dynamicStyle +" src='{{imageURI}}' width='100%' height='200'><a class='{{element}} retake_photo'>Retake</a>";
 				var html = Mustache.to_html(template, {"imageURI":imageURI, "element":retakeEl});
 
-				if(!parentsEl) {
-					$("." + takeEl).remove();
-					$(".photo_block").empty().append(html);
-				}else {
-					$(parentsEl).find("."+ takeEl + ", ." + retakeEl).remove();
-					var photoBlock = $(parentsEl).find(".photo_block");
-					if(photoBlock.length == 0) {
-						$(parentsEl).empty().append(html);
-					}else {
-						$(parentsEl).find(".photo_block").empty().append(html);
-					}
-				}
+				inswit.retakeEl = retakeEl;
+				inswit.takeEl = takeEl;
+				inswit.parentsEl = parentsEl;
+				inswit.html = html;
+				inswit.callback = callback;
 
-				callback(imageURI);
-
-				if(oldImageURI){
-					var imageList = [{"imageURI":oldImageURI}];
-					inswit.clearPhoto(imageList);
-				}
-
+				//To prevent double tap
 				if(!parentsEl) {
 					$("."+ takeEl + ", ." + retakeEl).removeClass("disable");
 				}else {
@@ -853,6 +858,7 @@ var inswit = {
 	},
 
 	startCameraAbove: function(superImposeText, takeEl, retakeEl, parentsEl){
+
 		options = {
 			x: 0,
 			y: 0,
@@ -867,6 +873,7 @@ var inswit = {
 			disableExifHeaderStripping: false,
 			superImposeText: superImposeText
 		},
+
 		CameraPreview.startCamera(options, function(){
 			$(".in_app_camera").show();
 		}, function() {
@@ -1449,7 +1456,10 @@ var inswit = {
     	});
 
     	getStoreImage(db, storeId, function(response){
-            var imageList = [];
+			var imageList = [];
+			imageList.push({
+				"imageURI":response.selfie_image
+			});
             imageList.push({
             "imageURI":response.store_image
             });

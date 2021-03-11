@@ -67,10 +67,10 @@
       "cordova-plugin-camera": {},
       "cordova-plugin-screen-orientation": {},
       "cordova-plugin-keyboard": {},
-      "cordova-plugin-camera-preview": {},
       "phonegap-plugin-barcodescanner": {
         "ANDROID_SUPPORT_V4_VERSION": "27.+"
-      }
+      },
+      "cordova-plugin-camera-preview": {}
     },
     "platforms": [
       "android"
