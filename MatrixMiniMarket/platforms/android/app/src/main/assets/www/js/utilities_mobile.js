@@ -1,5 +1,5 @@
-//var PROJECTID = "a8fe973aff5c11e79d0d0050569cb68c"; //production
-var PROJECTID = "3d916a1c-60fb-4e86-8222-5f4d7c66951f"; //process
+var PROJECTID = "a8fe973aff5c11e79d0d0050569cb68c"; //production
+//var PROJECTID = "3d916a1c-60fb-4e86-8222-5f4d7c66951f"; //process
 //var PROJECTID = "99b8f2863f5511e9bb4f0050569c0a8e"; //development testing
 var inswit = {
 
@@ -736,6 +736,7 @@ var inswit = {
             parentsEl.find("."+ takeEl + ", ." + retakeEl).addClass("disable");
 			oldImageURI = parentsEl.find(".photo_block img").attr("src") || "";
 			
+			// oldImageURI - Already existing image
 			if(!singlePhoto) {
 				dynamicStyle = "gillette_photo_block";
 				oldImageURI = parentsEl.find("img").attr("src");
@@ -799,29 +800,29 @@ var inswit = {
 		// 	callback(imageURI);
 		// 	$("."+ takeEl + ", ." + retakeEl).removeClass("disable");
 		// }, cameraOptions);
+
+		//	Hide the Keyboard before opening the camera
+		Keyboard.hide();
+
+		//	Start the Camera
 		this.startCameraAbove(superImposeText, takeEl, retakeEl, parentsEl);
 		$("#camerablock").show();
 		window.superImposeText = superImposeText;
-		Keyboard.hide();
 
 		$("#takePic").click(function(){
-			//inswit.showLoaderEl("Processing your image...");
 			$("#camerablock").hide();
 			var image = $('.capturedImage');
 			image.attr("src", "");
 			CameraPreview.takePicture(function(filePath) {
-				//inswit.hideLoaderEl();
 				var imageURI = "file://"+filePath[0];            
-				//stopCamera();
 				CameraPreview.stopCamera();
-
+				
+				//Set the captured image inside the confirm block.
 				$(".previewblock").show();
 				console.log("filePath", filePath[0]);
                 var image = $('.capturedImage');
-				// image.src = "file://"+filePath[0];
 				image.attr("src", imageURI);
 				image.attr("oldSrc", oldImageURI);
-				
 				var height = window.screen.height-200;
 				$(".capturedImage").css('height', height + "px").show();
 
@@ -835,21 +836,7 @@ var inswit = {
 				inswit.html = html;
 				inswit.callback = callback;
 
-				// if(!parentsEl) {
-				// 	$("." + takeEl).remove();
-				// 	$(".photo_block").empty().append(html);
-				// }else {
-				// 	$(parentsEl).find("."+ takeEl + ", ." + retakeEl).remove();
-				// 	var photoBlock = $(parentsEl).find(".photo_block");
-				// 	if(photoBlock.length == 0) {
-				// 		$(parentsEl).empty().append(html);
-				// 	}else {
-				// 		$(parentsEl).find(".photo_block").empty().append(html);
-				// 	}
-				// }
-
-				//callback(imageURI);
-
+				//To prevent double tap
 				if(!parentsEl) {
 					$("."+ takeEl + ", ." + retakeEl).removeClass("disable");
 				}else {
@@ -871,6 +858,7 @@ var inswit = {
 	},
 
 	startCameraAbove: function(superImposeText, takeEl, retakeEl, parentsEl){
+
 		options = {
 			x: 0,
 			y: 0,
@@ -885,6 +873,7 @@ var inswit = {
 			disableExifHeaderStripping: false,
 			superImposeText: superImposeText
 		},
+
 		CameraPreview.startCamera(options, function(){
 			$(".in_app_camera").show();
 		}, function() {

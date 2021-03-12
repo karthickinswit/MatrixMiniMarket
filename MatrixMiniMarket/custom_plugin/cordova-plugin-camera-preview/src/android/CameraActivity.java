@@ -684,7 +684,7 @@ public class CameraActivity extends Fragment {
 //        float size = setTextSizeForWidth(tPaint, 450, text);
 //        System.out.println(size);
 //        tPaint.setTextSize(size);
-        tPaint.setTextSize(14 * getResources().getDisplayMetrics().density);
+        tPaint.setTextSize(16 * getResources().getDisplayMetrics().density);
         tPaint.setColor(Color.WHITE);
         tPaint.setStyle(Paint.Style.FILL);
         float height = tPaint.measureText("yY");

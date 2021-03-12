@@ -376,7 +376,6 @@ table.table-bordered > tbody > tr > td{
 .in_app_camera .camerablock,
 .in_app_camera .previewblock{
   padding: 2px;
-  border: 1px solid #111;
   border-radius: 3px;
   position: absolute;
   bottom: 5%;

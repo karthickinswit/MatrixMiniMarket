@@ -99,6 +99,8 @@ function onDeviceReady(isDesktop) {
                 }
 
                 inswit.callback(imageURI);
+                var image = $('.capturedImage');
+                image.attr("src", "");    
                 
             }, 10);
         });
@@ -110,6 +112,8 @@ function onDeviceReady(isDesktop) {
             setTimeout(function(){
                 startCamera();
             }, 10);
+            var image = $('.capturedImage');
+            image.attr("src", "");
         });
 
 

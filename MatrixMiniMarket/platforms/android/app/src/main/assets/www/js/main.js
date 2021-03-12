@@ -74,27 +74,17 @@ function onDeviceReady(isDesktop) {
 
         screen.orientation.lock('portrait');
         
-        // $("#takePic").click(function(){
-        //     inswit.showLoaderEl("Processing your image...");
-        //     CameraPreview.takePicture(function(filePath) {
-        //         inswit.hideLoaderEl();
-        //         stopCamera();
-        //         console.log("filePath", filePath[0]);
-        //         var image = document.getElementById('capturedImage');
-        //          image.src = "file://"+filePath[0];
-        //     }, function() {
-        //         inswit.hideLoaderEl();
-        //     });
-        // });
-
         $("#confirmPreview").click(function(){
             setTimeout(function(){
-                var imageSrc = $('.capturedImage').attr('oldSrc');
-                var imageList = [{"imageURI":imageSrc}];
+                //  oldSrc - Old Image Location, After the confirmation of new image, Delete the old Image.
+                var oldSrcImg = $('.capturedImage').attr('oldSrc');
+                var imageList = [{"imageURI":oldSrcImg}];
                 inswit.clearPhoto(imageList);
+
+                var imageURI = $('.capturedImage').attr('src');
+
                 $(".in_app_camera").hide();
                 $(".previewblock").hide();
-
                 if(!inswit.parentsEl) {
 					$("." + inswit.takeEl).remove();
 					$(".photo_block").empty().append(inswit.html);
@@ -108,7 +98,9 @@ function onDeviceReady(isDesktop) {
 					}
                 }
 
-                inswit.callback();
+                inswit.callback(imageURI);
+                var image = $('.capturedImage');
+                image.attr("src", "");    
                 
             }, 10);
         });
@@ -120,6 +112,8 @@ function onDeviceReady(isDesktop) {
             setTimeout(function(){
                 startCamera();
             }, 10);
+            var image = $('.capturedImage');
+            image.attr("src", "");
         });
 
 
@@ -130,31 +124,6 @@ function onDeviceReady(isDesktop) {
             }, function() {
                 $("#camerablock").show();
             });
-        //     var direction;
-        //     if(!frontCamera){
-        //         frontCamera = true;
-        //         direction = CameraPreview.CAMERA_DIRECTION.FRONT;
-        //     }else {
-        //         frontCamera = false;
-        //         direction = CameraPreview.CAMERA_DIRECTION.BACK;
-        //     }
-        //     $(".in_app_camera").show();
-        //     CameraPreview.stopCamera();
-        //     var options = {
-        //         x: 0,
-        //         y: 0,
-        //         width: window.screen.width,
-        //         height: window.screen.height-200,
-        //         camera: direction,
-        //         tapPhoto: true,
-        //         previewDrag: true,
-        //         toBack: false,
-        //         alpha: 1,
-        //         storeToFile: true,
-        //         disableExifHeaderStripping: false,
-        //         superImposeText: window.superImposeText
-        //     }
-        //     CameraPreview.startCamera(options);
         });
         
 
