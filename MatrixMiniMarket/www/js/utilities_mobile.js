@@ -813,7 +813,7 @@ var inswit = {
 			$("#camerablock").hide();
 			var image = $('.capturedImage');
 			image.attr("src", "");
-			CameraPreview.takePicture(function(filePath) {
+			CameraPreview.takePicture({quality: 100},function(filePath) {
 				var imageURI = "file://"+filePath[0];            
 				CameraPreview.stopCamera();
 				

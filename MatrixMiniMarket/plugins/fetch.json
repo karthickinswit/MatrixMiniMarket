@@ -147,14 +147,6 @@
     "is_top_level": false,
     "variables": {}
   },
-  "cordova-plugin-camera": {
-    "source": {
-      "type": "local",
-      "path": "/Users/christusvalerian/Documents/Matrix/MatrixMiniMarket/node_modules/cordova-plugin-camera"
-    },
-    "is_top_level": true,
-    "variables": {}
-  },
   "cordova-plugin-screen-orientation": {
     "source": {
       "type": "registry",
@@ -183,6 +175,14 @@
     "source": {
       "type": "registry",
       "id": "phonegap-plugin-barcodescanner@8.1.0"
+    },
+    "is_top_level": true,
+    "variables": {}
+  },
+  "cordova-plugin-camera": {
+    "source": {
+      "type": "local",
+      "path": "/Users/christusvalerian/Documents/Matrix/MatrixMiniMarket/node_modules/cordova-plugin-camera"
     },
     "is_top_level": true,
     "variables": {}
