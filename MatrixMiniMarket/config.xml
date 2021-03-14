@@ -16,6 +16,10 @@
     	<preference name="android-minSdkVersion" value="26" />
         <preference name="android-targetSdkVersion" value="29" />
         <allow-intent href="market:*" />
+        <resource-file src="google-services.json" target="app/google-services.json" />
+        <preference name="GradlePluginGoogleServicesEnabled" value="true" />
+        <preference name="GradlePluginGoogleServicesVersion" value="4.2.0" />
+
 	<icon src="res/android/icon.png"/>
     	<splash src="res/android/screen.png"/>
     </platform>

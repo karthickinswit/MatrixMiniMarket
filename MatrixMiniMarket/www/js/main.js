@@ -133,6 +133,10 @@ function onDeviceReady(isDesktop) {
 
     // Make the request
     requestLocationAccuracy();
+
+    var crashlytics = FirebaseCrashlytics.initialise();
+    crashlytics.logException("my caught exception");
+
 }
 
 if (!isDesktop()) {
