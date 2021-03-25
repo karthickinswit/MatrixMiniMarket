@@ -75,11 +75,11 @@
       "cordova-plugin-camera": {
         "ANDROID_SUPPORT_V4_VERSION": "27.+"
       },
-      "cordova-plugin-camera-preview": {},
       "cordova-plugin-firebase-crashlytics": {
         "ANDROID_FIREBASE_ANALYTICS_VERSION": "17.4.3",
         "ANDROID_FIREBASE_CRASHLYTICS_VERSION": "17.1.0"
-      }
+      },
+      "cordova-plugin-camera-preview": {}
     },
     "platforms": [
       "android"

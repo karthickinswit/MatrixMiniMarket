@@ -146,6 +146,9 @@ public class CameraActivity extends Fragment {
   private String appResourcesPackage;
 
   SeekBar seekBar;
+
+  FrameLayout progressBarHolder;
+
   @Override
   public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
     appResourcesPackage = getActivity().getPackageName();
@@ -178,6 +181,8 @@ public class CameraActivity extends Fragment {
 
     // Inflate the layout for this fragment
     view = inflater.inflate(getResources().getIdentifier("camera_activity", "layout", appResourcesPackage), container, false);
+    progressBarHolder = (FrameLayout) view.findViewById(R.id.camera_loader);
+
     createCameraPreview();
     seekBar  = (SeekBar) view.findViewById(R.id.seekBar);
 
@@ -689,7 +694,7 @@ public class CameraActivity extends Fragment {
 //        System.out.println(size);
        // tPaint.setTextSize(20);
 
-        tPaint.setTextSize(16 * getResources().getDisplayMetrics().density);
+        tPaint.setTextSize(14 * getResources().getDisplayMetrics().density);
         tPaint.setColor(Color.WHITE);
         tPaint.setStyle(Paint.Style.FILL);
         float height = tPaint.measureText("yY");
@@ -710,6 +715,7 @@ public class CameraActivity extends Fragment {
 
           String compressImagePath = compressImage(path, rotationDegrees);
 
+          progressBarHolder.setVisibility(View.INVISIBLE);
 
 //          out.write(data);
 //          out.close();
@@ -722,17 +728,22 @@ public class CameraActivity extends Fragment {
         // most likely failed to allocate memory for rotateBitmap
         Log.d(TAG, "CameraPreview OutOfMemoryError");
         // failed to allocate memory
+        progressBarHolder.setVisibility(View.INVISIBLE);
         eventListener.onPictureTakenError("Picture too large (memory)");
       } catch (IOException e) {
         Log.d(TAG, "CameraPreview IOException");
+        progressBarHolder.setVisibility(View.INVISIBLE);
         eventListener.onPictureTakenError("IO Error when extracting exif");
       } catch (Exception e) {
+        progressBarHolder.setVisibility(View.INVISIBLE);
         Log.d(TAG, "CameraPreview onPictureTaken general exception");
       } finally {
         canTakePicture = true;
         try{
           mCamera.startPreview();
+          progressBarHolder.setVisibility(View.INVISIBLE);
         }catch(Exception e){
+          progressBarHolder.setVisibility(View.INVISIBLE);
         }
       }
     }
@@ -919,6 +930,13 @@ public class CameraActivity extends Fragment {
       }
 
       canTakePicture = false;
+
+      getActivity().runOnUiThread(new Runnable() {
+        @Override
+        public void run() {
+          progressBarHolder.setVisibility(View.VISIBLE);
+        }
+      });
 
       new Thread() {
         public void run() {          

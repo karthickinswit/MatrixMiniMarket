@@ -46,7 +46,8 @@ define([
 
 					require(['templates/t_list'], function(template){
 						var categories = {};
-						
+						inswit.showLoaderEl("Please wait...");
+
 						checkSgfAvailable(db, storeId, function(sgfResult) {
 
 							var fn = function(completedProducts){
@@ -122,12 +123,11 @@ define([
 
 								var er = function(e, a){
 								};*/
-
 								isAuditCompleted(db, storeId, smartSpotId, channelId, function(isCompleted) {
 									if(isCompleted) {
 										that.$el.find(".complete_audit, .audit-btn").prop("disabled", false);
 									}
-
+									inswit.hideLoaderEl();
 								});
 							}		
 							

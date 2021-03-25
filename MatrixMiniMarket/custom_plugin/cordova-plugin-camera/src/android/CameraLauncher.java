@@ -1149,7 +1149,7 @@ public class CameraLauncher extends CordovaPlugin implements MediaScannerConnect
 
                     Canvas cs = new Canvas(scaledBitmap);
                     Paint tPaint = new Paint();
-                    tPaint.setTextSize(30);
+                    tPaint.setTextSize(25);
                     tPaint.setColor(Color.WHITE);
                     tPaint.setStyle(Paint.Style.FILL);
 

@@ -218,6 +218,8 @@ function isAuditCompleted(db, auditId, categoryId, channelId, success, error){
                                     
                                     if(compNormCount == totalNormCount && sgfCount ==  sgfCompCount) {
                                         success(true);
+                                    }else {
+                                        success(false);
                                     }
                                 });
                             });

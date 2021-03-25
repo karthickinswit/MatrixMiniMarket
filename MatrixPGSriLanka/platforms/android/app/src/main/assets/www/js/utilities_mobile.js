@@ -1,7 +1,9 @@
 //var PROJECTID = "1c62737aae0d11e59d090050569cb68c";   //development
 //var PROJECTID = "b600b3d2ea5211e8a9bf0050569ccb08"; //production
 //var PROJECTID = "97677c1832bc11e5a9bb0050569ccb08"; //demo
-var PROJECTID = "4bae93ece73b11e8a9bf0050569ccb08"; //process
+//var PROJECTID = "4bae93ece73b11e8a9bf0050569ccb08"; //process
+
+var PROJECTID = "59fc54e08bc911eba360c282e0885855"; //process
 
 var inswit = {
 
@@ -24,7 +26,7 @@ var inswit = {
 	VERSION : "1.0",
 
 	LOGIN_CREDENTIAL: {
-		"email": "bangladesh@matrixbsindia.com",
+		"email": "bangladesh_final@matrixbsindia.com",
 		"password": "admin@matrix123"
 	},
 
@@ -37,56 +39,56 @@ var inswit = {
 
 	LOGIN_PROCESS: {
 		"projectId":PROJECTID,
-		"workflowId":"4ddae257a7c34f0f8ca35ec695800d98",
-		"processId":"0900c2b3d8eb42949025c82a7f7ac6be"
+		"workflowId":"cf55f437de6c42168d0e5011619d0831",
+		"processId":"3e862cbb0f8147059a03821aee9bc0a5"
 	},
-
+		 
 	UPLOAD_PROCESS: {
 		"projectId":PROJECTID,
-		"workflowId":"1429e08d8c8f4891b2362168ced2d241",
-		"processId":"5f028af6f15f11e8a7a60050569ce25f"
+		"workflowId":"4107f294e5394442b3018bd7a73f48e3",
+		"processId":"77c8e023339f4be0bb4f9eb67605a189"
 	},
-
+		 
 	FORGOT_PROCESS: {
 		"projectId":PROJECTID,
-		"workflowId":"fd6a1ca5127c42929f3ee62b6d864b4a",
-		"processId":"b996eed4c99345c3a176cc5681c10eaf"
+		"workflowId":"8745dec72e414a7bb668518bb252e102",
+		"processId":"e231c48449624315ba3df59489fb5e5d"
 	},
-
+		 
 	RESET_PROCESS: {
 		"projectId":PROJECTID,
-		"workflowId":"fd6a1ca5127c42929f3ee62b6d864b4a",
-		"processId":"344b16b66414468dac41d19c75419286"
+		"workflowId":"8745dec72e414a7bb668518bb252e102",
+		"processId":"89ac5dfd982e428a99e87e72698731de"
 	},
-
+		 
 	GET_DETAILED_AUDIT_PROCESS: {
 		"projectId":PROJECTID,
-		"workflowId":"47e6ab168f6711e5a9bb0050569ccb08",
-		"processId":"484eb7568f6711e5a9bb0050569ccb08"
+		"workflowId":"f827206491b34b99abd864ac73a482c3",
+		"processId":"3ee8a71f89dd49e7bf68a312bca28d68"
 	},
-
+		 
 	GET_ASSIGNED_AUDIT_PROCESS: {
 		"projectId":PROJECTID,
-		"workflowId":"33b542bd320e44808b95236e983738cf",
-		"processId":"feb3ee8b7d9347d28b2c603741724b73"
+		"workflowId":"e0486fd0b8d7471784a3c6827a5a719f ",
+		"processId":"ab2995561d5a42de8f823853f8ee4823"
 	},
-
+		 
 	INIT_PROCESS: {
 		"projectId":PROJECTID,
-		"workflowId":"551673bf90a148c98b22081080ab336c",
-		"processId":"0f045f924d584396ab8ea6f8c3ab6445"
+		"workflowId":"643f36c572084c54bda4700f84e0d53e",
+		"processId":"e2a048b13a904f51b3979b9f9e39f8a6"
 	},
-
+		 
 	ERROR_LOG: {
 		"projectId":PROJECTID,
-		"workflowId":"c669ead8407f44cda0f5972b3f2515b0",
-		"processId":"dc14cc67abb348048a6093e063aef7ba"
+		"workflowId":"4a0e6365e8cc4d18b93cc63a55844cdf",
+		"processId":"ffee0c5d760b4a6091c291d8ced27d78"
 	},
-
+		 
 	ERROR_LOG_UPLOAD: {
 		"projectId":PROJECTID,
-		"workflowId":"240ef64ac4e7490f8dca8effaa84fa58",
-		"processId":"84cb70fa018a46acb4d6d73a51eaf424"
+		"workflowId":"b06e2f8a547c48ed85bb4c91f104e6be",
+		"processId":"0fc5a53006544d64b6d884017b4024fb"
 	},
 
 	//Don't change the order.

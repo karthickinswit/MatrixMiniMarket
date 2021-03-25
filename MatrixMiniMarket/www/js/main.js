@@ -135,7 +135,7 @@ function onDeviceReady(isDesktop) {
     requestLocationAccuracy();
 
     var crashlytics = FirebaseCrashlytics.initialise();
-    crashlytics.logException("my caught exception");
+    //crashlytics.logException("my caught exception");
 
 }
 
