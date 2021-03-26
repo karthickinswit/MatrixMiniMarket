@@ -149,35 +149,13 @@ public class CameraActivity extends Fragment {
 
   FrameLayout progressBarHolder;
 
+  private SimpleOrientationListener mOrientationListener;
+
   @Override
   public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
     appResourcesPackage = getActivity().getPackageName();
 
-    SimpleOrientationListener mOrientationListener = new SimpleOrientationListener(getActivity()) {
-
-      @Override
-      public void onSimpleOrientationChanged(int orientation) {
-
-        if (orientation == SimpleOrientationListener.ORIENTATION_LANDSCAPE_RIGHT) {
-          Log.d(TAG, "ORIENTATION_LANDSCAPE_RIGHT");
-          rotationDegrees = 180;
-        } else if (orientation == SimpleOrientationListener.ORIENTATION_LANDSCAPE_LEFT) {
-          Log.d(TAG, "ORIENTATION_LANDSCAPE_LEFT");
-          rotationDegrees = 0;
-        }
-        //Log.d(TAG, "ORIENTATION_LANDSCAPE: "+ rotation);
-        else if (orientation == SimpleOrientationListener.ORIENTATION_PORTRAIT) {
-          Log.d(TAG, "ORIENTATION_PORTRAIT");
-          rotationDegrees = 90;
-        } else {
-          Log.d(TAG, "ORIENTATION_PORTRAIT_UPSIDE_DOWN");
-          rotationDegrees = 270;
-        }
-
-
-      }
-    };
-    mOrientationListener.enable();
+    setOrientationListener();
 
     // Inflate the layout for this fragment
     view = inflater.inflate(getResources().getIdentifier("camera_activity", "layout", appResourcesPackage), container, false);
@@ -485,13 +463,18 @@ public class CameraActivity extends Fragment {
         }
       });
     }
+    if(this.mOrientationListener == null) {
+      setOrientationListener();
+    }
   }
 
   @Override
   public void onPause() {
     super.onPause();
-
-    // Because the Camera object is a shared resource, it's very important to release it when the activity is paused.
+    if(this.mOrientationListener != null) {
+      this.mOrientationListener.disable();
+      this.mOrientationListener = null;
+    }    // Because the Camera object is a shared resource, it's very important to release it when the activity is paused.
     if (mCamera != null) {
       setDefaultCameraId();
       mPreview.setCamera(null, -1);
@@ -1346,5 +1329,55 @@ public class CameraActivity extends Fragment {
     return inSampleSize;
   }
 
+  @Override
+  public void onStop() {
+
+    if(this.mOrientationListener != null) {
+      this.mOrientationListener.disable();
+      this.mOrientationListener = null;
+    }
+    // stop the preview
+    if (mCamera != null) {
+      setDefaultCameraId();
+      mPreview.setCamera(null, -1);
+      mCamera.setPreviewCallback(null);
+      mCamera.release();
+      mCamera = null;
+    }
+    super.onStop();
+  }
+
+  private void setOrientationListener() {
+
+    mOrientationListener = new SimpleOrientationListener(getActivity()) {
+
+      @Override
+      public void onSimpleOrientationChanged(int orientation) {
+
+        if (orientation == SimpleOrientationListener.ORIENTATION_LANDSCAPE_RIGHT) {
+          Log.d(TAG, "ORIENTATION_LANDSCAPE_RIGHT");
+          rotationDegrees = 180;
+        } else if (orientation == SimpleOrientationListener.ORIENTATION_LANDSCAPE_LEFT) {
+          Log.d(TAG, "ORIENTATION_LANDSCAPE_LEFT");
+          rotationDegrees = 0;
+        }
+        //Log.d(TAG, "ORIENTATION_LANDSCAPE: "+ rotation);
+        else if (orientation == SimpleOrientationListener.ORIENTATION_PORTRAIT) {
+          Log.d(TAG, "ORIENTATION_PORTRAIT");
+          rotationDegrees = 90;
+        } else {
+          Log.d(TAG, "ORIENTATION_PORTRAIT_UPSIDE_DOWN");
+          rotationDegrees = 270;
+        }
+
+
+      }
+    };
+    mOrientationListener.enable();
+
+  }
 
 }
+
+
+//https://github.com/boxme/SquareCamera/blob/aa1d02be33104e312c8658bec3f896a7181ebacd/squarecamera/src/main/java/com/desmond/squarecamera/CameraFragment.java#L566
