@@ -655,68 +655,81 @@ public class CameraActivity extends Fragment {
         }
 
        // String superImposeText = "Test SuperImpose";
-
-        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yy HH:mm:ss");
-        String text = sdf.format(Calendar.getInstance().getTime()); // reading local time in the system
-
-        if(!superImposeText.isEmpty()) {
-          text = text + " - " + superImposeText;
-        }
+      try {
+            String lat = "";
+            String lng = "";
 
 
-        Bitmap bmp = BitmapFactory.decodeByteArray(data, 0, data.length).copy(Bitmap.Config.ARGB_8888, true); //myArray is the byteArray containing the image. Use copy() to create a mutable bitmap. Feel free to change the config-type. Consider doing this in two steps so you can recycle() the immutable bitmap.
+            SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yy HH:mm:ss");
+            String text = sdf.format(Calendar.getInstance().getTime()); // reading local time in the system
 
-    //    bmp = rotateBitmap(bmp, mPreview.getDisplayOrientation(), cameraCurrentlyLocked == Camera.CameraInfo.CAMERA_FACING_FRONT);
-      //  bmp = getResizedBitmap(bmp, 500);
+            if (!superImposeText.isEmpty()) {
+              String[] arrOfSuperImposeTxt = superImposeText.split("Z", 3);
+              text = text + " - " + arrOfSuperImposeTxt[0];
+              lat = arrOfSuperImposeTxt[1];
+              lng = arrOfSuperImposeTxt[2];
+            }
 
 
-        Canvas cs = new Canvas(bmp);
-        Paint tPaint = new Paint();
+            Bitmap bmp = BitmapFactory.decodeByteArray(data, 0, data.length).copy(Bitmap.Config.ARGB_8888, true); //myArray is the byteArray containing the image. Use copy() to create a mutable bitmap. Feel free to change the config-type. Consider doing this in two steps so you can recycle() the immutable bitmap.
 
-//        float size = setTextSizeForWidth(tPaint, 450, text);
-//        System.out.println(size);
-       // tPaint.setTextSize(20);
+            // bmp = rotateBitmap(bmp, mPreview.getDisplayOrientation(), cameraCurrentlyLocked == Camera.CameraInfo.CAMERA_FACING_FRONT);
+            //bmp = getResizedBitmap(bmp, 500);
 
-        tPaint.setTextSize(14 * getResources().getDisplayMetrics().density);
-        tPaint.setColor(Color.WHITE);
-        tPaint.setStyle(Paint.Style.FILL);
-        float height = tPaint.measureText("yY");
-        cs.drawText(text, 20f, bmp.getHeight() - (height+5f), tPaint);
+
+            Canvas cs = new Canvas(bmp);
+            Paint tPaint = new Paint();
+
+            // float size = setTextSizeForWidth(tPaint, 450, text);
+            //System.out.println(size);
+            //tPaint.setTextSize(20);
+
+            tPaint.setTextSize(14 * getResources().getDisplayMetrics().density);
+            tPaint.setColor(Color.WHITE);
+            tPaint.setStyle(Paint.Style.FILL);
+            float height = tPaint.measureText("yY");
+            cs.drawText(text, 20f, bmp.getHeight() - (height+5f), tPaint);
+
+
+            cs.drawText(lat, 20f, 40f, tPaint);
+
+            cs.drawText(lng, 20f, 80f, tPaint);
+
 
 
         if (!storeToFile) {
-          String encodedImage = Base64.encodeToString(data, Base64.NO_WRAP);
+              String encodedImage = Base64.encodeToString(data, Base64.NO_WRAP);
 
-          eventListener.onPictureTaken(encodedImage);
-        } else {
-          String path = getTempFilePath();
+              eventListener.onPictureTaken(encodedImage);
+            } else {
+              String path = getTempFilePath();
 
-          FileOutputStream out = new FileOutputStream(path);
+              FileOutputStream out = new FileOutputStream(path);
 
-          bmp.compress(Bitmap.CompressFormat.PNG, currentQuality, out);
-          out.close();
+              bmp.compress(Bitmap.CompressFormat.PNG, currentQuality, out);
+              out.close();
 
-          String compressImagePath = compressImage(path, rotationDegrees);
+              String compressImagePath = compressImage(path, rotationDegrees);
 
-          progressBarHolder.setVisibility(View.INVISIBLE);
+              progressBarHolder.setVisibility(View.INVISIBLE);
 
-//          out.write(data);
-//          out.close();
-          eventListener.onPictureTaken(compressImagePath);
+  //          out.write(data);
+  //          out.close();
+              eventListener.onPictureTaken(compressImagePath);
+            }
+
+
+            Log.d(TAG, "CameraPreview pictureTakenHandler called back");
+        } catch (IOException e) {
+            progressBarHolder.setVisibility(View.INVISIBLE);
+          eventListener.onPictureTakenError("Picture too large (memory)");
         }
-
-
-        Log.d(TAG, "CameraPreview pictureTakenHandler called back");
       } catch (OutOfMemoryError e) {
         // most likely failed to allocate memory for rotateBitmap
         Log.d(TAG, "CameraPreview OutOfMemoryError");
         // failed to allocate memory
         progressBarHolder.setVisibility(View.INVISIBLE);
         eventListener.onPictureTakenError("Picture too large (memory)");
-      } catch (IOException e) {
-        Log.d(TAG, "CameraPreview IOException");
-        progressBarHolder.setVisibility(View.INVISIBLE);
-        eventListener.onPictureTakenError("IO Error when extracting exif");
       } catch (Exception e) {
         progressBarHolder.setVisibility(View.INVISIBLE);
         Log.d(TAG, "CameraPreview onPictureTaken general exception");

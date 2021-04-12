@@ -129,5 +129,13 @@ var LocalStorage = {
         return parseInt(localStorage.getItem("gpsTimeout"));
     },
 
+    setGPSMandatory: function(flag) {
+      localStorage.setItem("gpsMandatory", flag);
+    },
+
+    isGPSMandatory: function() {
+      return localStorage.getItem("gpsMandatory");
+    }
+
 
 };

@@ -107,5 +107,21 @@ var LocalStorage = {
 
     removeServerTime: function(id) {
         localStorage.removeItem(id)
+    },
+
+    setGpsTimeOut: function(time) {
+      localStorage.setItem("gpsTimeout", time);
+    },
+
+    getGpsTimeOut: function() {
+      return parseInt(localStorage.getItem("gpsTimeout"));
+    },
+    
+    setGPSMandatory: function(flag) {
+      localStorage.setItem("gpsMandatory", flag);
+    },
+
+    isGPSMandatory: function() {
+      return localStorage.getItem("gpsMandatory");
     }
 };

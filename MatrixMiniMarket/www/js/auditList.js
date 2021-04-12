@@ -116,6 +116,17 @@ define([
 			    	var cutOffTime = response.ProcessVariables.cutOffTime;
                     LocalStorage.setAuditTimeLimit(cutOffTime);
 
+					var gpsTimer = (response.ProcessVariables.gpsCutOffTime || 1) * 1000;
+			    	//inswit.TIMEOUT = parseInt(gpsTimer / 5); // Browser & GPS timeout configuration.
+					inswit.TIMEOUT = gpsTimer;
+					LocalStorage.setGpsTimeOut(inswit.TIMEOUT);
+					console.log("gpsTimer", inswit.TIMEOUT);
+
+
+					var isGPSMandatory = response.ProcessVariables.isGPSMandatory || false;
+					console.log("isGPSMandatory", isGPSMandatory);
+					LocalStorage.setGPSMandatory(isGPSMandatory);
+
 		    		if(response.ProcessVariables.isUpdate){
 			    		//inswit.alert("Master data is changed!. Hereafter you can do audits based on new modification");
 

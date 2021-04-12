@@ -68,6 +68,10 @@ function onDeviceReady(isDesktop) {
         Backbone.history.start();
         
         inswit.events = _.extend({}, Backbone.Events);
+
+        document.addEventListener("offline", onOffline, false);
+        document.addEventListener("online", onOnline, false);
+
         
         $('body').addClass("android cover");
         select2Intitialize();
@@ -377,4 +381,26 @@ function _makeRequest(){
         }
     });
 }
+
+function onOffline() {
+}
+ 
+function onOnline() {
+   // alert('You are now online!');
+   var tableName = "mxpg_error_log";
+   isTableExist(db, tableName, function(result) {
+       var length = result.rows.length;
+       if(length == 1) {
+            getErrorLog(db, function(result){
+                for(var i = 0; i < result.length; i++){
+                    console.log("DB result"+ result);
+                    var auditId = result[0].audit_id;
+                    var storeId = result[0].store_id;
+                    var error = result[0].error;
+                    inswit.logGPSError(auditId, storeId, error);
+                }
+            });
+        }
+   });
+ }
 

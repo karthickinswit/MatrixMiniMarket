@@ -215,6 +215,16 @@ define([
             var storeId = id[1];
 			var channelId = id[2];
 
+			var isGPS = LocalStorage.isGPSMandatory();
+
+			if(isGPS){
+				var route = "#audits/" + mId + "/continue/" + 
+					JSON.stringify(pos);
+				router.navigate(route, {
+					trigger: true
+				});
+				return;
+			}
 
 			setTimeout(function(){
 				that.setGeoLocation(auditId, storeId, function(pos){

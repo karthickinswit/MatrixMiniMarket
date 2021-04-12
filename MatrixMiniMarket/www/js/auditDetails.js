@@ -14,7 +14,8 @@ define([
 		className: "audits",
 
 		events:{
-			"click .back": "back"
+			"click .back": "back",
+			"click .start_audit": "startAudit"
 		},
 
 		showAuditDetails: function(mId){
@@ -202,7 +203,78 @@ define([
 				this.scrollView = new iScroll(wrapperEle);
 			}
 			this.scrollView.refresh();
+		},
+
+		startAudit: function(event) {
+			var that = this;
+			var mId = $(event.currentTarget).attr("href");
+			
+			var id = mId.split("-");
+            var auditId = id[0];
+            var storeId = id[1];
+			var channelId = id[2];
+
+
+			setTimeout(function(){
+				that.setGeoLocation(auditId, storeId, function(pos){
+					var route = "#audits/" + mId + "/continue/" + 
+					JSON.stringify(pos);
+					router.navigate(route, {
+						trigger: true
+					});
+				});
+			}, 0);
+
+		},
+
+		//Get latitude and longitude position of the device
+		setGeoLocation: function(auditId, storeId, fn){
+			$(".android").mask("Capturing Geolocation... Please wait...", 100);
+			var pos = {
+                lat: "",
+                lng: ""
+            };
+			var that = this;
+
+			var callback = function(pos, retry){
+				// if(retry){
+				// 	inswit.errorLog({
+				// 		"error":"GPS signal is weak, Not able to capture LAT/LNG", 
+				// 		"auditId":auditId, 
+				// 		"storeId":storeId
+				// 	});
+
+				// 	that.setGeoLocation(auditId, storeId, fn);
+				// 	return;
+				// }
+
+				if(pos.lat){
+					if(fn){
+						fn(pos);
+					}
+					$(".android").unmask();
+				}else{
+					console.log("GPS error"+ pos);
+					inswit.alert(""+pos.message);
+	
+					//Log GPS error in appiyo
+					inswit.logGPSError(auditId, storeId, pos);
+					
+					$(".android").unmask();
+				}
+			};
+
+			var options = {
+		    	enableHighAccuracy: LocalStorage.isGPSMandatory(),
+				maximumAge: inswit.MAXIMUM_AGE,
+				timeout: LocalStorage.getGpsTimeOut(),
+				priority: inswit.PRIORITY.PRIORITY_HIGH_ACCURACY,
+			};
+			inswit.getLatLng(callback, options, false);
+
 		}
+
+		
 
 	});
 

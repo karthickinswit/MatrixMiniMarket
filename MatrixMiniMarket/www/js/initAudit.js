@@ -30,6 +30,10 @@ define([
 		startAudit: function(mId){
 			var that = this;
 
+			var pos = this.model.get("pos");
+			console.log("position"+pos.lat);
+
+
 			var id = mId.split("-");
             var auditId = id[0];
             var storeId = id[1];
@@ -149,7 +153,12 @@ define([
 			}*/
 
 		
-
+			var mId = $(event.currentTarget).attr("href");
+			var id = mId.split("-");
+			var auditId = id[0];
+			var storeId = id[1];
+			var channelId = id[2];
+			var position = this.model.get("pos");
 
 
 			// var gpsDetect = cordova.require('cordova/plugin/gpsDetectionPlugin');
@@ -170,12 +179,6 @@ define([
 	            }else{
 	            	setTimeout(function(){
 						
-						var mId = $(event.currentTarget).attr("href");
-						var id = mId.split("-");
-			            var auditId = id[0];
-			            var storeId = id[1];
-			            //var channelId = id[2];
-
 			            var dist = getDistributor(db, auditId, storeId, function(distributor){
 
 			            	var image = $(".store_photo").find(".photo_block img").attr("src");
@@ -222,9 +225,9 @@ define([
 								audit.optionId = auditStatus;
 								audit.signImage = "";
 								audit.storeImage = image;
+								audit.lat = position.lat;
+								audit.lng = position.lng;
 								audit.selfieImage = selfieImage;
-								audit.lat = "";
-								audit.lng = "";
 								audit.storeImageId = "";
 								audit.signImageId = "";
 								audit.selfieImageId = "";
@@ -232,6 +235,8 @@ define([
 								audit.phoneNumber = phoneNumber;
 								audit.nonCoName = nonCoName;
 								audit.nonCoDesignation = nonCoDesignation;
+								audit.accuracy = position.accuracy;
+
 								
 
 								/**
@@ -241,8 +246,8 @@ define([
 								 */
 								selectCompletedAudit(db, mId, function(auditDetails){
 									if(auditDetails && auditDetails.length > 0 && auditDetails.item(0).lat){
-										audit.lat = auditDetails.item(0).lat;
-										audit.lng = auditDetails.item(0).lng;
+										// audit.lat = auditDetails.item(0).lat;
+										// audit.lng = auditDetails.item(0).lng;
 
 										populateCompAuditTable(db, audit, function(){
 						                    //that.startTimer(storeId);
@@ -266,7 +271,7 @@ define([
 									            });
 //											 }
 											
-											that.setGeoLocation(auditId, storeId);
+											//that.setGeoLocation(auditId, storeId);
 										//	$(".android").mask("Capturing Geolocation... Please wait...", 100);
 
 										}, function(a, e){
@@ -295,6 +300,8 @@ define([
 
             var nonCoName = this.$el.find(".audit_co_name").val() || "";
             var nonCoDesignation = this.$el.find(".audit_co_desg").val() || "";
+
+			var position = this.model.get("pos");
 
 			 var auditStatus;
 
@@ -396,8 +403,8 @@ define([
 							audit.storeImage = image || "";
 							audit.selfieImage = selfieImage;
 							audit.signImage = "";
-							audit.lat = "";
-							audit.lng = "";
+							audit.lat = position.lat;
+							audit.lng = position.lng;
 							audit.storeImageId = "";
 							audit.signImageId = "";
 							audit.selfieImageId = "";
@@ -405,6 +412,7 @@ define([
                             audit.phoneNumber = phoneNumber;
                             audit.nonCoName = nonCoName;
                             audit.nonCoDesignation = nonCoDesignation;
+							audit.accuracy = position.accuracy;
 
 
 							//Completed products need to cleared for audit status changed from 'YES' to 'NO'.
@@ -438,7 +446,7 @@ define([
 							                    });
 //											}
 										
-											that.setGeoLocation(auditId, storeId);
+										//	that.setGeoLocation(auditId, storeId);
 //											$(".android").mask("Capturing Geolocation... Please wait...", 100);
 
 										}, function(a, e){
@@ -523,15 +531,22 @@ define([
             var auditId = id[0];
             var storeId = id[1];
             //var channelId = id[2];
+			var pos = this.model.get("pos");
+			selectCompletedAudit(db, mId, function(data){
+				var auditData = data[0];
+				var lat = pos.lat;
+				var lng = pos.lng;
 
-            getStoreCode(db, storeId, function(storeCode){
-            	var callback = function(imageURI){
-					that.refreshScroll("continue_audit_wrapper");
-				}
+				getStoreCode(db, storeId, function(storeCode){
+					var callback = function(imageURI){
+						that.refreshScroll("continue_audit_wrapper");
+					}
 
-				var takeEl = "take_store_photo";
-				var retakeEl = "retake_store_photo";
-				inswit.takePicture(callback, takeEl, retakeEl, storeCode, parentsEl);
+					var takeEl = "take_store_photo";
+					var retakeEl = "retake_store_photo";
+					storeCode = storeCode + "Z" + "Lat: "+ lat + "Z" + "Lng: "+lng;
+					inswit.takePicture(callback, takeEl, retakeEl, storeCode, parentsEl);
+				});
 			});
 		},
 
@@ -545,8 +560,11 @@ define([
             var id = mId.split("-");
             var auditId = id[0];
             var storeId = id[1];
-            //var channelId = id[2];
-
+			//var channelId = id[2];
+			
+			var pos = this.model.get("pos");
+			var lat = pos.lat;
+			var lng = pos.lng;
             getStoreCode(db, storeId, function(storeCode){
                 var callback = function(imageURI){
                     that.refreshScroll("continue_audit_wrapper");
@@ -554,6 +572,7 @@ define([
 
                 var takeEl = "take_selfie_photo";
                 var retakeEl = "retake_selfie_photo";
+				storeCode = storeCode + "Z" + "Lat: "+ lat + "Z" + "Lng: "+lng;
                 inswit.takePicture(callback, takeEl, retakeEl, storeCode, parentsEl, 1);
             });
         },
@@ -569,6 +588,9 @@ define([
             var auditId = id[0];
             var storeId = id[1];
             //var channelId = id[2];
+			var pos = this.model.get("pos");
+			var lat = pos.lat;
+			var lng = pos.lng;
 
             getStoreCode(db, storeId, function(storeCode){
                 var callback = function(imageURI){
@@ -577,6 +599,8 @@ define([
 
                 var takeEl = "take_selfie_photo";
                 var retakeEl = "retake_selfie_photo";
+				storeCode = storeCode + "Z" + "Lat: "+ lat + "Z" + "Lng: "+lng;
+
                 inswit.takePicture(callback, takeEl, retakeEl, storeCode);
             });
 		},

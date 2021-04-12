@@ -1,5 +1,5 @@
-var PROJECTID = "a8fe973aff5c11e79d0d0050569cb68c"; //production
-//var PROJECTID = "3d916a1c-60fb-4e86-8222-5f4d7c66951f"; //process
+//var PROJECTID = "a8fe973aff5c11e79d0d0050569cb68c"; //production
+var PROJECTID = "3d916a1c-60fb-4e86-8222-5f4d7c66951f"; //process
 //var PROJECTID = "99b8f2863f5511e9bb4f0050569c0a8e"; //development testing
 var inswit = {
 
@@ -177,7 +177,8 @@ var inswit = {
 		DB_CREATION: "DB_CREATION",
 		DB_UPDATION: "DB_UPDATION",
 		UPLOAD_AUDIT: "UPLOAD_AUDIT",
-		UPDATE_MASTER: "UPDATE_MASTER"
+		UPDATE_MASTER: "UPDATE_MASTER",
+		GPS_FAIL: "GPS_CAPTURE_FAIL_MINIMARKET"
 	},
 
 	FIELD_TYPES: {
@@ -553,6 +554,18 @@ var inswit = {
 	 */
 	getLatLng: function(callback, options, retry){
 		var that = this;
+
+		options = {
+			enableHighAccuracy:LocalStorage.isGPSMandatory(),
+			maximumAge:inswit.MAXIMUM_AGE,
+			timeout: LocalStorage.getGpsTimeOut(),
+			priority: inswit.PRIORITY.PRIORITY_HIGH_ACCURACY,
+		};
+
+		that.getLatLngUsingLocationServices(callback, options, false);
+
+		return;
+
 		
 		if(navigator.geolocation) {
 		    navigator.geolocation.getCurrentPosition(
@@ -622,20 +635,21 @@ var inswit = {
 				return;
 
 			}, function(error) {
+				callback(error);
 				if(retry){
 					
 					callback("");
 					return;
 				}
 
-		    	options = {
-		    		enableHighAccuracy:true,
-			    	maximumAge:inswit.MAXIMUM_AGE,
-		    		timeout:inswit.TIMEOUT,
-			    	priority: inswit.PRIORITY.PRIORITY_HIGH_ACCURACY
-				};
+		    	// options = {
+		    	// 	enableHighAccuracy:true,
+			    // 	maximumAge:inswit.MAXIMUM_AGE,
+		    	// 	timeout:inswit.TIMEOUT,
+			    // 	priority: inswit.PRIORITY.PRIORITY_HIGH_ACCURACY
+				// };
 
-				that.getLatLngUsingLocationServices(callback, options, true);
+				// that.getLatLngUsingLocationServices(callback, options, true);
 
 		    }, options);
 	},
@@ -1519,5 +1533,58 @@ var inswit = {
                 fn("");
             }
         });
-    }
+    },
+
+	logGPSError: function(auditId, storeId, gpsError) {
+		//this.$(".upload_container").show();
+		//inswit.hideLoaderEl();
+		var that = this;
+
+		this.auditId = auditId;
+		this.storeId = storeId;
+		this.errorDesc = gpsError;
+		
+		var pVariables = {
+			"projectId":inswit.ERROR_LOG_UPLOAD.projectId,
+			"workflowId":inswit.ERROR_LOG_UPLOAD.workflowId,
+			"processId":inswit.ERROR_LOG_UPLOAD.processId,
+			"ProcessVariables":{
+			//	"isSellerAudit": inswit.ISSELLERAUDIT,
+				"errorType": inswit.ERROR_LOG_TYPES.GPS_FAIL,
+				"auditId": this.auditId, 
+				"storeId": this.storeId,
+				"empId":LocalStorage.getEmployeeId(),
+				"issueDate":new Date(),
+				"issueDescription": JSON.stringify(this.errorDesc),
+				"version": inswit.VERSION
+			}
+		};
+
+		inswit.executeProcess(pVariables, {
+			success: function(response){
+				if(response.ProcessVariables){
+					removeErrorLog(db, that.auditId, that.storeId);
+				}
+			}, failure: function(error){
+				//inswit.hideLoaderEl();
+				populateErrorLogTable(db, auditId, storeId, JSON.stringify(gpsError), function(result){
+				}, function(error){
+				});
+				switch(error){
+					case 0:{
+						inswit.alert("No internet connection, please enable");
+						break;
+					}
+					case 1:{
+						inswit.alert("Check your network settings!");
+						break;
+					}
+					case 2:{
+						inswit.alert("Server Busy.Try Again!");
+						break;
+					}
+				}
+			}
+		});
+	}
 };

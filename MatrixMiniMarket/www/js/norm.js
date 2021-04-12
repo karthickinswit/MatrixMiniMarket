@@ -226,15 +226,22 @@ define([
             var auditId = id[0];
             var storeId = id[1];
             var channelId = id[2];
+            selectCompletedAudit(db, mId, function(data){
+				var auditData = data[0];
+				var lat = auditData.lat;
+				var lng = auditData.lng;
 
-            getStoreCode(db, storeId, function(storeCode){
-                var callback = function(imageURI){
-                    that.refreshScroll("wrapper_norms");
-                }
+                getStoreCode(db, storeId, function(storeCode){
+                    var callback = function(imageURI){
+                        that.refreshScroll("wrapper_norms");
+                    }
 
-                var takeEl = "take_product_photo";
-                var retakeEl = "retake_product_photo";
-                inswit.takePicture(callback, takeEl, retakeEl, storeCode, parentsEl);
+                    var takeEl = "take_product_photo";
+                    var retakeEl = "retake_product_photo";
+                    storeCode = storeCode + "Z" + "Lat: "+ lat + "Z" + "Lng: "+lng;
+
+                    inswit.takePicture(callback, takeEl, retakeEl, storeCode, parentsEl);
+                });
             });
 		},
 
