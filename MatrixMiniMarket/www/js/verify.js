@@ -153,7 +153,9 @@ define([
 
 					var takeEl = "take_signature_photo";
 					var retakeEl = "retake_signature_photo";
-					storeCode = storeCode + "Z" + "Lat: "+ lat + "Z" + "Lng: "+lng;
+					if(lat.length != 0) {
+						storeCode = storeCode + "Z" + "Lat: "+ lat + "Z" + "Lng: "+lng;
+					}					
 					inswit.takePicture(callback, takeEl, retakeEl, storeCode);
 				});
 			});

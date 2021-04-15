@@ -544,7 +544,9 @@ define([
 
 					var takeEl = "take_store_photo";
 					var retakeEl = "retake_store_photo";
-					storeCode = storeCode + "Z" + "Lat: "+ lat + "Z" + "Lng: "+lng;
+					if(lat.length != 0) {
+						storeCode = storeCode + "Z" + "Lat: "+ lat + "Z" + "Lng: "+lng;
+					}
 					inswit.takePicture(callback, takeEl, retakeEl, storeCode, parentsEl);
 				});
 			});
@@ -572,8 +574,10 @@ define([
 
                 var takeEl = "take_selfie_photo";
                 var retakeEl = "retake_selfie_photo";
-				storeCode = storeCode + "Z" + "Lat: "+ lat + "Z" + "Lng: "+lng;
-                inswit.takePicture(callback, takeEl, retakeEl, storeCode, parentsEl, 1);
+				if(lat.length != 0) {
+					storeCode = storeCode + "Z" + "Lat: "+ lat + "Z" + "Lng: "+lng;
+				}                
+				inswit.takePicture(callback, takeEl, retakeEl, storeCode, parentsEl, 1);
             });
         },
 
@@ -599,8 +603,9 @@ define([
 
                 var takeEl = "take_selfie_photo";
                 var retakeEl = "retake_selfie_photo";
-				storeCode = storeCode + "Z" + "Lat: "+ lat + "Z" + "Lng: "+lng;
-
+				if(lat.length != 0) {
+					storeCode = storeCode + "Z" + "Lat: "+ lat + "Z" + "Lng: "+lng;
+				}
                 inswit.takePicture(callback, takeEl, retakeEl, storeCode);
             });
 		},

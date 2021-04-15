@@ -254,6 +254,19 @@ define([
 					}
 					$(".android").unmask();
 				}else{
+
+					let isGpsMandatory = LocalStorage.isGPSMandatory();
+
+					if(!isGpsMandatory) {
+						var pos = {
+							lat: "",
+							lng: ""
+						};
+						fn(pos);
+						$(".android").unmask();
+						return;
+					}
+
 					console.log("GPS error"+ pos);
 					inswit.alert(""+pos.message);
 	

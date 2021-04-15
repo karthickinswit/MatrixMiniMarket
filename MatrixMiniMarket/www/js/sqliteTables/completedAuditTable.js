@@ -2,7 +2,7 @@
  * This method create table to completed audit details.
  */
 function createCompAuditTable(tx, success, error) {
-    var createStatement = "CREATE TABLE IF NOT EXISTS mxpg_comp_audits(store_id TEXT, id TEXT, comp_audit BOOLEAN, audited BOOLEAN, option_id TEXT, audit_id TEXT, store_image TEXT, sign_image TEXT, lat TEXT, lng TEXT, store_image_id TEXT, sign_image_id TEXT, channel_id TEXT, auditer_name TEXT, auditer_number TEXT, selfie_image TEXT, selfie_image_id TEXT, non_co_name TEXT, non_co_designation TEXT)";
+    var createStatement = "CREATE TABLE IF NOT EXISTS mxpg_comp_audits(store_id TEXT, id TEXT, comp_audit BOOLEAN, audited BOOLEAN, option_id TEXT, audit_id TEXT, store_image TEXT, sign_image TEXT, lat TEXT, lng TEXT, store_image_id TEXT, sign_image_id TEXT, channel_id TEXT, auditer_name TEXT, auditer_number TEXT, selfie_image TEXT, selfie_image_id TEXT, non_co_name TEXT, non_co_designation TEXT, accuracy TEXT)";
     tx.executeSql(createStatement, [], success, error);
     var createIndex = "CREATE UNIQUE INDEX compAuditIndex ON mxpg_comp_audits(audit_id, store_id)";
     tx.executeSql(createIndex);
@@ -27,8 +27,8 @@ function createCompProductTable(tx, success, error) {
 
 function populateCompAuditTable(db, audit, callback, error) {
     db.transaction(function(tx){
-        tx.executeSql('INSERT OR replace INTO mxpg_comp_audits(store_id, id, comp_audit, audited, option_id, audit_id, store_image, sign_image, lat, lng, store_image_id, sign_image_id, channel_id, auditer_name, auditer_number, selfie_image, selfie_image_id, non_co_name, non_co_designation) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);',
-            [audit.storeId, audit.id, audit.isCompleted, audit.isContinued, audit.optionId, audit.auditId, audit.storeImage, audit.signImage, audit.lat, audit.lng, audit.storeImageId, audit.signImageId, audit.categoryId, audit.auditerName, audit.phoneNumber, audit.selfieImage, audit.selfieImageId, audit.nonCoName, audit.nonCoDesignation]
+        tx.executeSql('INSERT OR replace INTO mxpg_comp_audits(store_id, id, comp_audit, audited, option_id, audit_id, store_image, sign_image, lat, lng, store_image_id, sign_image_id, channel_id, auditer_name, auditer_number, selfie_image, selfie_image_id, non_co_name, non_co_designation, accuracy) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);',
+            [audit.storeId, audit.id, audit.isCompleted, audit.isContinued, audit.optionId, audit.auditId, audit.storeImage, audit.signImage, audit.lat, audit.lng, audit.storeImageId, audit.signImageId, audit.categoryId, audit.auditerName, audit.phoneNumber, audit.selfieImage, audit.selfieImageId, audit.nonCoName, audit.nonCoDesignation, audit.accuracy]
         , callback, error);
     });
 }

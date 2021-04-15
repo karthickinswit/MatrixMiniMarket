@@ -122,6 +122,6 @@ var LocalStorage = {
     },
 
     isGPSMandatory: function() {
-      return localStorage.getItem("gpsMandatory");
+      return localStorage.getItem("gpsMandatory") === 'true';
     }
 };

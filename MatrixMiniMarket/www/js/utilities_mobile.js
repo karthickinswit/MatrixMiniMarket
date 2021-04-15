@@ -628,7 +628,8 @@ var inswit = {
 			function(position) {
 				var pos = {
 					lat: position.coords.latitude || "",
-					lng: position.coords.longitude || ""
+					lng: position.coords.longitude || "",
+					accuracy: position.coords.accuracy || ""
 				};
 					
 				callback(pos);
@@ -885,7 +886,7 @@ var inswit = {
 			alpha: 1,
 			storeToFile: true,
 			disableExifHeaderStripping: false,
-			superImposeText: superImposeText
+			superImposeText: superImposeText || ""
 		},
 
 		CameraPreview.startCamera(options, function(){

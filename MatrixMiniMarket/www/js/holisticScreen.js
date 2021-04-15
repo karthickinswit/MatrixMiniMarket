@@ -226,17 +226,28 @@ define([
             var auditId = id[0];
             var storeId = id[1];
             var channelId = id[2];
+            selectCompletedAudit(db, mId, function(data){
+                var auditData = data[0];
+				var lat = auditData.lat;
+				var lng = auditData.lng;
 
-            getStoreCode(db, storeId, function(storeCode){
-                var callback = function(imageURI){
-                    updateSignaturePhoto(db, auditId, storeId, imageURI);
-                    that.refreshScroll("audit_score");
-                }
+                getStoreCode(db, storeId, function(storeCode){
+                    var callback = function(imageURI){
+                        updateSignaturePhoto(db, auditId, storeId, imageURI);
+                        that.refreshScroll("audit_score");
+                    }
 
-                var takeEl = "take_signature_photo";
-                var retakeEl = "retake_signature_photo";
-                var signPhotoEl = that.$el.find(".take_signature_photo");
-                inswit.takePicture(callback, takeEl, retakeEl, storeCode, signPhotoEl);
+                    var takeEl = "take_signature_photo";
+                    var retakeEl = "retake_signature_photo";
+                    var signPhotoEl = that.$el.find(".take_signature_photo");
+
+                    if(lat.length != 0) {
+						storeCode = storeCode + "Z" + "Lat: "+ lat + "Z" + "Lng: "+lng;
+                    }
+                    
+                    inswit.takePicture(callback, takeEl, retakeEl, storeCode, signPhotoEl);
+                });
+
             });
         }
 

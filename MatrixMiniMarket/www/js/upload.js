@@ -672,7 +672,9 @@ define([
                                         var auditerName = audit.item(0).auditer_name;
                                         var auditerNumber = audit.item(0).auditer_number;
                                         var nonCoName = audit.item(0).non_co_name;
-                                        var nonCoDesignation = audit.item(0).non_co_designation;
+										var nonCoDesignation = audit.item(0).non_co_designation;
+										var accuracy = audit.item(0).accuracy;
+
 
                                         var processVariables = {
                                             "projectId":inswit.UPLOAD_PROCESS.projectId,
@@ -699,7 +701,8 @@ define([
                                                 "spocNumber": auditerNumber,
                                                 "completedSgf": compSgfDetails,
                                                 "nonCoopName": nonCoName,
-                                                "nonCoopDesignation": nonCoDesignation,
+												"nonCoopDesignation": nonCoDesignation,
+												"accuracy": accuracy
                                             }
                                         };
 

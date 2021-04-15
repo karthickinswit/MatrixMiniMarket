@@ -640,7 +640,7 @@ public class CameraActivity extends Fragment {
           //   rotationDegrees = 180;
           //   System.out.println("rotation******"+ rotationDegrees);
 
-          
+
 
           // Check if matrix has changed. In that case, apply matrix and override data
           if (!matrix.isIdentity()) {
@@ -666,8 +666,10 @@ public class CameraActivity extends Fragment {
             if (!superImposeText.isEmpty()) {
               String[] arrOfSuperImposeTxt = superImposeText.split("Z", 3);
               text = text + " - " + arrOfSuperImposeTxt[0];
-              lat = arrOfSuperImposeTxt[1];
-              lng = arrOfSuperImposeTxt[2];
+              if(arrOfSuperImposeTxt.length > 1){
+                lat = arrOfSuperImposeTxt[1];
+                lng = arrOfSuperImposeTxt[2];
+              }
             }
 
 
@@ -690,10 +692,12 @@ public class CameraActivity extends Fragment {
             float height = tPaint.measureText("yY");
             cs.drawText(text, 20f, bmp.getHeight() - (height+5f), tPaint);
 
+            if(!lat.isEmpty()) {
+              cs.drawText(lat, 20f, 40f, tPaint);
 
-            cs.drawText(lat, 20f, 40f, tPaint);
+              cs.drawText(lng, 20f, 80f, tPaint);
+            }
 
-            cs.drawText(lng, 20f, 80f, tPaint);
 
 
 
@@ -935,7 +939,7 @@ public class CameraActivity extends Fragment {
       });
 
       new Thread() {
-        public void run() {          
+        public void run() {
           try {
             Camera.Parameters params = mCamera.getParameters();
 
@@ -1192,8 +1196,8 @@ public class CameraActivity extends Fragment {
     if (rotationDegrees == 90 || rotationDegrees == 270) {
         maxHeight = 970.0f;
         maxWidth = 728.0f;
-    } 
-    
+    }
+
 
 
     float imgRatio = actualWidth / actualHeight;
