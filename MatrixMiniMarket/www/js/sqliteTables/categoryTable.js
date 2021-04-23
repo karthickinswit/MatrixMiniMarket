@@ -121,7 +121,7 @@ function checkPromoCompleted(db, categoryId, channelId, storeId, success, error)
                 if(len > 0){
                     normPnCount = response.rows.item(0).normPnCount;
                 }
-                if(normCompCount == normPnCount){
+                if(normCompCount >1){
                     success(true)
                 }
                 console.log("results"+ normCompCount + normPnCount);
@@ -176,17 +176,19 @@ function isAuditCompleted(db, auditId, categoryId, channelId, success, error){
     var cnNormCount = 0;
     var sgfNormCount = 0;
     var sgfCount = 0;
-    //var query1 = "select count(norm_id) as normCompCount from mxpg_comp_products where store_id ="+ auditId +" and category_id not in (select category_id from mxpg_category where category_name like '%promo%')";
+    var promoCount = 0;
+    var promoCompCount = 0;
+    var query1 = "select count(norm_id) as normCompCount from mxpg_comp_products where store_id ="+ auditId +" and category_id not in (select category_id from mxpg_category where category_name like '%promo%')";
 
-    var query1 = "select count(norm_id) as normCompCount from mxpg_comp_products where store_id ="+ auditId;
+    //var query1 = "select count(norm_id) as normCompCount from mxpg_comp_products where store_id ="+ auditId;
     db.transaction(function(tx){
         tx.executeSql(query1, [], function(tx, response){
             var rows = response.rows;
             var len = response.rows.length;
             compNormCount = response.rows.item(0).normCompCount;
-            //var query2 = "select count(norm_id) as normPncount  from mxpg_pn_map where channel_id = "+ channelId + " and category_id not in (select category_id from mxpg_category where category_name like '%promo%')";
+            var query2 = "select count(norm_id) as normPncount  from mxpg_pn_map where channel_id = "+ channelId + " and category_id not in (select category_id from mxpg_category where category_name like '%promo%')";
 
-            var query2 = "select count(norm_id) as normPncount  from mxpg_pn_map where channel_id = "+ channelId;
+            //var query2 = "select count(norm_id) as normPncount  from mxpg_pn_map where channel_id = "+ channelId;
             db.transaction(function(tx){
                 tx.executeSql(query2, [], function(tx, response){
                     var rows = response.rows;
@@ -215,12 +217,32 @@ function isAuditCompleted(db, auditId, categoryId, channelId, success, error){
                                     var rows = response.rows;
                                     var len = response.rows.length;
                                     sgfCount = response.rows.item(0).sgfCount;
+
+                                    var query6 = "select count(distinct(category_id)) as promoCount from mxpg_comp_products where store_id ="+auditId +" and category_id in (select category_id from mxpg_category where category_name like '%promo%')";
+                                    db.transaction(function(tx){
+                                        tx.executeSql(query6, [], function(tx, response){
+                                            var rows = response.rows;
+                                            var len = response.rows.length;
+                                            promoCount = response.rows.item(0).promoCount;
+
+                                        var query7 = "select count(distinct(category_id)) as promoCompCount from mxpg_cc_map where channel_id = "+ channelId +" and category_id in (select category_id from mxpg_category where category_name like '%promo%')";
+                                        db.transaction(function(tx){
+                                            tx.executeSql(query7, [], function(tx, response){
+                                                var rows = response.rows;
+                                                var len = response.rows.length;
+                                                promoCompCount = response.rows.item(0).promoCompCount;
+
                                     
-                                    if(compNormCount == totalNormCount && sgfCount ==  sgfCompCount) {
-                                        success(true);
-                                    }else {
-                                        success(false);
-                                    }
+                                                if(compNormCount == totalNormCount && sgfCount ==  sgfCompCount && promoCount == promoCompCount) {
+                                                    success(true);
+                                                }else {
+                                                    success(false);
+                                                }
+
+                                            });
+
+                                        });
+                                    });
                                 });
                             });
                         });
@@ -231,4 +253,5 @@ function isAuditCompleted(db, auditId, categoryId, channelId, success, error){
         });
 
     });
+});
 }
