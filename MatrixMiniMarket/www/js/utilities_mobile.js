@@ -27,7 +27,7 @@ var inswit = {
 		password: "",
 	},
 
-	VERSION : "3.4",
+	VERSION : "3.5",
 
 	LOGIN_CREDENTIAL: {
 		"email": "minimarket@matrixbsindia.com",
@@ -881,6 +881,7 @@ var inswit = {
 			height: window.screen.height-200,
 			camera: CameraPreview.CAMERA_DIRECTION.BACK,
 			tapPhoto: true,
+			tapFocus: true,
 			previewDrag: true,
 			toBack: false,
 			alpha: 1,

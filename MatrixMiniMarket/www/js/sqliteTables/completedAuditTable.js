@@ -189,10 +189,11 @@ function selectProductsToVerify(db, auditId, storeId, productId, fn, categoryId)
 
     var tempProductId = "0";
 
+    //and t2.category_id = '" + categoryId +"'\ Removed this to solve Google chrome issue
+
     var productQuery = "select t1.product_id as csbProduct, t2.product_id as categoryProduct from mxpg_csb_map t1\
                         join mxpg_pn_map t2 on t2.category_id = t1.category_id\
                         where t1.category_id = '" + categoryId +"'\
-                        and t2.category_id = '" + categoryId +"'\
                         group by t2.product_id, t1.product_id";
 
         db.transaction(function(tx){

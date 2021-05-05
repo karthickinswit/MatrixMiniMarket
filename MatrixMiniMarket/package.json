@@ -33,7 +33,7 @@
   },
   "devDependencies": {
     "android": "0.0.8",
-    "cordova-android": "^9.0.0",
+    "cordova-android": "^9.1.0",
     "cordova-plugin-camera": "file:custom_plugin/cordova-plugin-camera",
     "cordova-plugin-camera-preview": "file:custom_plugin/cordova-plugin-camera-preview",
     "cordova-plugin-firebase-crashlytics": "^1.2.0",
