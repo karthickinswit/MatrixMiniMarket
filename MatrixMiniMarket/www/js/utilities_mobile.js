@@ -27,7 +27,7 @@ var inswit = {
 		password: "",
 	},
 
-	VERSION : "3.5",
+	VERSION : "3.6",
 
 	LOGIN_CREDENTIAL: {
 		"email": "minimarket@matrixbsindia.com",
@@ -929,6 +929,7 @@ var inswit = {
 			var empId = LocalStorage.getEmployeeId();
 			var channels = processVariables.channelList;
 			var categoryList = processVariables.categoryList;
+			var csbMap = processVariables.categorySmartSpotBrands;
 			
 			var modified = false;
 			//Remove and populate the product table
@@ -1338,6 +1339,58 @@ var inswit = {
 				});
 			}
 
+			if(csbMap && csbMap.length > 0){
+				modified = true;
+				
+				removeTable(db, "mxpg_csb_map", function(){
+				
+					populateCsbMap(db, csbMap, function(){}, function(error, info){
+				
+						var desc = {
+							value: channels,
+							table: "mxpg_csb_map"
+						};
+
+						var pVariables = {
+						    "projectId":inswit.ERROR_LOG.projectId,
+						    "workflowId":inswit.ERROR_LOG.workflowId,
+						    "processId":inswit.ERROR_LOG.processId,
+						    "ProcessVariables":{
+						    	"errorType": inswit.ERROR_LOG_TYPES.UPDATE_MASTER,
+						    	"empId":empId,
+						    	"issueDate":new Date(),
+						    	"issueDescription": JSON.stringify(desc),
+						    	"version": inswit.VERSION
+						    }
+						};
+		
+						inswit.executeProcess(pVariables, {
+						    success: function(response){
+						    	if(response.ProcessVariables){
+						    		
+						    	}
+			                }, failure: function(error){
+			                	inswit.hideLoaderEl();
+			                	switch(error){
+			                		case 0:{
+			                			inswit.alert("No Internet Connection!");
+			                			break;
+			                		}
+			                		case 1:{
+			                			inswit.alert("Check your network settings!");
+			                			break;
+			                		}
+			                		case 2:{
+			                			inswit.alert("Server Busy.Try Again!");
+			                			break;
+			                		}
+			                	}
+			                }
+			            });
+					});
+				});
+
+			}
 			//Remove completed audits from the DB
 			if(modified){
 				selectAllCompletedAudit(db, function(audits){
