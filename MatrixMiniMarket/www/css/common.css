@@ -235,13 +235,15 @@ table.table-bordered > tbody > tr > td{
 }
 
 .audits .remove_item,
+.audits .remove_item1,
 .audits .add_item,
 .audits .save_sod_audit{
   color: white !important;
 }
 
 .audits .remove_item,
-.audits .add_item {
+.audits .remove_item1,
+.audits .add_item,.add_item1 {
   padding: 7px;
   border: none;
   width: 50px;
@@ -297,12 +299,12 @@ table.table-bordered > tbody > tr > td{
    margin-bottom: 20px
 }
 
-.gillette_table .add_item {
+.gillette_table .add_item,.add_item1 {
    margin-top: 6px;
    margin-left: 7px;
 }
 
-.audits .gillette_table .remove_item {
+.audits .gillette_table .remove_item,.remove_item1 {
     margin-top: 5px;
     margin-right: 15px;
     border-radius: 35px;
@@ -494,4 +496,7 @@ table.table-bordered > tbody > tr > td{
 
 html, body, .ion-app, .ion-content {
   background-color: transparent;
+}
+button.btn-mini.btn-success.add_item1 {
+  margin-bottom: 10px;
 }

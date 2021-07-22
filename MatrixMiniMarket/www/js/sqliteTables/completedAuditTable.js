@@ -526,13 +526,27 @@ function updateProductImageId(db, auditId, storeId, productId, imageId, success,
 
 function updateMPDphotos(db, auditId, storeId, categoryId, imageId, imgURI, position, success, error) {
 
-    if(auditId == "mpd_audits") {
+   // if(auditId == "mpd_audits") {
         db.transaction(function(tx){
             tx.executeSql('UPDATE mxpg_mpd SET image_id=? WHERE store_id=? AND category_id=? AND image_uri=? AND position=?;',
-                [imageId, storeId, categoryId, imgURI, position]
+                [imageId, storeId, categoryId, imgURI, position], success, error
             );
         });
-    }
+   // }
+
+}
+function updateCatImagephotos(db, brandId, storeId, categoryId, imageId, imgURI, position,auditId, success, error) {
+
+    //console.log(db, brandId, storeId, categoryId, imageId, imgURI, position,auditId);
+                    // brandId, storeId, categoryId, image, imgURI, imgPosition,auditId
+
+   // if(brandId == "0") {
+        db.transaction(function(tx){
+            tx.executeSql('UPDATE mxpg_cat_mpd SET image_id=? WHERE store_id=? AND category_id=? AND image_uri=? AND position=? AND audit_id=?;',
+                [imageId, storeId, categoryId, imgURI, position,auditId],success, error
+            );
+        });
+   // }
 
 }
 
@@ -575,6 +589,9 @@ function removeAudit(db, auditId, storeId, success, error) {
     db.transaction(function(tx){
          tx.executeSql('DELETE FROM mxpg_mpd WHERE store_id=?;', [storeId]);
     });
+    db.transaction(function(tx){
+        tx.executeSql('DELETE FROM mxpg_cat_mpd WHERE store_id=?;', [storeId]);
+   });
 }
 
 /**
@@ -697,9 +714,12 @@ function removePartialAudit(db, storeId) {
         tx.executeSql('DELETE FROM mxpg_comp_audits WHERE store_id=?;', [storeId]);
     });
 
-     db.transaction(function(tx){
+   db.transaction(function(tx){
          tx.executeSql('DELETE FROM mxpg_mpd WHERE store_id=?;', [storeId]);
      });
+     db.transaction(function(tx){
+        tx.executeSql('DELETE FROM mxpg_cat_mpd WHERE store_id=?;', [storeId]);
+    }); 
 
     db.transaction(function(tx){
          tx.executeSql('DELETE FROM mxpg_comp_sgf WHERE store_id=?;', [storeId]);

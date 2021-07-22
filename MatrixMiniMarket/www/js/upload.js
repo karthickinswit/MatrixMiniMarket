@@ -33,7 +33,6 @@ define([
 
 		upload: function(event){
 			var that = this;
-
 			//inswit.errorLog({"Info":"Upload Initiated"});
 
 			if(that.$el.find(".upload_audit").hasClass("clicked")){
@@ -138,9 +137,11 @@ define([
 							//inswit.errorLog({"error":"all products fetched", "allproducts":products});
 
 							that.products = products;
+							//console.log('selectAllCompProducts')
 							//Get unique product, image list
 							selectCompProducts(db, that.auditId, that.storeId, function(productList){
 								//inswit.errorLog({"error":"completed products fetched", "completed_products":productList});
+								console.log('selectCompProducts')
 
 								for(var i = 0; i < productList.length; i++){
 									var p = productList[i];
@@ -165,6 +166,8 @@ define([
 
 								selectCompletedSGF(db, that.auditId, that.storeId, function(productList){
 
+									console.log('selectCompletedSGF')
+
 									for(var i = 0; i < productList.length; i++){
 											var p = productList[i];
 											/**
@@ -186,38 +189,74 @@ define([
 										}
 
 										that.$(".upload_container").hide();
+										
+								selectMPDDetails(db, function(mpdList) {
+									//console.log('selectMPDDetails')
+
+									for(var i = 0; i < mpdList.length; i++){
+										var mpd = mpdList[i];
+										/**
+										 * Priority 8 means hotspot brands
+										 * Hotspot brands should not have images thats why i restricted based on priority
+										 * Sometimes hotspot and Frontage brand also doesn't had image, thats why i am checking image_uri
+										 */
+										if(mpd.priority != 8 && mpd.image_uri){
+											imageList.push({
+												"auditId": "mpd_audits",
+												"storeId":mpd.store_id,
+												"categoryId":mpd.category_id,
+												"brandId":mpd.brand_id,
+												"imageURI":mpd.image_uri,
+												"image":mpd.image_id,
+												"position": mpd.position,
+												"productName":"",
+											});
+										}
+									}
+	
+									that.$(".upload_container").hide();
+								   // that.uploadPhoto(imageList, 0, imageList.length);
+								   selectCatImageDetails(db, function(mpdList) {
+
+									//console.log('selectCatImageDetails')
+
+									for(var i = 0; i < mpdList.length; i++){
+										var mpd = mpdList[i];
+										/**
+										 * Priority 8 means hotspot brands
+										 * Hotspot brands should not have images thats why i restricted based on priority
+										 * Sometimes hotspot and Frontage brand also doesn't had image, thats why i am checking image_uri
+										 */
+										if(mpd.image_uri){
+											imageList.push({
+												"auditId": mpd.audit_id,
+												"storeId":mpd.store_id,
+												"categoryId":mpd.category_id,
+												"brandId":mpd.brand_id,
+												"imageURI":mpd.image_uri,
+												"image":mpd.image_id,
+												"position": mpd.position,
+												"productName":"",
+											});
+										}
+									}
+	
+									that.$(".upload_container").hide();
+									that.uploadPhoto(imageList, 0, imageList.length);
+	
+								});
+	
+								});
 										//that.uploadPhoto(imageList, 0, imageList.length);
 								});
 
-								selectMPDDetails(db, function(mpdList) {
 
-								    for(var i = 0; i < mpdList.length; i++){
-                                        var mpd = mpdList[i];
-                                        /**
-                                         * Priority 8 means hotspot brands
-                                         * Hotspot brands should not have images thats why i restricted based on priority
-                                         * Sometimes hotspot and Frontage brand also doesn't had image, thats why i am checking image_uri
-                                         */
-                                        if(p.priority != 8 && p.image_uri){
-                                            imageList.push({
-                                                "auditId": "mpd_audits",
-                                                "storeId":mpd.store_id,
-                                                "categoryId":mpd.category_id,
-                                                "brandId":mpd.brand_id,
-                                                "imageURI":mpd.image_uri,
-                                                "image":mpd.image_id,
-                                                "position": mpd.position,
-                                                "productName":"",
-                                            });
-                                        }
-                                    }
-
-                                    that.$(".upload_container").hide();
-                                    that.uploadPhoto(imageList, 0, imageList.length);
-
-								});
+								
+								
 
 							});
+							
+							
 						});			
 
 					}else{
@@ -255,13 +294,18 @@ define([
 		   	}
 
 			//Call upload audit function once all images are uploaded successfully
+		//	console.log('length', length, 'list', imageList, 'index', index);
+			
 			if(length == 0){
-				//inswit.alert("uploading audit");
-				that.uploadAudit(imageList);
-				that.$el.find(".upload_audit").removeClass("clicked");
+				console.log('api call for update');
+				// setTimeout(function() {
+					that.uploadAudit(imageList);
+				    that.$el.find(".upload_audit").removeClass("clicked");
 				return;
+				//	}, (2*imageList.length*100));
+					
+				
 			}
-
 			//Retry happen twice per image
 			if(isRetry){
 				that.retry = that.retry + 1;
@@ -276,6 +320,8 @@ define([
 			}else{
 				that.retry = 0;
 			}
+
+			
 
 			//IF ImageURI is undefined just skip that image and going to next.
 			var imageURI = imageList[index].imageURI;
@@ -315,6 +361,8 @@ define([
 		    		var isSmartSpot = imageList[index].isSmartSpot;
 		    		var imgPosition = imageList[index].position;
 		    		var imgURI = imageList[index].imageURI;
+					var brandId=imageList[index].brandId;
+					
 
 					if(!result.info.id){
 						//Retry the same image
@@ -324,8 +372,8 @@ define([
 					var image = result.info.id;
 					imageList[index].image = image;
 
-					console.log(image);
-
+					//console.log(image);
+					
 					if(auditId == "mpd_audits") {
 
                         updateMPDphotos(db, auditId, storeId, categoryId, image, imgURI, imgPosition, function(){
@@ -337,7 +385,25 @@ define([
                             return;
 
                         });
+
+						return;
+
 					}
+
+					if(brandId == "0") {
+
+						updateCatImagephotos(db, brandId, storeId, categoryId, image, imgURI, imgPosition,auditId, function(){
+							that.uploadPhoto(imageList, index+1, length-1);
+							return;
+
+						}, function(a, e){
+							that.uploadPhoto(imageList, index, length);
+							return;
+
+						});
+						return;
+					}  
+					
 
 					if(productId == "storeImage"){
 						updateStoreImageId(db, auditId, storeId, image, function(){
@@ -370,18 +436,21 @@ define([
                             return;
 
                         });
-					}else{
+					}
+					else{
 						updateProductImageId(db, auditId, storeId, productId, image, function(){
 
 							that.uploadPhoto(imageList, index+1, length-1);
 							return;
 
 						}, function(a, e){
+							
 							that.uploadPhoto(imageList, index, length);
 							return;
 						},categoryId, isSmartSpot);
-					}
-		    	}else{
+						}
+					
+		    	}else {
 		    		that.uploadPhoto(imageList, index, length, true);
 		    	}
 		    }
@@ -442,7 +511,7 @@ define([
 			if(error){
 				imageList[index].error = error;
 			}
-			var pVariables = {
+			var pVariables = { 
 			    "projectId":inswit.ERROR_LOG.projectId,
 			    "workflowId":inswit.ERROR_LOG.workflowId,
 			    "processId":inswit.ERROR_LOG.processId,
@@ -496,7 +565,8 @@ define([
 		   	}
 
 		   	selectAllCompProducts(db, that.auditId, that.storeId, function(products){
-
+				// console.log("selectAllCompProducts");
+				// console.log(products);
 		   		//inswit.errorLog({"error":"all completed products fetched Before uploading audits", "allCompletedproducts":products});
 		   		
 		   		var auditDetails = [];
@@ -532,6 +602,8 @@ define([
 				}
 
 				selectCompletedSGF(db, that.auditId, that.storeId, function(completedSGF){
+					// console.log("selectCompletedSGF");
+					// console.log(completedSGF);
 
 					var compSgfDetails = [];
 	
@@ -567,7 +639,8 @@ define([
 					}
 
 					selectCompletedSod(db, that.auditId, that.storeId, function(compProducts) {
-					
+						// console.log("selectCompletedSod");
+						// console.log(compProducts);
 						var compSodDetails = [];
 
 						var length = 0;
@@ -598,7 +671,8 @@ define([
 
 
                         selectCompMPDDetails(db, that.storeId, function(products){
-
+							// console.log("selectCompMPDDetails");
+							// console.log(products);
                                 var auditMPDPhotos = [];
                                 var length = 0;
                                 if(products){
@@ -627,6 +701,41 @@ define([
                                     auditMPDPhotos.push(detail);
                                 }
 
+								selectCompCatMPDDetails(db, that.storeId, function(catPhotos){
+									// console.log("selectCompCatMPDDetails");
+									// console.log(catPhotos);
+
+									var auditCatMPDPhotos = [];
+									var length = 0;
+									if(catPhotos){
+										length = catPhotos.length;
+									}
+									for(var j = 0; j < length; j++){
+										var catPhoto  = catPhotos[j];
+										var categoryId = catPhoto.category_id;
+										var storeId = catPhoto.store_id;
+										var brandId = catPhoto.brand_id;
+										var auditId = catPhoto.audit_id;
+										var position=catPhoto.position;
+	
+										var photoId = "";
+										if(catPhoto.image_id){
+											photoId = inswit.URI + "d/drive/docs/" + catPhoto.image_id;
+										}
+	
+										var detail = {
+											brandId: brandId,
+											photoId: photoId,
+											categoryId: categoryId,
+											auditId: auditId,
+											storeId:storeId,
+											position:position
+										}
+	
+										auditCatMPDPhotos.push(detail);
+									}
+
+
 
 
                             var date = new Date();
@@ -648,6 +757,7 @@ define([
                             }
 
                             findStore(db, that.auditId, that.storeId, function(result){
+								
 
                                 //inswit.errorLog({"Info":"Store Deatils fetched", "store": result});
 
@@ -662,6 +772,8 @@ define([
                                 //Query audit details from the database
                                 var mId = that.auditId + "-" + that.storeId + "-" + that.categoryId;
                                 selectCompletedAudit(db, mId, function(audit){
+									// console.log("");
+									// console.log();
 
                                     //inswit.errorLog({"error":"After fetching completed audit while uploading audit", "audit":audit, "AuditLength": audit.length});
                                     if(audit.length > 0){
@@ -684,6 +796,7 @@ define([
                                                 "auditDetails":auditDetails,
                                                 "auditSodDetails": compSodDetails,
                                                 "auditMPDDetails": auditMPDPhotos,
+												"auditcatMPDDetails":auditCatMPDPhotos,
                                                 "auditId":that.auditId,
                                                 "id":id,
                                                 "auditor":LocalStorage.getEmployeeId(),
@@ -709,6 +822,7 @@ define([
                                         //inswit.errorLog({"info":"After constructing processvariables", "processVariables":processVariables});
 
                                         //Upload the Audit details to the Appiyo server
+										
                                         inswit.executeProcess(processVariables, {
                                             success: function(response){
                                                 if(response.Error == "0"){
@@ -759,7 +873,7 @@ define([
                                                             "version": inswit.VERSION
                                                         }
                                                     };
-
+													
                                                     inswit.executeProcess(pVariables, {
                                                         success: function(response){
                                                             inswit.hideLoaderEl();
@@ -784,6 +898,7 @@ define([
                                                             }
                                                         }
                                                     });
+												
                                                 }
                                             }, failure: function(error){
 
@@ -806,10 +921,13 @@ define([
                                                 }
                                             }
                                         });
+									
                                     }
                                 });
                             });
+						  });
                         });
+					 
                     });
 				});
 		   	});

@@ -641,7 +641,7 @@
     width: 98%;
 }
 
-.audits .gillette_table .remove_item {
+.audits .gillette_table .remove_item,.remove_item1 {
     display: block !important;
     border-color: transparent;
     position: absolute;
@@ -656,3 +656,5 @@
         /*display: inline-block;*/
         /*z-index: -1;*/
 }
+  
+

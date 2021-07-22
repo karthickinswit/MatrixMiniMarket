@@ -32,7 +32,9 @@ define([
             "click .scan_qr": "scanQR",
 
             "click .add_item": "addPhoto",
+            "click .add_item1": "addPhoto1",
             "click .remove_item": "removePhoto",
+            "click .remove_item1": "removePhoto1",
 		},
 
 		showNorms: function(mId, pId, product, hotspotPid){
@@ -715,11 +717,58 @@ define([
            }
 
        },
+       
+       addPhoto1: function(event) {
+        event.preventDefault();
+        event.stopPropagation();
+        var that = this;
+
+        if(this.$el.find(".add_item1").hasClass("clicked")){
+                                   //inswit.errorLog({"Clicked": that.$el.find(".upload_audit").hasClass("clicked")});
+            return;
+        }
+
+        this.$el.find(".add_item1").addClass("clicked");
+        var addItemEl = $(event.target);
+        that.questionEl = addItemEl.parents(".category-brand-norm");
+        var count = 10 || 0;
+
+        var tableRowElLen = that.questionEl.find(".gillette_table_row").length;
+        if(count <= tableRowElLen) {
+            inswit.alert("You have reached maximum limit of Category Photos");
+            that.$el.find(".add_item1").removeClass("clicked");
+            return;
+        }else {
+            require(['templates/t_audits'], function(template){
+                var html = Mustache.to_html(template.catPhotoBlock);
+                var tableBodyEl = that.questionEl.find(".gillette_table_body").append(html);
+                that.scrollView.refresh();
+                that.$el.find(".add_item1").removeClass("clicked");
+                
+            });
+        }
+
+    },
 
        removePhoto: function(event) {
            var target =  $(event.target).parents().parents().parents().get(0);
            target.remove();
        },
+       removePhoto1: function(event) {
+        var addItemEl = $(event.target);
+        var that = this;
+
+        that.questionEl = addItemEl.parents(".category-brand-norm");
+        var tableRowElLen = that.questionEl.find(".gillette_table_row").length;
+        if(tableRowElLen>1)
+        {
+        var target =  $(event.target).parents().parents().parents().get(0);
+        target.remove();
+        }
+        else {
+            inswit.alert("At least one category photo is must!");
+        }
+    },
 
        checkScoreValidationAPI: function(data) {
             inswit.showLoaderEl("Checking please wait....");

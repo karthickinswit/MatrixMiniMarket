@@ -149,7 +149,64 @@ define([],function(){
                                             </div>\
                                         {{/textBox}}\
                                     {{/isCategoryNorm}}\
-                                {{/norms}}\
+                                    {{/norms}}\
+                                <!------------------------TableAddded--------------------------------->\
+                                {{#takeMultiPhoto}}\
+                                <table class="table gillette_table takeMultiPhoto" id="{{normId}}-{{productId}}" >\
+                                       <tbody class="gillette_table_body gillette_table_body1">\
+									    {{#CatImages}}\
+                                       <tr class="gillette_table_row">\
+                                                      <td>\
+                                                               <div class="pull-right">\
+                                                                       <button class="btn-mini btn-warning hide remove_item1 ">\
+                                                                       X</button>\
+                                                               </div>\
+                                                                 <!--<span class="photo_block_container  multiple_photo  ">\
+                                                                      <button class="pull-left btn take_product_photo  gillette_store_photo \">\
+                                                                           <img class="ico_16" src="images/matrix_icons/take_photo_48.png">\
+                                                                           Take Brand Photo\
+                                                                      </button>\
+                                                                 </span>-->\
+                                                                <div class="photo_block_container multiple_photo" >\
+                                                                   <img src="{{image_uri}}"   width="95%"    width="95%"  height="200px" style="margin-left:2.5%">\
+                                                                   <a class="retake_photo {{element}}">Retake</a>\
+                                                                </div>\
+                                                            \
+                                                      </td>\
+                                                    </tr>\
+													 {{/CatImages}}\
+													 {{^CatImages}}\
+                                                    <tr class="gillette_table_row">\
+                                                   <td>\
+                                                       \
+                                                            <div class="pull-right">\
+                                                                  <button class="btn-mini btn-warning hide remove_item1 disabled">\
+                                                                   X</button>\
+                                                             </div>\
+                                                             {{#takeMultiPhoto}}\
+                                                       \
+                                                         <div class="photo_block_container  multiple_photo">\
+                                                              <button class="pull-left btn take_product_photo  gillette_store_photo \">\
+                                                                   <img class="ico_16" src="images/matrix_icons/take_photo_48.png">\
+                                                                   Take Brand Photo\
+                                                              </button>\
+                                                         </div>\
+                                                         {{/takeMultiPhoto}}\
+                                                   </td>\
+                                               </tr>\
+											   {{/CatImages}}\
+                                            </tbody>\
+                                   </table>\
+                                   \
+                                    {{^hideMultiplePhotos}}\
+                                         <span class="add_product_photo">\
+                                            <button class="btn-mini btn-success add_item1">\
+                                            +</button>\
+                                         </span>\
+                                    {{/hideMultiplePhotos}}\
+                                    {{/takeMultiPhoto}}\
+                                <!-------------------------------------------------------------------->\
+                                {{^takeMultiPhoto}}\
                                 {{#takePhoto}}\
                                 <div class="photo_block {{^multiplePhoto}}single_photo{{/multiplePhoto}}">\
                                     <button class="btn take_product_photo" >\
@@ -164,6 +221,7 @@ define([],function(){
                                         <a class="retake_photo {{element}}">Retake</a>\
                                     {{/isImage}}\
                                 </div>\
+                                {{/takeMultiPhoto}}\
                                 {{#qrFlag}}\
                                     <div class="qr_scan_block">\
                                         <input type="text" id="{{previous_code}}" class="qrcode_text" value="{{qrCode}}" disabled ></input>\

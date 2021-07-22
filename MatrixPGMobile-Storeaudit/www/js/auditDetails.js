@@ -190,6 +190,10 @@ define([
 		    	animation: google.maps.Animation.BOUNCE,
 		    	title: storeName
 		  	});
+			  marker.addListener('click', function() {
+				console.log("Map Listener");
+				window.location.href = "http://www.google.com/maps/place/12.991674,80.2413083"
+			  });
 		},
 
 		back: function(){

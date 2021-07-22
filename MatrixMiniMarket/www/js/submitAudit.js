@@ -173,7 +173,7 @@ define(["jquery"], function(){
                     product.image = "";
                     product.imageId = "";
                     product.norms = that.getValues(categoryBrandEl);
-                    product.imageURI = that.getImageUri(categoryBrandEl) || "";
+                    product.imageURI = that.getImageUri(categoryBrandEl) || ""||categoryBrandEl.find(".takeMultiPhoto img").attr( 'src' );;
                     product.priority = priority;
                     product.cId = cId;
                     product.isSOS = (brandwiseNorm == "true")? "1":"0";
@@ -181,6 +181,8 @@ define(["jquery"], function(){
                     product.savedBrand = savedBrand;
                     product.categoryId = categoryId;
                     product.qrResult = "";
+                   // that.getImageUri(element.$el.find(".takeMultiPhoto")) || "";
+
 
 				}
 
@@ -216,10 +218,17 @@ define(["jquery"], function(){
                     }
 
                     populateCompProductTable(db, product, function() {
+                       // var mpdEl = categoryBrandEl.find(".gillette_table_row");
+                        // if(categoryId=="0")
+                        // {
+                        //     mpdEl=element.$el.find(".category-brand-norm")
+                        // }
                         var mpdEl = categoryBrandEl.find(".gillette_table_row");
+
 
                         if(mpdEl.length) {
                             var mpdPhotoEl = $(".question .gillette_table");
+                           
 
                              for(var j = 0; j < mpdPhotoEl.length; j++) {
                                 var el = $(mpdPhotoEl[j]);
@@ -231,8 +240,10 @@ define(["jquery"], function(){
                                 audit.normId = id[0];
                                 audit.brandId = id[1];
                                 audit.categoryId = categoryId;
-
-                                that.getMPDImages(audit, el);
+                               
+                                    that.getMPDImages(audit, el);
+                                
+                                
                                 if(j + 1 == mpdPhotoEl.length){
                                     populateCompProductTable(db, product, callback);
                                 }else{
@@ -252,6 +263,45 @@ define(["jquery"], function(){
 				if(!isSGF) {
 
                     populateCompProductTable(db, product, function() {
+                        var categoryType = $(".norms").attr("id");
+                        if(categoryType=="0")
+                        {
+                            var mpdEl = categoryBrandEl.find(".gillette_table_row");
+
+
+                        if(mpdEl.length) {
+                            var mpdPhotoEl = $(categoryBrandEl).find(".gillette_table");
+                           
+
+                             for(var j = 0; j < mpdPhotoEl.length; j++) {
+                                var el = $(mpdPhotoEl[j]);
+
+                                var id =  el.attr("id").split("-");
+
+                                var audit = {};
+                                audit.storeId = storeId;
+                                audit.auditId = auditId;
+                                audit.brandId = id[1];
+                                audit.categoryId = categoryId;
+                                if(categoryType=="0")
+                                    {
+                                        audit.categoryType=categoryType;
+                                        audit.channelId=cId;
+                                     }
+                               
+                                    that.getCatImages(audit, el);
+                                
+                                
+                                if(j + 1 == mpdPhotoEl.length){
+                                   // populateCompProductTable(db, product, callback);
+                                }else{
+                                    //populateCompProductTable(db, product);
+                                }
+
+                             }
+                        }
+                        }
+
 
                         var callback = function(){
                             //HotspotDescision is 'no' means we have to
@@ -459,6 +509,51 @@ define(["jquery"], function(){
             });
 
 		},
+        getCatImages: function(product, element) {
+
+		    var no = element.parent().find("#frontage_applicable").find(":selected").text();
+
+            cleanCatImageTable(db, product, function() {
+
+                var getMPDPhoto =  element.find(".gillette_table_row");
+
+                var noOfRows = getMPDPhoto.length;
+
+                for(var i=0; i<noOfRows; i++) {
+
+                    if($(getMPDPhoto[i]).find("img")) {
+                        var imgUrl = $(getMPDPhoto[i]).find("img").attr("src");
+
+
+                        var imgPos = i+1;
+                        console.log("Photo"+ imgUrl);
+
+                        var mpdNorm = {};
+                        mpdNorm.storeId = product.storeId;
+                        //mpdNorm.brandId = categoryType;
+                        mpdNorm.normId = product.normId;
+                       // mpdNorm.normId = product.normId;
+                        mpdNorm.image = imgUrl;
+                        mpdNorm.imgPos = imgPos;
+                        mpdNorm.categoryId = product.categoryId;
+                        mpdNorm.categoryType=product.categoryType;
+                        mpdNorm.channelId=product.channelId;
+                        mpdNorm.auditId=product.auditId;
+
+                        console.log("mpdNorm"+ mpdNorm);
+
+                         if(no == "No") {
+                           // removeMPDImageURI(db, imgUrl)
+                         }else {
+
+                            populateCatImageTable(db, mpdNorm);
+
+                         }
+                    }
+                }
+            });
+
+		},
 
 		getQrData: function(element) {
 		    var data = element.find(".qrcode_text").val();
@@ -609,9 +704,9 @@ define(["jquery"], function(){
                         break;
                     }
 				}
-
+              
 				var mpdEl = normEl.find(".gillette_table_body");
-
+                
                 if(mpdEl.length) {
 
                     var noOfRowsEl = mpdEl.find(".gillette_table_row");
@@ -635,6 +730,36 @@ define(["jquery"], function(){
                         }
                    }
                 }
+                         if(categoryType == 0)
+                            {
+                                var mpdEl = element.find(".gillette_table_body1");
+                                 if(mpdEl.length) {
+                    
+                                        var noOfRowsEl = mpdEl.find(".gillette_table_row");
+                                        var isInvalidPhoto = false;
+                    
+                                        var len = noOfRowsEl.length;
+                                        for(var k = 0; k < len; k++) {
+                                            var availablePhoto = $(noOfRowsEl[k]).find(".photo_block_container img").attr("src");
+                                            var isInvalidPhoto = availablePhoto.startsWith("images/matrix_icons");
+                                            if(isInvalidPhoto){
+                                                break;
+                                            }
+                                        }
+                    
+                                       
+                                            if(isInvalidPhoto) {
+                                               alert("Please take a Category Photo")
+                                               $(".product_done").removeClass("clicked");
+                                               throw new Error('Category Photo');
+                                               return;
+                                            }
+                                       
+                                    } 
+                        
+                            }
+
+                 
 
 				
 				

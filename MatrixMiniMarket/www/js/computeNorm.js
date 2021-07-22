@@ -20,7 +20,12 @@ define([
 
 			var mId = that.model.get("mId");
 			this.getStoreName(mId);
-			
+			var id = mId.split("-");
+            var auditId = id[0];
+            var storeId = id[1];
+            
+
+
 			var pId = that.model.get("pId");
 			var product = that.model.get("product");
 			var brandwiseNorm = that.model.get("brandwiseNorm");
@@ -40,15 +45,20 @@ define([
             var results = that.model.get("results");
             require(['templates/t_audit_questions'], function(template){
                 var qrFlag;
+                var takeMultiPhoto=false;
+                var CatImages=[];
+                if(categoryType=="0"){takeMultiPhoto=true;}
                 var callback = function(norms){
                     var fetchCategory = false;
                     var alreadyAudited = true;
+                    
 
                     var fn = "selectNorms";
 
                     if(brandwiseNorm) {
                         fn = "completedSmartSpotNorms";
                     }
+
 
                      selectNorms(db, channelId, pId, product.priority, product.is_frontage, function(data) {
 
@@ -146,56 +156,102 @@ define([
 
                             norms.takePhoto = takePhoto;
                              norms.qrFlag = qrFlag;
+                             
 
                             console.log(norms);
-                            var html = Mustache.to_html(
-                                template.normTemplate,
-                                {
-                                    "norms":norms,
-                                    "mId":mId,
-                                    "productName":productName,
-                                    "productId":pId,
-                                    "name": that.storeName,
-                                    "imageURI":imageURI,
-                                    "isImage":isImage,
-                                    "takePhoto":takePhoto,
-                                    "element":"retake_product_photo",
-                                    "priority": priority,
-                                    "categoryName": that.categoryName,
-                                    "categoryType": categoryType,
-                                    "qrFlag": qrFlag,
-                                    "qrCode": qrCode
-                                },{multiplePhotoRows: template.multiplePhotoRows}
-                            );
+                            
+                            
+                           
+                            selectCatImagePhotos(db,categoryId,auditId, storeId, function(mpdPhotos) {
 
-                            //toggleHotspot function will disable certain elements based on hotspot decision value
-                            if(priority == 10){
-                                var hotspotDecision = $(".hotspot_decision").val().replace(/\s/g, '').toLowerCase();
-                                if(hotspotDecision == "no"){
-                                    that.toggleHotspot("", "no");
-
-                                    //Hide all other norms except first
-                                    var elements  = $(".question");
-                                    for(var i = 1; i < elements.length; i++){
-                                        $(elements[i]).hide();
+                                if(mpdPhotos.length) {
+                                    for(var i=0;i<mpdPhotos.length;i++)
+                                    {
+                                        CatImages[i]= mpdPhotos[i];
                                     }
+                                    var html = Mustache.to_html(
+                                        template.normTemplate,
+                                        {
+                                            "norms":norms,
+                                            "mId":mId,
+                                            "productName":productName,
+                                            "productId":pId,
+                                            "name": that.storeName,
+                                            "imageURI":imageURI,
+                                            "isImage":isImage,
+                                            "takePhoto":takePhoto,
+                                            "element":"retake_product_photo",
+                                            "priority": priority,
+                                            "categoryName": that.categoryName,
+                                            "categoryType": categoryType,
+                                            "qrFlag": qrFlag,
+                                            "qrCode": qrCode,
+                                            "takeMultiPhoto":takeMultiPhoto,
+                                            "CatImages":CatImages,
+                                        },{multiplePhotoRows: template.multiplePhotoRows}
+                                    );
                                 }
-                            }
-
-                            if(priority == 8){
-                                var success = function(results){
-                                    if(results.item(0)){
-                                        if(results.item(0).option_name.replace(/\s/g, '').toLowerCase() == "no"){
-                                            that.$el.find(".question_list .norms").prepend("<div class='warning_msg'>This hotspot brand can not be edited. Because hotspot execution is not available</div>");
-                                            that.toggleHotspot("", "no", true);
+                                else
+                                {
+                                 var   html = Mustache.to_html(
+                                        template.normTemplate,
+                                        {
+                                            "norms":norms,
+                                            "mId":mId,
+                                            "productName":productName,
+                                            "productId":pId,
+                                            "name": that.storeName,
+                                            "imageURI":imageURI,
+                                            "isImage":isImage,
+                                            "takePhoto":takePhoto,
+                                            "element":"retake_product_photo",
+                                            "priority": priority,
+                                            "categoryName": that.categoryName,
+                                            "categoryType": categoryType,
+                                            "qrFlag": qrFlag,
+                                            "qrCode": qrCode,
+                                            "takeMultiPhoto":takeMultiPhoto,
+                                            "CatImages":CatImages,
+                                        },{multiplePhotoRows: template.multiplePhotoRows}
+                                    );
+                                }
+                                if(priority == 10){
+                                    var hotspotDecision = $(".hotspot_decision").val().replace(/\s/g, '').toLowerCase();
+                                    if(hotspotDecision == "no"){
+                                        that.toggleHotspot("", "no");
+    
+                                        //Hide all other norms except first
+                                        var elements  = $(".question");
+                                        for(var i = 1; i < elements.length; i++){
+                                            $(elements[i]).hide();
                                         }
                                     }
                                 }
+    
+                                if(priority == 8){
+                                    var success = function(results){
+                                        if(results.item(0)){
+                                            if(results.item(0).option_name.replace(/\s/g, '').toLowerCase() == "no"){
+                                                that.$el.find(".question_list .norms").prepend("<div class='warning_msg'>This hotspot brand can not be edited. Because hotspot execution is not available</div>");
+                                                that.toggleHotspot("", "no", true);
+                                            }
+                                        }
+                                    }
+    
+                                    selectHotSpotExecutionDecision(db, auditId, storeId, hotspotPid, success);
+                                }
+                                that.$el.find(".takeMultiPhoto .remove_item").prop("disabled", true);
 
-                                selectHotSpotExecutionDecision(db, auditId, storeId, hotspotPid, success);
-                            }
+    
+                                return callbackFn(html);
 
-                            return callbackFn(html);
+                            });
+                        
+                        
+                           
+
+                            //toggleHotspot function will disable certain elements based on hotspot decision value
+                            
                         });
                      }, fetchCategory, brandwiseNorm, categoryId, alreadyAudited, false, storeId);
 
@@ -543,6 +599,7 @@ define([
 
                     norms[0].takePhoto = true;
 
+
                     selectProduct(db, pId, channelId, function(product){
                         require(['templates/t_audit_questions'], function(template){
                             var takePhoto = false;
@@ -553,6 +610,13 @@ define([
                             norms.productId = pId;
                             norms.mId = mId;
                             norms.qrFlag = qrFlag;
+                            var takeMultiPhoto=false;
+                             if(categoryType=="0")
+                             {
+                                takeMultiPhoto=true;  
+                                takePhoto=false;
+                             }
+                            
 
                             var html = Mustache.to_html(
                                 template.normTemplate,
@@ -568,6 +632,7 @@ define([
                                     "categoryName": that.categoryName,
                                     "qrFlag": qrFlag,
                                     "categoryType": categoryType,
+                                    "takeMultiPhoto":takeMultiPhoto,
                                 }, {multiplePhotoRows: template.multiplePhotoRows}
                             );
                             return callbackFn(html);
