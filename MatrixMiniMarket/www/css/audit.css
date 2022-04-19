@@ -334,7 +334,7 @@
     position: absolute;
     left: 0;
 }
-.con_adt_status, .con_adt_header {
+.con_adt_status, .con_adt_header,con_adt_header1 {
 	margin: 10px 0;
 }
 .audits .adt_status{

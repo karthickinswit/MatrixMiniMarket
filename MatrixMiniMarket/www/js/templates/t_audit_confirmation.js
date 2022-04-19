@@ -49,12 +49,14 @@ define([],function(){
                                  <div class="audit_textbox"><input class="width_70p audit_co_desg" placeholder="Enter non cooperator designation" value="{{auditerNonCoDesi}}" type="textbox">\
                                  </input></div>\
                              </div>\
-                             <div class="auditer_detail">\
-                                <div class="audit_textbox"><input class="width_70p audit_name" placeholder="Enter spoc name" value="{{auditerName}}" type="textbox">\
-                                </input></div>\
-                                <div class="audit_textbox"><input class="width_70p audit_number" placeholder="Enter spoc phonenumber" value="{{auditerNumber}}" type="number">\
-                                </input></div>\
-                            </div>\
+                             <div class="con_adt_header1 font_18 bold" style="display:none">Acknowledgement Photo :</div>\
+                                <div class="ack_photo" style="display:none">\
+                                 <button class="btn take_ack_photo">\
+                                     <img class="ico_16" src="images/matrix_icons/take_photo_48.png">\
+                                     <i class="icon_photo"></i> Take Acknowledgement Photo\
+                                 </button>\
+                                 <div class="photo_block"></div>\
+                             </div>\
                             <button class="continue_audit btn btn-success" href="{{mId}}">Continue Audit</button>\
                             <button class="finish_audit btn btn-success" href="{{mId}}" style="display:none">Complete Audit</button>\
                         </div>\

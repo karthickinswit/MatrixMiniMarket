@@ -123,15 +123,17 @@ define([
 
 					//inswit.errorLog({"info":"Audit is audited or not?", "Audited":audited});
 
+					imageList.push({
+						"auditId":that.auditId,
+						"storeId":that.storeId,
+						"productId":"signImage",
+						"productName":"Sign",
+						"imageURI":signImage,
+						"image":signImageId
+					});
+
 					if(completed == "true" && audited == "true"){
-						imageList.push({
-							"auditId":that.auditId,
-							"storeId":that.storeId,
-							"productId":"signImage",
-							"productName":"Sign",
-							"imageURI":signImage,
-							"image":signImageId
-						});
+						
 
 						selectAllCompProducts(db, that.auditId, that.storeId, function(products){
 							//inswit.errorLog({"error":"all products fetched", "allproducts":products});

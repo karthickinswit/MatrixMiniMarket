@@ -22,6 +22,8 @@ define([
 			"click .take_selfie_photo": "takeSelfiePicture",
 			"click .retake_store_photo": "takeStorePicture",
 			"click .retake_selfie_photo": "takeSelfiePicture",
+			"click .take_ack_photo": "takeAcknowledgementPicture",
+			"click .retake_ack_photo": "takeAcknowledgementPicture",
 			"change .aud_confirmation" : "toggleConfirmationBlock",
 			"change .audit_status": "onAuditStatus",
 			"click .back": "back"
@@ -371,6 +373,13 @@ define([
                     $(event.currentTarget).removeClass("clicked");
                     return;
                 }
+				var ackImage = $(".ack_photo").find(".photo_block img").attr("src");
+
+                if(!ackImage){
+                    inswit.alert("Please take a acknowledgement photo!");
+                    $(event.currentTarget).removeClass("clicked");
+                    return;
+                }
 
 				var callback = function(isYes){
 					$(event.currentTarget).removeClass("clicked");
@@ -402,7 +411,7 @@ define([
 							audit.optionId = auditStatus;
 							audit.storeImage = image || "";
 							audit.selfieImage = selfieImage;
-							audit.signImage = "";
+							audit.signImage = ackImage;
 							audit.lat = position.lat;
 							audit.lng = position.lng;
 							audit.storeImageId = "";
@@ -551,6 +560,34 @@ define([
 				});
 			});
 		},
+		takeAcknowledgementPicture:function(event){
+			var that = this;
+
+			var parentsEl = $(event.currentTarget).parent();
+
+			var mId = $(".continue_audit").attr("href");
+
+			var id = mId.split("-");
+            var auditId = id[0];
+            var storeId = id[1];
+            //var channelId = id[2];
+			var pos = this.model.get("pos");
+			var lat = pos.lat;
+			var lng = pos.lng;
+
+            getStoreCode(db, storeId, function(storeCode){
+            	var callback = function(imageURI){
+					that.refreshScroll("continue_audit_wrapper");
+				}
+
+				var takeEl = "take_ack_photo";
+				var retakeEl = "retake_ack_photo";
+				if(lat.length != 0) {
+					storeCode = storeCode + "Z" + "Lat: "+ lat + "Z" + "Lng: "+lng;
+				} 
+				inswit.takePicture(callback, takeEl, retakeEl, storeCode, parentsEl);
+			});
+		},
 
 		takeSelfiePicture:function(event){
             var that = this;
@@ -632,10 +669,14 @@ define([
 			    this.$el.find(".audit_no_block, .finish_audit").css({"display":"none"});
 			    $(".non_co_auditer").css({"display":"none"});
 			    $(".audit_no").prop("selectedIndex", 0);
+				this.$el.find(".con_adt_header1").css({"display":"none"});
+				this.$el.find(".ack_photo").css({"display":"none"});
 			}else{
 				this.$el.find(".continue_audit").css({"display":"none"});
 			    this.$el.find(".audit_no_block, .finish_audit").css({"display":"block"});
 			    $(".non_co_auditer").css({"display":"none"});
+				this.$el.find(".con_adt_header1").css({"display":"block"});
+				this.$el.find(".ack_photo").css({"display":"block"});
 			}
 			this.refreshScroll("continue_audit_wrapper");
 		},
