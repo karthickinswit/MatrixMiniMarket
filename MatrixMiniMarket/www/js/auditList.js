@@ -122,6 +122,8 @@ define([
 					LocalStorage.setGpsTimeOut(inswit.TIMEOUT);
 					console.log("gpsTimer", inswit.TIMEOUT);
 
+					inswit.ErrorMessages.imageMissingError=response.ProcessVariables.imageMissingMsg||"Image is Missing! \nPlease try to clear and Re Audit ";
+
 
 					var isGPSMandatory = response.ProcessVariables.isGPSMandatory || false;
 					console.log("isGPSMandatory", isGPSMandatory);

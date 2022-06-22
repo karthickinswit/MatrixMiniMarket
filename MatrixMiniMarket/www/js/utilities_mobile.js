@@ -1,5 +1,5 @@
- var PROJECTID = "a8fe973aff5c11e79d0d0050569cb68c"; //production
-//  var PROJECTID = "3d916a1c-60fb-4e86-8222-5f4d7c66951f"; //process
+   var PROJECTID = "a8fe973aff5c11e79d0d0050569cb68c"; //production
+//    var PROJECTID = "3d916a1c-60fb-4e86-8222-5f4d7c66951f"; //process
 //var PROJECTID = "99b8f2863f5511e9bb4f0050569c0a8e"; //development testing
 var inswit = {
 
@@ -167,7 +167,9 @@ var inswit = {
 
 		"timerExceed": "Taking photos for this store exceeded the time limit.\nYou can restart taking photos by selecting the store from store list.",
 
-        "oldTimerExceed": "Already taken photos for this store are invalid as the time exceeds the limit.\nYou will be navigated to Start page."
+        "oldTimerExceed": "Already taken photos for this store are invalid as the time exceeds the limit.\nYou will be navigated to Start page.",
+
+		"imageMissingError": "Image is Missing! \nPlease try to clear and Re Audit "
 
 	},
 

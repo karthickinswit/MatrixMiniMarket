@@ -475,7 +475,12 @@ define([
 		    		that.imageUploadFailure(imageList, index, e);
 	
 					//This is not retry, skip current image and start upload next
-					that.uploadPhoto(imageList, index+1, length-1);
+					inswit.hideLoaderEl();
+			    		that.$(".upload_container").show();
+			    		inswit.alert(inswit.ErrorMessages.imageMissingError);
+			    		that.$el.find(".upload_audit").removeClass("clicked");
+					// Stopped to Upload Next	
+					// that.uploadPhoto(imageList, index+1, length-1);
 					return;
 
 		    	}else{ 
@@ -824,6 +829,8 @@ define([
                                         //inswit.errorLog({"info":"After constructing processvariables", "processVariables":processVariables});
 
                                         //Upload the Audit details to the Appiyo server
+
+										// console.log(Stop);
 										
                                         inswit.executeProcess(processVariables, {
                                             success: function(response){

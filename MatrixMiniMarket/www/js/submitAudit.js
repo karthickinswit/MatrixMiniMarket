@@ -293,7 +293,7 @@ define(["jquery"], function(){
                                 
                                 
                                 if(j + 1 == mpdPhotoEl.length){
-                                   // populateCompProductTable(db, product, callback);
+                                    // populateCompProductTable(db, product, callback);
                                 }else{
                                     //populateCompProductTable(db, product);
                                 }
@@ -541,14 +541,15 @@ define(["jquery"], function(){
                         mpdNorm.auditId=product.auditId;
 
                         console.log("mpdNorm"+ mpdNorm);
+                        populateCatImageTable(db, mpdNorm);
 
-                         if(no == "No") {
-                           // removeMPDImageURI(db, imgUrl)
-                         }else {
+                        //  if(no == "No") {
+                        //    // removeMPDImageURI(db, imgUrl)
+                        //  }else {
 
-                            populateCatImageTable(db, mpdNorm);
+                        //     populateCatImageTable(db, mpdNorm);
 
-                         }
+                        //  }
                     }
                 }
             });
