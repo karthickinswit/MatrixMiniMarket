@@ -57,6 +57,8 @@ define([
 								for(var i =0; i<length; i++){
 									if(result[i].category_type == 1) {
 										result[i].sod = true;
+                                        smartSpotId = result[i].category_id;
+                                        that.checkSodComplete(smartSpotId, channelId, storeId);
 									}else if(result[i].category_type == 0) {
 										result[i].defaultSpot = true;
 									}else if(result[i].category_type == 2) {
@@ -123,7 +125,7 @@ define([
 
 								var er = function(e, a){
 								};*/
-								isAuditCompleted(db, storeId, smartSpotId, channelId, function(isCompleted) {
+								isAuditCompleted(db, storeId, smartSpotId, channelId, storeId,function(isCompleted) {
 									if(isCompleted) {
 										that.$el.find(".complete_audit, .audit-btn").prop("disabled", false);
 									}
@@ -149,6 +151,15 @@ define([
 				}
 			};
 			smartSpotCompleted(db, categoryId, channelId, storeId, callback);
+		},
+		checkSodComplete: function(categoryId, channelId, storeId) {
+			var that = this;
+			var callback = function(result) {
+				if(result) {
+					that.$el.find(".list-group-item span"+ "#"+categoryId).find("img").show();
+				}
+			};
+			sodCompleted(db, categoryId, channelId, storeId, callback);
 		},
 
 		checkPromoBrandComplete: function(categoryId, channelId, storeId) {

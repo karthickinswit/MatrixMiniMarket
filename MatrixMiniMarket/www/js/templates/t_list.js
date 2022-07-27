@@ -91,6 +91,7 @@ define([],function(){
                             <div class="brand_option"></div>\
                             <div class="product_header SOD_header"><h2 class="font_16" >SOD</h2></div>\
                             <div class="SOD"></div>\
+                            <br/>\
                               <a class="save_sod_audit btn btn-danger"  style="display:none;">Save Audit</a></td>\
                         </div>\
                     </div>';
@@ -125,7 +126,55 @@ define([],function(){
                     {{/tos}}\
                     </tr>\
                    </tbody>\
-            </table>'
+            </table>\
+            {{>multiplePhotoRows}}\
+                <br\>'
+    templates.multiplePhotoRows = '<table class="table gillette_table " id="{{normId}}-{{productId}}" >\
+                                       <tbody class="gillette_table_body">\
+                                       {{#sodImages}}\
+                                                   <tr class="gillette_table_row">\
+                                                      <td>\
+                                                               <div class="pull-right">\
+                                                                       <button class="btn-mini btn-warning  remove_photo">\
+                                                                       X</button>\
+                                                               </div>\
+                                                                 <!--<span class="photo_block_container  multiple_photo ">\
+                                                                      <button class="pull-left btn take_product_photo gillette_store_photo \">\
+                                                                           <img class="ico_16" src="images/matrix_icons/take_photo_48.png">\
+                                                                           Take Brand Photo\
+                                                                      </button>\
+                                                                 </span>-->\
+                                                                <div class="photo_block_container multiple_photo" >\
+                                                                   <img src="{{image_uri}}"   width="95%"   height="200px" style="margin-left:2.5%">\
+                                                                   <a class="retake_photo {{element}}">Retake</a>\
+                                                                </div>\
+                                                      </td>\
+                                                    </tr>\
+                                                    {{/sodImages}}\
+                                                    {{^sodImages}}\
+                                               <tr class="gillette_table_row ">\
+                                                   <td>\
+                                                            <div class="pull-right">\
+                                                                  <button class="btn-mini btn-warning hide remove_photo">\
+                                                                   X</button>\
+                                                             </div>\
+                                                         <div class="photo_block_container  multiple_photo ">\
+                                                              <button class="pull-left btn take_product_photo  gillette_store_photo \">\
+                                                                   <img class="ico_16" src="images/matrix_icons/take_photo_48.png">\
+                                                                   Take Brand Photo\
+                                                              </button>\
+                                                         </div>\
+                                                   </td>\
+                                               </tr>\
+                                               {{/sodImages}}\
+                                       </tbody>\
+                                   </table>\
+                                   <span class="add_product_photo ">\
+                                            <button class="btn-mini btn-success add_photo">\
+                                            +</button>\
+                                         </span>\
+';
+
 
     return templates;
 });

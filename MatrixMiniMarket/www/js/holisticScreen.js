@@ -36,6 +36,25 @@ define([
 
                 that.model.set("audits", arrResult);
                 that.model.set("storeName", that.storeName);
+                
+
+                // var isSKU=false,isSOS=false;
+
+                // for (var i = 0; i < arrResult.length; i++) {
+                //     if (arrResult[i].includes('sos_percnt')) {
+                //         isSOS= true;
+                //         break
+                //     }
+                // }
+                // for (var i = 0; i < arrResult.length; i++) {
+                //     if (arrResult[i].includes('sku_percnt')) {
+                //         isSKU= true;
+                //         break
+                //     }
+                // }
+
+                // that.model.set("isSKU", result.isSKU);
+                // that.model.set("isSOS", result.isSKU);
 
                 var html = Mustache.to_html(template,that.model.toJSON());
                 that.$el.html(html);
@@ -53,7 +72,11 @@ define([
 
             fetchStoreName(db, mId, function(result){
                 that.storeName = result.storeName;
+                that.isSKU=result.isSKU=="true"?true:false;
+                that.isSOS=result.isSOS=="true"?true:false;;
                 that.model.set("storeName", that.storeName);
+                that.model.set("isSOS", that.isSOS);
+                that.model.set("isSKU", that.isSKU);
             });
         },
 
@@ -62,12 +85,14 @@ define([
             var auditId = id[0];
             var storeId = id[1];
             var channelId = id[2];
+            var that=this;
 
             var arrayJson = [];
 
             selectBrandToDisplay(db, function(brandId) {
                 console.log(brandId);
                 var brandIds = brandId;
+                
 
                 selectComputeLogic(db, storeId, function (response) {
 
@@ -76,6 +101,12 @@ define([
                     var prodId = -1;
 
                     var prodJson = {};
+                    // that.model.set("storeName", that.storeName);
+                    // that.model.set("isSOS", that.isSOS);
+                    // that.model.set("isSKU", that.isSKU);
+
+                    var isSKU=that.model.get("isSKU");
+                    var isSOS=that.model.get("isSOS");
 
 
 
@@ -96,6 +127,7 @@ define([
                          aJson[prodName] = prodId;
 
                          for(var j = 0; j < response.length; j++) {
+                            console.log(response);
 
                             if(prodId == response[j].product_id) {
 
@@ -147,15 +179,17 @@ define([
                     }
 
 
-
+                    if(isSKU&&isSOS||isSKU){
                     for(var i = 0; i < arrayJson.length; i++) {
                         var flagSku = arrayJson[i].sku_percnt;
+                        
                         if(!flagSku) {
                             var smId = arrayJson[i].smId;
                             for(var j = 0; j <  arrayJson.length; j++) {
                                 if(i != j) {
                                     var jSmid = arrayJson[j].smId;
                                     var jFlagSku = arrayJson[j].sku_percnt;
+                                    var jFlagSos = arrayJson[j].sos_percnt;
                                     if(jSmid == smId && jFlagSku) {
                                           arrayJson[i].sku_percnt = arrayJson[j].sku_percnt;
                                           arrayJson[i].sos_percnt = arrayJson[j].sos_percnt;
@@ -165,6 +199,28 @@ define([
                             }
                         }
                     }
+                }
+                 if(isSOS&&!isSKU){
+                    for(var i = 0; i < arrayJson.length; i++) {
+                        var flagSos = arrayJson[i].sos_percnt;
+                        
+                        if(!flagSos) {
+                            var smId = arrayJson[i].smId;
+                            for(var j = 0; j <  arrayJson.length; j++) {
+                                if(i != j) {
+                                    var jSmid = arrayJson[j].smId;
+                                    var jFlagSku = arrayJson[j].sku_percnt;
+                                    var jFlagSos = arrayJson[j].sos_percnt;
+                                    if(jSmid == smId && jFlagSos) {
+                                          arrayJson[i].sku_percnt = arrayJson[j].sku_percnt;
+                                          arrayJson[i].sos_percnt = arrayJson[j].sos_percnt;
+                                          break;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                 }
 
 
 //                    for(var i = 0; i< arrayJson.length; i++ ) {

@@ -1,6 +1,6 @@
 
 function createAllStoreTable(tx, success, error) {
-    var createStatement = "CREATE TABLE IF NOT EXISTS mxpg_store(audit_id TEXT, store_id TEXT, id TEXT, store_code TEXT, store_name TEXT, mkt_id INTEGER, mkt_name TEXT, chl_name TEXT, dbtr_id INTEGER, dbtr_name TEXT, loc_id INTEGER, loc_name TEXT, brch_id INTEGER, brch_name TEXT, adtr_id NUMBER, adtr_name TEXT, adtr_code TEXT, addr TEXT, due TEXT, lat TEXT, lng TEXT,is_fresh BOOLEAN, chl_id INTEGER, sgf_store TEXT)";
+    var createStatement = "CREATE TABLE IF NOT EXISTS mxpg_store(audit_id TEXT, store_id TEXT, id TEXT, store_code TEXT, store_name TEXT, mkt_id INTEGER, mkt_name TEXT, chl_name TEXT, dbtr_id INTEGER, dbtr_name TEXT, loc_id INTEGER, loc_name TEXT, brch_id INTEGER, brch_name TEXT, adtr_id NUMBER, adtr_name TEXT, adtr_code TEXT, addr TEXT, due TEXT, lat TEXT, lng TEXT,is_fresh BOOLEAN, chl_id INTEGER, sgf_store TEXT,is_sgf BOOLEAN,PNNORMCOUNT INTEGER,CNNORMCOUNT INTEGER,PROMOCOUNT INTEGER,SGFCOUNT INTEGER,is_sku BBOOLEAN,is_sos BOOLEAN)";
     tx.executeSql(createStatement, [], success, error);
     var createIndex = "CREATE UNIQUE INDEX allStoreIndex ON mxpg_store(audit_id, store_id)";
     tx.executeSql(createIndex);
@@ -24,6 +24,7 @@ function populateAllStoreTable(db, storesDetails, callback, error) {
     var startDate = storesDetails.startDate;
 
     var stores = storesDetails.stores;
+  
     var length = stores.length;
 
     db.transaction(function(tx){
@@ -31,14 +32,21 @@ function populateAllStoreTable(db, storesDetails, callback, error) {
             var store = stores[i];
                 var latitude = "";
                 var longitude = "";
+                var pnNormCount=store.pnNormCount||0;
+                var cnNormCount=store.cnNormCount||0;
+                var sgfCount=store.sgfCount||0;
+                var promoCount=store.promoCount||0;
+                var isSOS=store.sosAvailable;
+                var isSKU=store.skuAvailable;
                 
                 if(store.latitude != null &&  store.latitude != "" && store.latitude != "undefined"){
                     latitude = store.latitude;
                     longitude = store.longitude;
                 }
+                var isSGF=store.isSGF||false;
 
-            tx.executeSql('INSERT OR replace INTO mxpg_store(audit_id, store_id, id, store_code, store_name, mkt_id, mkt_name, chl_id, chl_name, dbtr_id, dbtr_name, loc_id, loc_name, brch_id, brch_name, adtr_id, adtr_name, adtr_code, addr, due, lat, lng, is_fresh) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);',
-                [auditId, store.sId, store.id, store.sCodeByMx, store.sName, store.mktId, store.mktName, store.chanId, store.chanName, store.distId, store.distName, store.locId, store.locName, store.mxBrchId, store.mxBrchName, empId, empName, empCode, store.sAdds, due, latitude, longitude, store.isFreshAudit], function(tx, results){
+            tx.executeSql('INSERT OR replace INTO mxpg_store(audit_id, store_id, id, store_code, store_name, mkt_id, mkt_name, chl_id, chl_name, dbtr_id, dbtr_name, loc_id, loc_name, brch_id, brch_name, adtr_id, adtr_name, adtr_code, addr, due, lat, lng, is_fresh,is_sgf,PNNORMCOUNT,CNNORMCOUNT,PROMOCOUNT,SGFCOUNT,is_sku,is_sos) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);',
+                [auditId, store.sId, store.id, store.sCodeByMx, store.sName, store.mktId, store.mktName, store.chanId, store.chanName, store.distId, store.distName, store.locId, store.locName, store.mxBrchId, store.mxBrchName, empId, empName, empCode, store.sAdds, due, latitude, longitude, store.isFreshAudit,isSGF,pnNormCount,cnNormCount,promoCount,sgfCount,isSKU,isSOS], function(tx, results){
 
                 }, function(a, e){
                     console.log(e);
@@ -132,7 +140,7 @@ function fetchStoreName(db, mId, fn) {
     var storeId = id[1];
     var channelId = id[2];
 
-    var select_query = "select store_name as storeName from mxpg_store where audit_id='" + auditId + "'AND store_id='" + storeId + "'";
+    var select_query = "select store_name as storeName, is_sku as isSKU,is_sos as isSOS from mxpg_store where audit_id='" + auditId + "'AND store_id='" + storeId + "'";
     db.transaction(function(tx){
         tx.executeSql(select_query , [], function(tx, results) {
             var audit = "";

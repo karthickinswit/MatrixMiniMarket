@@ -464,7 +464,7 @@ function processNormMap(db, query, channelId, productId, priority, isFrontage, f
                     for(var j = i+1; j < len; j++){
 
                         var nextRow = response.rows.item(j);
-                        if(row.norm_id == nextRow.norm_id){
+                        if(row.norm_id == nextRow.norm_id&&row.product_id==nextRow.product_id){
                             var nextOptionName = nextRow.option_name.toLowerCase().trim();
 
                             if(nextOptionName == "yes"){

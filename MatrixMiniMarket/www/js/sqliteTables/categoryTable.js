@@ -170,7 +170,7 @@ function fetchCategoryName(db, categoryId, success, error) {
     });   
 }
 
-function isAuditCompleted(db, auditId, categoryId, channelId, success, error){
+function isAuditCompleted(db, auditId, categoryId, channelId,storeId, success, error){
     var compNormCount = 0;
     var pnNormCount = 0;
     var cnNormCount = 0;
@@ -178,6 +178,7 @@ function isAuditCompleted(db, auditId, categoryId, channelId, success, error){
     var sgfCount = 0;
     var promoCount = 0;
     var promoCompCount = 0;
+    var sodCompCount=0;
     var query1 = "select count(norm_id) as normCompCount from mxpg_comp_products where store_id ="+ auditId +" and category_id not in (select category_id from mxpg_category where category_name like '%promo%')";
 
     //var query1 = "select count(norm_id) as normCompCount from mxpg_comp_products where store_id ="+ auditId;
@@ -232,12 +233,112 @@ function isAuditCompleted(db, auditId, categoryId, channelId, success, error){
                                                 var len = response.rows.length;
                                                 promoCompCount = response.rows.item(0).promoCompCount;
 
+
+                                                var query8="select count(sod_id) as sodCompCount from mxpg_comp_sod where  store_id =" + storeId ;
+                                                db.transaction(function(tx){
+                                                    tx.executeSql(query8, [], function(tx, response){
+                                                        var rows = response.rows;
+                                                        var len = response.rows.length;
+                                                        sodCompCount = response.rows.item(0).sodCompCount;
+
                                     
-                                                if(compNormCount == totalNormCount && sgfCount ==  sgfCompCount && promoCount == promoCompCount) {
+                                                if(compNormCount == totalNormCount && sgfCount ==  sgfCompCount && promoCount == promoCompCount && sodCompCount>0) {
                                                     success(true);
                                                 }else {
                                                     success(false);
                                                 }
+                                            });
+                                            });
+
+                                            });
+
+                                        });
+                                    });
+                                });
+                            });
+                        });
+                    });
+                });
+            });
+
+        });
+
+    });
+});
+}
+
+function getNormCount(db,auditId,channelId,success,error){
+    var countObj={};
+    countObj.compNormCount = 0;
+    countObj.pnNormCount = 0;
+    countObj.cnNormCount = 0;
+    countObj.sgfNormCount = 0;
+    countObj.sgfCount = 0;
+    countObj.promoCount = 0;
+    countObj.promoCompCount = 0;
+    countObj.promoCount2=0;
+    var query1 = "select count(norm_id) as normCompCount from mxpg_comp_products where store_id ="+ auditId +" and category_id not in (select category_id from mxpg_category where category_name like '%promo%')";
+
+    //var query1 = "select count(norm_id) as normCompCount from mxpg_comp_products where store_id ="+ auditId;
+    db.transaction(function(tx){
+        tx.executeSql(query1, [], function(tx, response){
+            var rows = response.rows;
+            var len = response.rows.length;
+            countObj.compNormCount = response.rows.item(0).normCompCount;
+            var query2 = "select count(norm_id) as normPncount  from mxpg_pn_map where channel_id = "+ channelId + " and category_id not in (select category_id from mxpg_category where category_name like '%promo%')";
+
+            //var query2 = "select count(norm_id) as normPncount  from mxpg_pn_map where channel_id = "+ channelId;
+            db.transaction(function(tx){
+                tx.executeSql(query2, [], function(tx, response){
+                    var rows = response.rows;
+                    var len = response.rows.length;
+                    countObj.pnNormCount = response.rows.item(0).normPncount;
+
+                });
+            });
+            
+            var query3 = "select count(norm_id) as normCncount from mxpg_cn_map where category_id in (select category_id from mxpg_category where category_type in (0,2)) and channel_id = "+ channelId;
+            db.transaction(function(tx){
+                tx.executeSql(query3, [], function(tx, response){
+                    var rows = response.rows;
+                    var len = response.rows.length;
+                    countObj.cnNormCount = response.rows.item(0).normCncount;
+                    countObj.totalNormCount = countObj.pnNormCount + countObj.cnNormCount;
+                    var query4 = "select count(brand_id) as sgfCmpCount from mxpg_comp_sgf where store_id = "+ auditId;
+                    db.transaction(function(tx){
+                        tx.executeSql(query4, [], function(tx, response){
+                            var rows = response.rows;
+                            var len = response.rows.length;
+                            countObj.sgfCompCount = response.rows.item(0).sgfCmpCount;
+                            var query5 = " select count(brand_id) as sgfCount from mxpg_sgf where store_id = "+ auditId;
+                            db.transaction(function(tx){
+                                tx.executeSql(query5, [], function(tx, response){
+                                    var rows = response.rows;
+                                    var len = response.rows.length;
+                                    countObj.sgfCount = response.rows.item(0).sgfCount;
+
+                                    var query6 = "select count(distinct(category_id)) as promoCount from mxpg_comp_products where store_id ="+auditId +" and category_id in (select category_id from mxpg_category where category_name like '%promo%')";
+                                    db.transaction(function(tx){
+                                        tx.executeSql(query6, [], function(tx, response){
+                                            var rows = response.rows;
+                                            var len = response.rows.length;
+                                            countObj.promoCount = response.rows.item(0).promoCount;
+
+                                        var query7 = "select count(distinct(category_id)) as promoCompCount from mxpg_cc_map where channel_id = "+ channelId +" and category_id in (select category_id from mxpg_category where category_name like '%promo%')";
+                                        db.transaction(function(tx){
+                                            tx.executeSql(query7, [], function(tx, response){
+                                                var rows = response.rows;
+                                                var len = response.rows.length;
+                                                countObj.promoCompCount = response.rows.item(0).promoCompCount;
+                                                var query8 = "select count(distinct(category_id)) as promoCount2 from mxpg_category where category_type = 4";
+                                        db.transaction(function(tx){
+                                            tx.executeSql(query8, [], function(tx, response){
+                                                countObj.promoCount2 = response.rows.item(0).promoCount2;
+
+                                    
+                                               success(countObj);
+                                            });
+                                        });
 
                                             });
 

@@ -238,7 +238,7 @@ define([
 								audit.nonCoName = nonCoName;
 								audit.nonCoDesignation = nonCoDesignation;
 								audit.accuracy = position.accuracy;
-
+  
 								
 
 								/**
@@ -246,6 +246,66 @@ define([
 								 * There could be a possibility of multiple time revisit this page. So
 								 * No need to capture every time if Geolocation is already captured.
 								 */
+								 getNormCount(db, storeId, channelId, function(countObj) {
+									console.log(countObj);
+									console.log("storeDetails")
+									console.log(result);
+									// PNNORMCOUNT : 0,CNNORMCOUNT : 0,PROMOCOUNT : 0,SGFCOUNT : 0,
+									//countObj.pnNormCount = 0;countObj.cnNormCount = 0;countObj.sgfCount = 0;countObj.promoCount = 0;inswit.PROMO_COUNT_CHECK
+									if(countObj.pnNormCount==result.PNNORMCOUNT&&countObj.cnNormCount==result.CNNORMCOUNT&&result.PROMOCOUNT==((inswit.PROMO_COUNT_CHECK)?countObj.promoCompCount2:countObj.promoCompCount)){
+										
+
+										if(result.is_sgf=="true"){
+											console.log("SGF Brand Avilable");
+										if(countObj.sgfCount==result.SGFCOUNT)	{				
+											selectCompletedAudit(db, mId, function(auditDetails){
+												if(auditDetails && auditDetails.length > 0 && auditDetails.item(0).lat){
+													// audit.lat = auditDetails.item(0).lat;
+													// audit.lng = auditDetails.item(0).lng;
+			
+													populateCompAuditTable(db, audit, function(){
+														//that.startTimer(storeId);
+														var route = "#audits/" + mId + "/products";
+														router.navigate(route, {
+															trigger: true
+														});
+			
+													}, function(a, e){
+														//Error callback of populateCompAuditTable function.
+													});
+			
+												}else{
+													populateCompAuditTable(db, audit, function(){
+			//											 var getBack = function(){
+			//									        	$(".android").unmask();
+															//that.startTimer(storeId);
+															var route = "#audits/" + mId + "/categoryList";
+															router.navigate(route, {
+																trigger: true
+															});
+			//											 }
+														
+														//that.setGeoLocation(auditId, storeId);
+													//	$(".android").mask("Capturing Geolocation... Please wait...", 100);
+			
+													}, function(a, e){
+														//Error callback of populateCompAuditTable function.
+													});
+												}
+											}, function(a, e){
+												//Error callback of selectCompletedAudit function.
+											});
+											
+										}
+										else {
+											inswit.alert(inswit.ErrorMessages.sgfCountMissingError);
+								router.navigate("/", {
+									trigger: true
+								});
+										}
+								}
+							else {
+								console.log("SGF Brand is Not Avilable");
 								selectCompletedAudit(db, mId, function(auditDetails){
 									if(auditDetails && auditDetails.length > 0 && auditDetails.item(0).lat){
 										// audit.lat = auditDetails.item(0).lat;
@@ -283,6 +343,16 @@ define([
 								}, function(a, e){
 									//Error callback of selectCompletedAudit function.
 								});
+							}
+							}
+							else {
+								inswit.alert(inswit.ErrorMessages.countMissingError);
+								router.navigate("/", {
+									trigger: true
+								});
+							}
+							});
+
 				            });
 			            }, function(a, e){
 			            	console.log(e);

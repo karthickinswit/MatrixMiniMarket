@@ -14,8 +14,8 @@ var template = '<div class="audit_header">\
                                 <thead>\
                                    <tr>\
                                         <th>Product name</th>\
-                                        <th>SOS %</th>\
-                                        <th>SKU %</th>\
+                                        {{#isSOS}}<th>SOS %</th>{{/isSOS}}\
+                                        {{#isSKU}}<th>SKU %</th>{{/isSKU}}\
                                         <th>Smartspot / Device</th>\
                                    </tr>\
                                 </thead>\
@@ -23,8 +23,8 @@ var template = '<div class="audit_header">\
                                    {{#audits}}\
                                      <tr>\
                                         <td>{{ productName}}</td>\
-                                        <td>{{#sos_percnt}}{{ sos_percnt}} %{{/sos_percnt}}{{^sos_percnt}}NA{{/sos_percnt}}</td>\
-                                        <td>{{#sku_percnt}}{{ sku_percnt}} %{{/sku_percnt}}{{^sku_percnt}}NA{{/sku_percnt}}</td>\
+                                        {{#isSOS}}<td>{{#sos_percnt}}{{ sos_percnt}} %{{/sos_percnt}}{{^sos_percnt}}NA{{/sos_percnt}}</td>{{/isSOS}}\
+                                        {{#isSKU}}<td>{{#sku_percnt}}{{ sku_percnt}} %{{/sku_percnt}}{{^sku_percnt}}NA{{/sku_percnt}}</td>{{/isSKU}}\
                                         <td class="Default {{smartspot}}">{{#smartspot}}{{ smartspot}}{{/smartspot}}{{^smartspot}}NA{{/smartspot}}</td>\
                                       </tr>\
                                    {{/audits}}\

@@ -236,14 +236,17 @@ table.table-bordered > tbody > tr > td{
 
 .audits .remove_item,
 .audits .remove_item1,
+.audits .remove_photo,
 .audits .add_item,
+.audits .add_photo,
 .audits .save_sod_audit{
   color: white !important;
 }
 
 .audits .remove_item,
 .audits .remove_item1,
-.audits .add_item,.add_item1 {
+.audits .remove_photo,
+.audits .add_item,.add_item1,.add_photo {
   padding: 7px;
   border: none;
   width: 50px;
@@ -299,12 +302,12 @@ table.table-bordered > tbody > tr > td{
    margin-bottom: 20px
 }
 
-.gillette_table .add_item,.add_item1 {
+.gillette_table .add_item,.add_item1,.add_photo {
    margin-top: 6px;
    margin-left: 7px;
 }
 
-.audits .gillette_table .remove_item,.remove_item1 {
+.audits .gillette_table .remove_item,.remove_item1,.remove_photo {
     margin-top: 5px;
     margin-right: 15px;
     border-radius: 35px;

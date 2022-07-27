@@ -139,6 +139,21 @@ define([],function(){
 		     </div>\
 		   </td>\
 		 </tr>';
+
+         templates.sodPhotoBlock ='<tr class="gillette_table_row">\
+         <td>\
+         <div class="pull-right">\
+              <button class="btn-mini btn-warning hide remove_photo">\
+               X</button>\
+          </div>\
+          <div class="photo_block_container">\
+               <button class="pull-left btn take_product_photo gillette_store_photo">\
+                    <img class="ico_16" src="images/matrix_icons/take_photo_48.png">\
+                    Take Brand Photo\
+               </button>\
+          </div>\
+        </td>\
+      </tr>';
          templates.catPhotoBlock ='<tr class="gillette_table_row">\
          <td>\
          <div class="pull-right">\

@@ -632,7 +632,7 @@ define(["jquery"], function(){
 				
 				if(normFieldType == inswit.FIELDS.TEXT_INPUT){
 					var optionName = normEl.find(".field_value").val();
-					var percentage = normEl.find(".field_value").attr("rel");
+				  var  percentage = normEl.find(".field_value").attr("rel");
 
 					if(optionName < 0) {
 						alert("Negative value found, Please recheck the values.")

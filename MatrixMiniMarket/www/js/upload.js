@@ -216,7 +216,7 @@ define([
 										}
 									}
 	
-									that.$(".upload_container").hide();
+									// that.$(".upload_container").hide();
 								   // that.uploadPhoto(imageList, 0, imageList.length);
 								   selectCatImageDetails(db, function(mpdList) {
 
@@ -242,9 +242,27 @@ define([
 											});
 										}
 									}
+
+									selectSodImageDetails(db, function(sodImages) {
+										for(var i = 0; i < sodImages.length; i++){
+											var sodMpd = sodImages[i];
+											if(sodMpd.image_uri){
+												imageList.push({
+													"auditId": sodMpd.audit_id,
+													"storeId":sodMpd.store_id,
+													"categoryId":sodMpd.category_id,
+													"brandId":sodMpd.brand_id,
+													"imageURI":sodMpd.image_uri,
+													"image":sodMpd.image_id,
+													"position": sodMpd.position,
+													"productName":"SOD",
+												});
+											}
+										}
 	
 									that.$(".upload_container").hide();
 									that.uploadPhoto(imageList, 0, imageList.length);
+									});
 	
 								});
 	
@@ -364,6 +382,7 @@ define([
 		    		var imgPosition = imageList[index].position;
 		    		var imgURI = imageList[index].imageURI;
 					var brandId=imageList[index].brandId;
+					var productName= imageList[index].productName;;
 					
 
 					if(!result.info.id){
@@ -375,6 +394,25 @@ define([
 					imageList[index].image = image;
 
 					//console.log(image);
+
+					if(productName=="SOD")
+					{
+						console.log(imageList[index]);
+						updateSodImagephotos(db,brandId, auditId, storeId, categoryId, image, imgURI, imgPosition, function(){
+							console.log();
+                            that.uploadPhoto(imageList, index+1, length-1);
+                            return;
+
+                        }, function(a, e){
+							console.log(e);
+                            that.uploadPhoto(imageList, index, length);
+							
+                            return;
+
+                        });
+
+						return;
+					}
 					
 					if(auditId == "mpd_audits") {
 
@@ -475,13 +513,13 @@ define([
 		    		that.imageUploadFailure(imageList, index, e);
 	
 					//This is not retry, skip current image and start upload next
-					inswit.hideLoaderEl();
-			    		that.$(".upload_container").show();
-			    		inswit.alert(inswit.ErrorMessages.imageMissingError);
-			    		that.$el.find(".upload_audit").removeClass("clicked");
+					// inswit.hideLoaderEl();
+			    		// that.$(".upload_container").show();
+			    		// inswit.alert(inswit.ErrorMessages.imageMissingError);
+			    		// that.$el.find(".upload_audit").removeClass("clicked");
 					// Stopped to Upload Next	
-					// that.uploadPhoto(imageList, index+1, length-1);
-					return;
+					 that.uploadPhoto(imageList, index+1, length-1);
+					// return;
 
 		    	}else{ 
 
@@ -741,6 +779,36 @@ define([
 	
 										auditCatMPDPhotos.push(detail);
 									}
+									selectSODMPDDetails(db, that.storeId, function(sodPhotos){
+										var auditSodMPDPhotos = [];
+									var length = 0;
+									if(sodPhotos){
+										length = sodPhotos.length;
+									}
+									for(var j = 0; j < length; j++){
+										var sodPhoto  = sodPhotos[j];
+										var categoryId = sodPhoto.category_id;
+										var storeId = sodPhoto.store_id;
+										var brandId = sodPhoto.brand_id;
+										var auditId = sodPhoto.audit_id;
+										var position=sodPhoto.position;
+	
+										var photoId = "";
+										if(sodPhoto.image_id){
+											photoId = inswit.URI + "d/drive/docs/" + sodPhoto.image_id;
+										}
+	
+										var detail = {
+											brandId: brandId,
+											photoId: photoId,
+											categoryId: categoryId,
+											auditId: auditId,
+											storeId:storeId,
+											position:position
+										}
+	
+										auditSodMPDPhotos.push(detail);
+									}
 
 
 
@@ -819,12 +887,14 @@ define([
                                                 "version":inswit.VERSION,
                                                 "spocName": auditerName,
                                                 "spocNumber": auditerNumber,
+												"sodMpdPhotos":auditSodMPDPhotos,
                                                 "completedSgf": compSgfDetails,
                                                 "nonCoopName": nonCoName,
 												"nonCoopDesignation": nonCoDesignation,
 												"accuracy": accuracy
                                             }
                                         };
+										console.log(processVariables);
 
                                         //inswit.errorLog({"info":"After constructing processvariables", "processVariables":processVariables});
 
@@ -934,6 +1004,10 @@ define([
                                     }
                                 });
                             });
+						});
+
+
+
 						  });
                         });
 					 

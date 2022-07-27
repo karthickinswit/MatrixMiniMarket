@@ -1,5 +1,5 @@
-   var PROJECTID = "a8fe973aff5c11e79d0d0050569cb68c"; //production
-//    var PROJECTID = "3d916a1c-60fb-4e86-8222-5f4d7c66951f"; //process
+    //    var PROJECTID = "a8fe973aff5c11e79d0d0050569cb68c"; //production
+        var PROJECTID = "3d916a1c-60fb-4e86-8222-5f4d7c66951f"; //process
 //var PROJECTID = "99b8f2863f5511e9bb4f0050569c0a8e"; //development testing
 var inswit = {
 
@@ -27,7 +27,7 @@ var inswit = {
 		password: "",
 	},
 
-	VERSION : "3.8",
+	VERSION : "4.0",
 
 	LOGIN_CREDENTIAL: {
 		"email": "minimarket@matrixbsindia.com",
@@ -149,6 +149,10 @@ var inswit = {
 
     TIMER_MIN: 3,
 
+	PROMO_COUNT_CHECK : false,
+
+	SOD_NORM_LIST : [],//for countable photos as mandatory
+
 	alertMessages : {
 		"logOut" : "Are you sure you want to logout?",
 
@@ -169,7 +173,11 @@ var inswit = {
 
         "oldTimerExceed": "Already taken photos for this store are invalid as the time exceeds the limit.\nYou will be navigated to Start page.",
 
-		"imageMissingError": "Image is Missing! \nPlease try to clear and Re Audit "
+		"imageMissingError": "Image is Missing! \nPlease try to clear and Re Audit ",
+
+		"countMissingError" : "You are not allowed to audit",
+
+		"sgfCountMissingError" : "You are not allowed to audit"
 
 	},
 
@@ -728,7 +736,7 @@ var inswit = {
         });
 	},
 
-	takePicture: function(callback, takeEl, retakeEl, superImposeText, parentsEl) {
+	takePicture: function(callback, takeEl, retakeEl, superImposeText, parentsEl,frontPic) {
 		var that = this;
 		var oldImageURI;
 		var singlePhoto, dynamicStyle;
@@ -822,7 +830,7 @@ var inswit = {
 		Keyboard.hide();
 
 		//	Start the Camera
-		this.startCameraAbove(superImposeText, takeEl, retakeEl, parentsEl);
+		this.startCameraAbove(superImposeText, takeEl, retakeEl, parentsEl,frontPic);
 		$("#camerablock").show();
 		window.superImposeText = superImposeText;
 
@@ -874,14 +882,14 @@ var inswit = {
 
 	},
 
-	startCameraAbove: function(superImposeText, takeEl, retakeEl, parentsEl){
+	startCameraAbove: function(superImposeText, takeEl, retakeEl, parentsEl,frontPic){
 
 		options = {
 			x: 0,
 			y: 0,
 			width: window.screen.width,
 			height: window.screen.height-200,
-			camera: CameraPreview.CAMERA_DIRECTION.BACK,
+			camera: frontPic?CameraPreview.CAMERA_DIRECTION.FRONT:CameraPreview.CAMERA_DIRECTION.BACK,
 			tapPhoto: true,
 			tapFocus: true,
 			previewDrag: true,
@@ -932,9 +940,270 @@ var inswit = {
 			var channels = processVariables.channelList;
 			var categoryList = processVariables.categoryList;
 			var csbMap = processVariables.categorySmartSpotBrands;
+			var cnNormMap = processVariables.categoryNormMap;
+			var sod = processVariables.sodNormMap;
+			var ccMap = processVariables.channelCategoryMap;
+			var sgfBrands = processVariables.sgfBrands;
+			var storeStatus = processVariables.StoreStatus;
 			
 			var modified = false;
-			//Remove and populate the product table
+			//Remove and populate storeStatus the tables
+			if(storeStatus && storeStatus.length > 0){
+				modified = true;
+
+				removeTable(db, "mxpg_store_status", function(){
+					populateStoreStatusTable(db, storeStatus, function(){}, function(error, info){
+						console.log("storeSatus tabel updated");
+						
+						var desc = {
+							value: storeStatus,
+							table: "mxpg_store_status"
+						};
+
+						var pVariables = {
+						    "projectId":inswit.ERROR_LOG.projectId,
+						    "workflowId":inswit.ERROR_LOG.workflowId,
+						    "processId":inswit.ERROR_LOG.processId,
+						    "ProcessVariables":{
+						    	"errorType": inswit.ERROR_LOG_TYPES.UPDATE_MASTER,
+						    	"empId":empId,
+						    	"issueDate": new Date(),
+						    	"issueDescription": JSON.stringify(desc),
+						    	"version": inswit.VERSION
+						    }
+						};
+		
+						inswit.executeProcess(pVariables, {
+						    success: function(response){
+						    	if(response.ProcessVariables){
+						    		
+						    	}
+			                }, failure: function(error){
+			                	inswit.hideLoaderEl();
+			                	switch(error){
+			                		case 0:{
+			                			inswit.alert("No Internet Connection!");
+			                			break;
+			                		}
+			                		case 1:{
+			                			inswit.alert("Check your network settings!");
+			                			break;
+			                		}
+			                		case 2:{
+			                			inswit.alert("Server Busy.Try Again!");
+			                			break;
+			                		}
+			                	}
+			                }
+			            });
+					});
+				});
+			}
+			//Remove and populate the tables
+			if(sod && sod.length > 0){
+				modified = true;
+
+				removeTable(db, "mxpg_sod", function(){
+					populateSODTable(db, sod, function(){}, function(error, info){
+						
+						var desc = {
+							value: sod,
+							table: "mxpg_sod"
+						};
+
+						var pVariables = {
+						    "projectId":inswit.ERROR_LOG.projectId,
+						    "workflowId":inswit.ERROR_LOG.workflowId,
+						    "processId":inswit.ERROR_LOG.processId,
+						    "ProcessVariables":{
+						    	"errorType": inswit.ERROR_LOG_TYPES.UPDATE_MASTER,
+						    	"empId":empId,
+						    	"issueDate": new Date(),
+						    	"issueDescription": JSON.stringify(desc),
+						    	"version": inswit.VERSION
+						    }
+						};
+		
+						inswit.executeProcess(pVariables, {
+						    success: function(response){
+						    	if(response.ProcessVariables){
+						    		
+						    	}
+			                }, failure: function(error){
+			                	inswit.hideLoaderEl();
+			                	switch(error){
+			                		case 0:{
+			                			inswit.alert("No Internet Connection!");
+			                			break;
+			                		}
+			                		case 1:{
+			                			inswit.alert("Check your network settings!");
+			                			break;
+			                		}
+			                		case 2:{
+			                			inswit.alert("Server Busy.Try Again!");
+			                			break;
+			                		}
+			                	}
+			                }
+			            });
+					});
+				});
+			}
+			/////////////////////////////////////
+			if(sgfBrands && sgfBrands.length > 0){
+				modified = true;
+
+				removeTable(db, "mxpg_sgf_brand", function(){
+					populateSgfBrandTable(db, sgfBrands, function(){}, function(error, info){
+						
+						var desc = {
+							value: sgfBrands,
+							table: "mxpg_sgf_brand"
+						};
+
+						var pVariables = {
+						    "projectId":inswit.ERROR_LOG.projectId,
+						    "workflowId":inswit.ERROR_LOG.workflowId,
+						    "processId":inswit.ERROR_LOG.processId,
+						    "ProcessVariables":{
+						    	"errorType": inswit.ERROR_LOG_TYPES.UPDATE_MASTER,
+						    	"empId":empId,
+						    	"issueDate": new Date(),
+						    	"issueDescription": JSON.stringify(desc),
+						    	"version": inswit.VERSION
+						    }
+						};
+		
+						inswit.executeProcess(pVariables, {
+						    success: function(response){
+						    	if(response.ProcessVariables){
+						    		
+						    	}
+			                }, failure: function(error){
+			                	inswit.hideLoaderEl();
+			                	switch(error){
+			                		case 0:{
+			                			inswit.alert("No Internet Connection!");
+			                			break;
+			                		}
+			                		case 1:{
+			                			inswit.alert("Check your network settings!");
+			                			break;
+			                		}
+			                		case 2:{
+			                			inswit.alert("Server Busy.Try Again!");
+			                			break;
+			                		}
+			                	}
+			                }
+			            });
+					});
+				});
+			}
+			/////////////////////////////////////////
+			if(ccMap && ccMap.length > 0){
+				modified = true;
+
+				removeTable(db, "mxpg_cc_map", function(){
+					populateCategoryChannel(db, ccMap, function(){}, function(error, info){
+						
+						var desc = {
+							value: ccMap,
+							table: "mxpg_cc_map"
+						};
+
+						var pVariables = {
+						    "projectId":inswit.ERROR_LOG.projectId,
+						    "workflowId":inswit.ERROR_LOG.workflowId,
+						    "processId":inswit.ERROR_LOG.processId,
+						    "ProcessVariables":{
+						    	"errorType": inswit.ERROR_LOG_TYPES.UPDATE_MASTER,
+						    	"empId":empId,
+						    	"issueDate": new Date(),
+						    	"issueDescription": JSON.stringify(desc),
+						    	"version": inswit.VERSION
+						    }
+						};
+		
+						inswit.executeProcess(pVariables, {
+						    success: function(response){
+						    	if(response.ProcessVariables){
+						    		
+						    	}
+			                }, failure: function(error){
+			                	inswit.hideLoaderEl();
+			                	switch(error){
+			                		case 0:{
+			                			inswit.alert("No Internet Connection!");
+			                			break;
+			                		}
+			                		case 1:{
+			                			inswit.alert("Check your network settings!");
+			                			break;
+			                		}
+			                		case 2:{
+			                			inswit.alert("Server Busy.Try Again!");
+			                			break;
+			                		}
+			                	}
+			                }
+			            });
+					});
+				});
+			}
+			////////////////////////////
+			if(cnNormMap && cnNormMap.length > 0){
+				modified = true;
+
+				removeTable(db, "mxpg_cn_map", function(){
+					populateCategoryNormTable(db, cnNormMap, function(){}, function(error, info){
+						
+						var desc = {
+							value: cnNormMap,
+							table: "mxpg_cn_map"
+						};
+
+						var pVariables = {
+						    "projectId":inswit.ERROR_LOG.projectId,
+						    "workflowId":inswit.ERROR_LOG.workflowId,
+						    "processId":inswit.ERROR_LOG.processId,
+						    "ProcessVariables":{
+						    	"errorType": inswit.ERROR_LOG_TYPES.UPDATE_MASTER,
+						    	"empId":empId,
+						    	"issueDate": new Date(),
+						    	"issueDescription": JSON.stringify(desc),
+						    	"version": inswit.VERSION
+						    }
+						};
+		
+						inswit.executeProcess(pVariables, {
+						    success: function(response){
+						    	if(response.ProcessVariables){
+						    		
+						    	}
+			                }, failure: function(error){
+			                	inswit.hideLoaderEl();
+			                	switch(error){
+			                		case 0:{
+			                			inswit.alert("No Internet Connection!");
+			                			break;
+			                		}
+			                		case 1:{
+			                			inswit.alert("Check your network settings!");
+			                			break;
+			                		}
+			                		case 2:{
+			                			inswit.alert("Server Busy.Try Again!");
+			                			break;
+			                		}
+			                	}
+			                }
+			            });
+					});
+				});
+			}
+			////////////////////////////////////////
 			if(products && products.length > 0){
 				modified = true;
 

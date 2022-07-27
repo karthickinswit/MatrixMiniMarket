@@ -592,6 +592,9 @@ function removeAudit(db, auditId, storeId, success, error) {
     db.transaction(function(tx){
         tx.executeSql('DELETE FROM mxpg_cat_mpd WHERE store_id=?;', [storeId]);
    });
+   db.transaction(function(tx){
+    tx.executeSql('DELETE FROM mxpg_sod_mpd WHERE store_id=?;', [storeId]);
+});
 }
 
 /**
@@ -728,6 +731,9 @@ function removePartialAudit(db, storeId) {
     db.transaction(function(tx){
        tx.executeSql('DELETE FROM mxpg_comp_sod WHERE store_id=?;', [storeId]);
     });
+    db.transaction(function(tx){
+        tx.executeSql('DELETE FROM mxpg_sod_mpd WHERE store_id=?;', [storeId]);
+     });
 }
 
 

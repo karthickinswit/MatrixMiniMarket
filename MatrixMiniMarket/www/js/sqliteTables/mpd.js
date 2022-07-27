@@ -9,7 +9,7 @@ function createCatImageTable (tx, success, error) {
     var createStatement = "CREATE TABLE IF NOT EXISTS mxpg_cat_mpd(store_id TEXT, category_id TEXT, brand_id TEXT, audit_id TEXT, image_uri TEXT, image_id TEXT, position INTEGER)";
     tx.executeSql(createStatement, [], success, error);
     var createIndex = "CREATE UNIQUE INDEX mxpg_cat_mpd_index ON mxpg_cat_mpd(store_id, category_id, brand_id, audit_id, image_uri, position)";
-    tx.executeSql(createIndex);
+    tx.executeSql(createIndex); 
 }
 
 

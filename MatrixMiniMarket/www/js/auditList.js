@@ -129,6 +129,15 @@ define([
 					console.log("isGPSMandatory", isGPSMandatory);
 					LocalStorage.setGPSMandatory(isGPSMandatory);
 
+
+					inswit.PROMO_COUNT_CHECK = response.ProcessVariables.promoNormCheck||false;
+
+					inswit.SOD_NORM_LIST =  response.ProcessVariables.sodNormsList||[];
+
+					inswit.ErrorMessages.countMissingError=response.ProcessVariables.countMissingErrorMessage||"You are not allowed to audit";
+
+					inswit.ErrorMessages.sgfCountMissingError=response.ProcessVariables.sgfCountMissingErrorMessage||"SGF Count Missing";
+
 		    		if(response.ProcessVariables.isUpdate){
 			    		//inswit.alert("Master data is changed!. Hereafter you can do audits based on new modification");
 
