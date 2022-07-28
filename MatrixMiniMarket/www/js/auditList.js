@@ -137,15 +137,17 @@ define([
 					inswit.ErrorMessages.countMissingError=response.ProcessVariables.countMissingErrorMessage||"You are not allowed to audit";
 
 					inswit.ErrorMessages.sgfCountMissingError=response.ProcessVariables.sgfCountMissingErrorMessage||"SGF Count Missing";
+					if(response.ProcessVariables.sgfNormMap) {
+						var sgfNormMap = response.ProcessVariables.sgfNormMap;
+						populateSgfTable(db, sgfNormMap);
+					}
+
 
 		    		if(response.ProcessVariables.isUpdate){
 			    		//inswit.alert("Master data is changed!. Hereafter you can do audits based on new modification");
 
 			    		that.fetchUpdatedMasterData(function(){
-			    			if(response.ProcessVariables.sgfNormMap) {
-			    				var sgfNormMap = response.ProcessVariables.sgfNormMap;
-			    				populateSgfTable(db, sgfNormMap);
-			    			}
+			    			
 
 			    			if(response.ProcessVariables.qrcodeDetails) {
                                 var qrcodeDetails = response.ProcessVariables.qrcodeDetails;
